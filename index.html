@@ -317,20 +317,36 @@
         </div>
       </div>
 
-      <div class="bg-[#FFFFFF] rounded-xl p-4 border border-[#EAEAEA]">
-        <div class="relative flex-1">
-          <input 
-            type="text" 
-            id="search-customer-input" 
-            placeholder="Tìm tên khách hàng, SĐT hoặc địa chỉ..."
-            class="w-full pl-3.5 pr-4 py-2 rounded-md border border-[#EAEAEA] text-xs bg-[#F7F6F3] text-[#2F3437] focus:bg-white focus:outline-none focus:border-[#111111] transition-all font-medium"
-          >
+      <!-- Customer Filter Bar -->
+      <div class="bg-[#FFFFFF] rounded-xl p-4 border border-[#EAEAEA] space-y-4">
+        <div class="flex flex-wrap items-center gap-3">
+          <div class="relative flex-1 min-w-[220px]">
+            <input 
+              type="text" 
+              id="search-customer-input" 
+              placeholder="Tìm tên khách hàng, SĐT hoặc địa chỉ..."
+              class="w-full pl-3.5 pr-4 py-2 rounded-md border border-[#EAEAEA] text-xs bg-[#F7F6F3] text-[#2F3437] focus:bg-white focus:outline-none focus:border-[#111111] transition-all font-medium"
+            >
+          </div>
+
+          <select id="cust-order-filter" class="px-3 py-2 rounded-md border border-[#EAEAEA] text-xs font-semibold text-[#2F3437] bg-[#F7F6F3] focus:bg-white focus:outline-none focus:border-[#111111]">
+            <option value="ALL">Tất cả số đơn</option>
+            <option value="LOYAL">Khách thân thiết (≥ 2 đơn)</option>
+            <option value="NEW">Khách mới (1 đơn)</option>
+          </select>
+
+          <select id="cust-sort-filter" class="px-3 py-2 rounded-md border border-[#EAEAEA] text-xs font-semibold text-[#2F3437] bg-[#F7F6F3] focus:bg-white focus:outline-none focus:border-[#111111]">
+            <option value="ORDERS_DESC">Sắp xếp: Số đơn nhiều nhất</option>
+            <option value="COD_DESC">Sắp xếp: Chi tiêu COD cao nhất</option>
+            <option value="NAME_ASC">Sắp xếp: Tên A-Z</option>
+          </select>
         </div>
       </div>
 
+      <!-- Customer Table -->
       <div class="bg-[#FFFFFF] rounded-xl border border-[#EAEAEA] overflow-hidden shadow-sm">
         <div class="overflow-x-auto">
-          <table class="w-full text-left border-collapse text-xs min-w-[900px]">
+          <table class="w-full text-left border-collapse text-xs min-w-[950px]">
             <thead>
               <tr class="bg-[#F9F9F8] border-b border-[#EAEAEA] text-[11px] font-semibold text-[#787774] uppercase tracking-wider whitespace-nowrap">
                 <th class="py-3.5 px-4 w-12 text-center">STT</th>
@@ -339,7 +355,8 @@
                 <th class="py-3.5 px-4">Địa chỉ giao hàng gần nhất</th>
                 <th class="py-3.5 px-4 w-28 text-center">Số đơn đã mua</th>
                 <th class="py-3.5 px-4 w-36 text-right">Tổng tiền COD</th>
-                <th class="py-3.5 px-4 w-36 text-center">Đơn mới nhất</th>
+                <th class="py-3.5 px-4 w-32 text-center">Đơn mới nhất</th>
+                <th class="py-3.5 px-4 w-24 text-center">Thao tác</th>
               </tr>
             </thead>
             <tbody id="customer-table-body" class="divide-y divide-[#EAEAEA] text-[#2F3437]">
@@ -580,16 +597,35 @@
       });
     }
 
+    const custOrderFilter = document.getElementById('cust-order-filter');
+    const custSortFilter = document.getElementById('cust-sort-filter');
+
     function renderCustomers() {
       const keyword = searchCustomerInput ? searchCustomerInput.value.toLowerCase().trim() : '';
-      const list = Object.values(customerMap).filter(c => {
-        return !keyword || 
+      const orderFilterVal = custOrderFilter ? custOrderFilter.value : 'ALL';
+      const sortFilterVal = custSortFilter ? custSortFilter.value : 'ORDERS_DESC';
+
+      let list = Object.values(customerMap).filter(c => {
+        const matchKeyword = !keyword || 
           c.name.toLowerCase().includes(keyword) || 
           c.phone.includes(keyword) || 
           c.address.toLowerCase().includes(keyword);
+
+        let matchOrderCount = true;
+        if (orderFilterVal === 'LOYAL') matchOrderCount = c.totalOrders >= 2;
+        if (orderFilterVal === 'NEW') matchOrderCount = c.totalOrders === 1;
+
+        return matchKeyword && matchOrderCount;
       });
 
-      list.sort((a, b) => b.totalOrders - a.totalOrders || b.totalCod - a.totalCod);
+      // Sắp xếp
+      if (sortFilterVal === 'ORDERS_DESC') {
+        list.sort((a, b) => b.totalOrders - a.totalOrders || b.totalCod - a.totalCod);
+      } else if (sortFilterVal === 'COD_DESC') {
+        list.sort((a, b) => b.totalCod - a.totalCod || b.totalOrders - a.totalOrders);
+      } else if (sortFilterVal === 'NAME_ASC') {
+        list.sort((a, b) => a.name.localeCompare(b.name));
+      }
 
       let grandTotalCod = 0;
       let grandTotalOrders = 0;
@@ -604,7 +640,7 @@
       if (customerCountInfo) customerCountInfo.textContent = `Hiển thị ${list.length} khách hàng`;
 
       if (list.length === 0) {
-        customerTableBody.innerHTML = `<tr><td colspan="7" class="py-8 text-center text-[#787774]">Không tìm thấy khách hàng nào.</td></tr>`;
+        customerTableBody.innerHTML = `<tr><td colspan="8" class="py-8 text-center text-[#787774]">Không tìm thấy khách hàng nào.</td></tr>`;
         return;
       }
 
@@ -613,19 +649,44 @@
           <td class="py-3.5 px-4 text-center font-mono-code text-[#787774]">${idx + 1}</td>
           <td class="py-3.5 px-4 font-bold text-[#111111]">${escapeHtml(c.name)}</td>
           <td class="py-3.5 px-4 font-mono-code text-blue-700 font-semibold">${escapeHtml(c.phone || '—')}</td>
-          <td class="py-3.5 px-4 max-w-[400px] truncate text-[#2F3437]" title="${escapeHtml(c.address)}">${escapeHtml(c.address)}</td>
+          <td class="py-3.5 px-4 max-w-[380px] truncate text-[#2F3437]" title="${escapeHtml(c.address)}">${escapeHtml(c.address)}</td>
           <td class="py-3.5 px-4 text-center font-bold">
-            <span class="inline-block px-2.5 py-0.5 rounded-full bg-slate-100 text-[#111111] border border-[#EAEAEA]">${c.totalOrders} đơn</span>
+            <span class="inline-block px-2.5 py-0.5 rounded-full ${c.totalOrders >= 2 ? 'bg-pastel-green' : 'bg-slate-100 text-[#111111]'} border border-[#EAEAEA]">${c.totalOrders} đơn</span>
           </td>
           <td class="py-3.5 px-4 text-right font-extrabold text-emerald-800">${c.totalCod.toLocaleString('vi-VN')} đ</td>
           <td class="py-3.5 px-4 text-center font-mono-code text-xs text-[#787774]">${formatDateShort(c.latestDate)}</td>
+          <td class="py-3.5 px-4 text-center">
+            <div class="flex items-center justify-center gap-1.5 text-[#787774]">
+              <button onclick="copyCustomerInfo('${escapeHtml(c.name)}', '${escapeHtml(c.phone)}', '${escapeHtml(c.address)}')" title="Sao chép SĐT & Địa chỉ" class="p-1.5 hover:text-[#111111] hover:bg-[#F0EFEA] rounded transition-all">
+                <i class="ph ph-copy text-base"></i>
+              </button>
+              <button onclick="filterCustomerOrders('${escapeHtml(c.phone || c.name)}')" title="Xem danh sách đơn của khách" class="p-1.5 hover:text-blue-700 hover:bg-pastel-blue rounded transition-all">
+                <i class="ph ph-magnifying-glass text-base"></i>
+              </button>
+            </div>
+          </td>
         </tr>
       `).join('');
     }
 
-    if (searchCustomerInput) {
-      searchCustomerInput.addEventListener('input', renderCustomers);
+    function copyCustomerInfo(name, phone, address) {
+      const text = `Khách hàng: ${name}\nSĐT: ${phone}\nĐịa chỉ: ${address}`;
+      navigator.clipboard.writeText(text).then(() => {
+        alert(`✅ Đã sao chép thông tin khách hàng ${name}!\n\n${text}`);
+      });
     }
+
+    function filterCustomerOrders(query) {
+      navTabOrders.click(); // Chuyển sang Tab đơn hàng
+      if (searchInput) {
+        searchInput.value = query;
+        renderOrders();
+      }
+    }
+
+    if (searchCustomerInput) searchCustomerInput.addEventListener('input', renderCustomers);
+    if (custOrderFilter) custOrderFilter.addEventListener('change', renderCustomers);
+    if (custSortFilter) custSortFilter.addEventListener('change', renderCustomers);
 
     function updateDeviceFilterOptions(list) {
       const devices = new Set();
