@@ -122,8 +122,8 @@
       </div>
     </header>
 
-    <!-- Main Editorial Content Area -->
-    <main class="p-6 md:p-10 space-y-8 flex-1 max-w-7xl w-full mx-auto">
+    <!-- Main Editorial Content Area (Full Width Display) -->
+    <main class="p-6 md:p-8 space-y-6 flex-1 w-full">
       
       <!-- Title Section with Modern Clean Fonts (Chuẩn hình mẫu Cài đặt hệ thống) -->
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-3 pb-2 border-b border-[#EAEAEA]">
@@ -485,12 +485,12 @@
 
         return `
           <tr class="hover:bg-[#F9F9F8] transition-colors border-b border-[#EAEAEA] whitespace-nowrap">
-            <td class="py-3 px-3 text-center"><input type="checkbox" class="rounded border-[#EAEAEA]"></td>
-            <td class="py-3 px-3">
-              <div class="font-bold text-[#111111] text-xs max-w-[140px] truncate" title="${escapeHtml(name)}">${escapeHtml(name)}</div>
+            <td class="py-3.5 px-3 text-center"><input type="checkbox" class="rounded border-[#EAEAEA]"></td>
+            <td class="py-3.5 px-3">
+              <div class="font-bold text-[#111111] text-xs max-w-[200px] truncate" title="${escapeHtml(name)}">${escapeHtml(name)}</div>
               <div class="text-[11px] text-[#787774] font-medium mt-0.5">${escapeHtml(phone)}</div>
             </td>
-            <td class="py-3 px-3 max-w-[260px] truncate text-[#2F3437]" title="${escapeHtml(address)}">${escapeHtml(address)}</td>
+            <td class="py-3.5 px-3 max-w-[450px] truncate text-[#2F3437]" title="${escapeHtml(address)}">${escapeHtml(address)}</td>
             <td class="py-3 px-3">
               <span class="inline-block font-semibold text-xs text-[#111111] bg-[#F7F6F3] px-2 py-0.5 rounded border border-[#EAEAEA]">${escapeHtml(orderCode)}</span>
             </td>
