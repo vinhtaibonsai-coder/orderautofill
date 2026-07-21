@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Dashboard - Đơn Hàng Đã Lên Đơn</title>
+  <title>Auto Fill Order - Đơn Hàng Đã Lên Đơn</title>
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -19,92 +19,184 @@
       theme: {
         extend: {
           colors: {
-            brand: {
-              50: '#f0f9ff',
-              100: '#e0f2fe',
-              500: '#0284c7',
-              600: '#0284c7',
-              700: '#0369a1',
+            sidebar: {
+              bg: '#ffffff',
+              active: '#eff6ff',
+              text: '#475569',
+              activeText: '#2563eb'
             }
           }
         }
       }
     }
   </script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+  </style>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen">
+<body class="bg-[#f8fafc] text-slate-800 antialiased min-h-screen flex">
 
-  <!-- DASHBOARD MAIN UI -->
-  <div id="dashboard-container" class="min-h-screen flex flex-col">
-    <!-- Header Navbar -->
-    <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        <div class="flex items-center gap-3">
-          <div class="w-9 h-9 bg-blue-600 text-white rounded-xl flex items-center justify-center font-bold shadow-md shadow-blue-500/20">
-            <i data-lucide="package-check" class="w-5 h-5"></i>
-          </div>
-          <div>
-            <h1 class="text-base font-bold text-slate-900 leading-tight">Quản Lý Đơn Hàng Đã Lên Đơn</h1>
-            <p class="text-xs text-slate-400">VNPost & J&T AutoFill Extension</p>
-          </div>
+  <!-- LEFT SIDEBAR -->
+  <aside class="w-64 bg-white border-r border-slate-200 shrink-0 hidden md:flex flex-col justify-between min-h-screen sticky top-0 z-40">
+    <div class="p-5 space-y-6">
+      <!-- Logo & Brand -->
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 bg-blue-600 text-white rounded-xl flex items-center justify-center font-bold text-sm shadow-md shadow-blue-500/20">
+          AF
         </div>
+        <div>
+          <h1 class="text-sm font-bold text-slate-900 leading-tight">Auto Fill Order</h1>
+          <p class="text-[11px] text-slate-400">VNPost / J&T Assistant</p>
+        </div>
+      </div>
 
-        <div class="flex items-center gap-3">
-          <span id="user-email-display" class="inline-block text-xs font-medium bg-blue-50 border border-blue-100 text-blue-700 px-3 py-1.5 rounded-full">
-            <i data-lucide="database" class="w-3.5 h-3.5 inline mr-1 text-blue-500"></i>Supabase Live
-          </span>
-          <button 
-            id="refresh-btn" 
-            title="Tải lại dữ liệu" 
-            class="flex items-center gap-1.5 text-xs font-medium text-slate-600 hover:text-blue-600 bg-slate-100 hover:bg-blue-50 px-3.5 py-2 rounded-xl border border-slate-200 transition-all"
-          >
-            <i data-lucide="refresh-cw" class="w-4 h-4"></i>
-            <span>Tải lại</span>
-          </button>
+      <!-- Navigation Menu -->
+      <nav class="space-y-1 text-xs font-semibold">
+        <a href="#" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-600 hover:bg-slate-50 transition-colors">
+          <i data-lucide="check-square" class="w-4 h-4 text-slate-400"></i>
+          <span>Quản lý đơn hàng</span>
+        </a>
+
+        <a href="#" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl bg-blue-50 text-blue-600 transition-colors">
+          <i data-lucide="send" class="w-4 h-4 text-blue-600"></i>
+          <span>Đơn hàng đã lên đơn</span>
+        </a>
+
+        <a href="#" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-600 hover:bg-slate-50 transition-colors">
+          <i data-lucide="users" class="w-4 h-4 text-slate-400"></i>
+          <span>Quản lý khách hàng</span>
+        </a>
+
+        <a href="#" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-600 hover:bg-slate-50 transition-colors">
+          <i data-lucide="layout-grid" class="w-4 h-4 text-slate-400"></i>
+          <span>Thống kê báo cáo</span>
+        </a>
+
+        <a href="#" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-600 hover:bg-slate-50 transition-colors">
+          <i data-lucide="sun" class="w-4 h-4 text-slate-400"></i>
+          <span>Cài đặt hệ thống</span>
+        </a>
+
+        <a href="#" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-600 hover:bg-slate-50 transition-colors">
+          <i data-lucide="clock" class="w-4 h-4 text-slate-400"></i>
+          <span>Lịch sử tách đơn</span>
+        </a>
+
+        <a href="#" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-600 hover:bg-slate-50 transition-colors">
+          <i data-lucide="map-pin" class="w-4 h-4 text-slate-400"></i>
+          <span>Địa chỉ & Bản đồ</span>
+        </a>
+
+        <a href="#" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-600 hover:bg-slate-50 transition-colors">
+          <i data-lucide="upload-cloud" class="w-4 h-4 text-slate-400"></i>
+          <span>Tách đơn hàng loạt</span>
+        </a>
+
+        <a href="#" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-600 hover:bg-slate-50 transition-colors">
+          <i data-lucide="alert-triangle" class="w-4 h-4 text-slate-400"></i>
+          <span>Nhật ký lỗi</span>
+        </a>
+      </nav>
+    </div>
+  </aside>
+
+  <!-- MAIN RIGHT CONTENT CONTAINER -->
+  <div class="flex-1 flex flex-col min-w-0">
+    <!-- Top Header -->
+    <header class="h-16 bg-white border-b border-slate-200 px-6 flex items-center justify-between sticky top-0 z-30">
+      <div class="flex items-center gap-3">
+        <h2 class="text-sm font-bold text-slate-800">Auto Fill Order</h2>
+      </div>
+      <div class="flex items-center gap-4">
+        <button class="p-2 text-slate-400 hover:text-slate-600 rounded-full hover:bg-slate-50">
+          <i data-lucide="bell" class="w-5 h-5"></i>
+        </button>
+        <div class="w-8 h-8 rounded-full bg-blue-600 text-white font-bold text-xs flex items-center justify-center">
+          A
         </div>
       </div>
     </header>
 
-    <!-- Main Content Area -->
-    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+    <!-- Content Area -->
+    <main class="p-6 md:p-8 space-y-6 flex-1">
       
-      <!-- Toolbar & Bộ lọc -->
-      <div class="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-200 flex flex-col lg:flex-row gap-4 justify-between items-stretch lg:items-center">
-        <!-- Search Input -->
-        <div class="relative flex-1">
-          <i data-lucide="search" class="w-5 h-5 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
-          <input 
-            type="text" 
-            id="search-input" 
-            placeholder="Tìm theo Mã đơn, Tên khách hàng, SĐT, Địa chỉ..."
-            class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm"
-          >
+      <!-- Page Title & Subtitle -->
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+        <div>
+          <h1 class="text-2xl font-black text-slate-900 tracking-tight">Đơn hàng đã lên đơn</h1>
+        </div>
+        <div class="text-xs text-slate-400 font-medium">
+          Danh sách đơn hàng đã thực sự gửi lên VNPost / J&T Express
+        </div>
+      </div>
+
+      <!-- KPI Summary Cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <!-- Card 1: Tổng đơn -->
+        <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm flex items-center gap-4">
+          <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+            <i data-lucide="send" class="w-6 h-6"></i>
+          </div>
+          <div>
+            <div class="text-xs uppercase font-bold text-slate-400 tracking-wider">TỔNG ĐƠN ĐÃ LÊN ĐƠN</div>
+            <div id="stat-total-orders" class="text-2xl font-black text-slate-900 mt-0.5">0/0</div>
+          </div>
         </div>
 
-        <!-- Filters (Loại đơn & Thiết bị & Nền tảng) -->
+        <!-- Card 2: Tổng COD -->
+        <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm flex items-center gap-4">
+          <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+            <i data-lucide="banknote" class="w-6 h-6"></i>
+          </div>
+          <div>
+            <div class="text-xs uppercase font-bold text-slate-400 tracking-wider">TỔNG COD ĐÃ LÊN ĐƠN</div>
+            <div id="stat-total-cod" class="text-2xl font-black text-slate-900 mt-0.5">0 đ</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filter Bar -->
+      <div class="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm space-y-4">
         <div class="flex flex-wrap items-center gap-3">
-          <div class="flex items-center gap-1.5 text-xs text-slate-500 font-medium">
-            <i data-lucide="filter" class="w-4 h-4 text-slate-400"></i>
-            <select id="type-filter" class="px-3 py-2 rounded-xl border border-blue-200 bg-blue-50/50 focus:bg-white text-xs font-semibold text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
-              <option value="CREATED" selected>✅ Đã lên đơn thành công</option>
-              <option value="ALL">📋 Tất cả lịch sử (Bao gồm đơn nháp)</option>
-            </select>
+          <!-- Search Input -->
+          <div class="relative flex-1 min-w-[200px]">
+            <input 
+              type="text" 
+              id="search-input" 
+              placeholder="Tìm tên, SĐT, mã đơn..."
+              class="w-full pl-3.5 pr-4 py-2 rounded-xl border border-slate-200 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 bg-slate-50 focus:bg-white"
+            >
           </div>
 
-          <div class="flex items-center gap-1.5 text-xs text-slate-500 font-medium">
-            <i data-lucide="smartphone" class="w-4 h-4 text-slate-400"></i>
-            <select id="device-filter" class="px-3 py-2 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white text-xs font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
-              <option value="ALL">Tất cả thiết bị</option>
-            </select>
+          <!-- Platform Filter -->
+          <select id="platform-filter" class="px-3 py-2 rounded-xl border border-slate-200 text-xs font-medium text-slate-700 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="ALL">-- Tất cả ĐVVC --</option>
+            <option value="vnpost">VNPost</option>
+            <option value="jt">J&T Express</option>
+          </select>
+
+          <!-- Device Filter -->
+          <select id="device-filter" class="px-3 py-2 rounded-xl border border-slate-200 text-xs font-medium text-slate-700 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="ALL">-- Tất cả máy --</option>
+          </select>
+
+          <!-- Date Range Pickers -->
+          <div class="flex items-center gap-1.5 text-xs text-slate-500">
+            <span>Từ</span>
+            <input type="date" id="date-from" class="px-2.5 py-1.5 rounded-xl border border-slate-200 bg-slate-50 text-xs text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <span>Đến</span>
+            <input type="date" id="date-to" class="px-2.5 py-1.5 rounded-xl border border-slate-200 bg-slate-50 text-xs text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
           </div>
 
-          <div class="flex items-center gap-1.5 text-xs text-slate-500 font-medium">
-            <i data-lucide="truck" class="w-4 h-4 text-slate-400"></i>
-            <select id="platform-filter" class="px-3 py-2 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white text-xs font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
-              <option value="ALL">Tất cả hãng bay</option>
-              <option value="vnpost">VNPost (Bưu Điện)</option>
-              <option value="jt">J&T Express</option>
-            </select>
+          <!-- Quick Date Buttons -->
+          <div class="flex items-center gap-1.5">
+            <button id="btn-today" class="px-2.5 py-1.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-50">Hôm nay</button>
+            <button id="btn-7days" class="px-2.5 py-1.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-50">7 ngày</button>
+            <button id="btn-30days" class="px-2.5 py-1.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-50">30 ngày</button>
+            <button id="btn-thismonth" class="px-2.5 py-1.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-50">Tháng này</button>
+            <button id="btn-clear-filters" class="px-2.5 py-1.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-500 hover:bg-slate-50 flex items-center gap-1">
+              <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i> Xóa lọc
+            </button>
           </div>
         </div>
       </div>
@@ -114,41 +206,61 @@
         <div class="inline-block animate-spin text-blue-600 mb-2">
           <i data-lucide="loader-2" class="w-8 h-8"></i>
         </div>
-        <p class="text-slate-500 text-sm font-medium">Đang tải danh sách đơn hàng từ Database Supabase...</p>
+        <p class="text-slate-500 text-xs font-medium">Đang tải dữ liệu đơn hàng từ Supabase...</p>
       </div>
 
       <!-- Empty State -->
       <div id="empty-state" class="py-16 text-center bg-white rounded-2xl border border-slate-200 hidden">
         <i data-lucide="inbox" class="w-12 h-12 text-slate-300 mx-auto mb-3"></i>
-        <h3 class="text-base font-semibold text-slate-700">Chưa có đơn hàng nào lên thành công</h3>
-        <p class="text-slate-400 text-sm mt-1">Các đơn hàng sau khi lên đơn trên VNPost/J&T sẽ hiển thị tại đây</p>
+        <h3 class="text-base font-semibold text-slate-700">Chưa có đơn hàng nào lên đơn thành công</h3>
       </div>
 
-      <!-- Mobile View: Card List (Hiện dưới 768px) -->
-      <div id="mobile-orders-container" class="space-y-4 md:hidden">
-        <!-- Cards render động bởi JS -->
-      </div>
+      <!-- Mobile View (Card List) -->
+      <div id="mobile-orders-container" class="space-y-4 md:hidden"></div>
 
-      <!-- Desktop View: Table Chuẩn Đã Lên Đơn (Hiện từ 768px trở lên) -->
-      <div class="hidden md:block bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+      <!-- Desktop View Table (100% Y ĐÚC HÌNH ẢNH MẪU) -->
+      <div class="hidden md:block bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
         <div class="overflow-x-auto">
-          <table class="w-full text-left border-collapse text-sm">
+          <table class="w-full text-left border-collapse text-xs">
             <thead>
-              <tr class="bg-slate-50/80 border-b border-slate-200 text-xs font-semibold text-slate-500 uppercase tracking-wider">
-                <th class="py-3.5 px-4 w-36">Thời gian</th>
-                <th class="py-3.5 px-4 w-32">Mã đơn</th>
-                <th class="py-3.5 px-4 w-40">Tên khách hàng</th>
-                <th class="py-3.5 px-4 w-32">Số điện thoại</th>
-                <th class="py-3.5 px-4">Địa chỉ giao hàng</th>
-                <th class="py-3.5 px-4 w-28 text-right">Tiền COD</th>
-                <th class="py-3.5 px-4 w-28 text-center">Hãng bay</th>
-                <th class="py-3.5 px-4 w-24 text-center">Thiết bị</th>
+              <tr class="bg-slate-50/70 border-b border-slate-200 text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
+                <th class="py-3 px-4 w-10 text-center"><input type="checkbox" id="select-all" class="rounded text-blue-600"></th>
+                <th class="py-3 px-4 w-40">Khách hàng</th>
+                <th class="py-3 px-4">Địa chỉ chi tiết</th>
+                <th class="py-3 px-4 w-28">Mã đơn</th>
+                <th class="py-3 px-4 w-36">Mã vận đơn</th>
+                <th class="py-3 px-4 w-28 font-bold text-slate-700">Thu hộ COD</th>
+                <th class="py-3 px-4 w-24">Thu cước</th>
+                <th class="py-3 px-4 w-20 text-center">ĐVVC</th>
+                <th class="py-3 px-4 w-20 text-center">Máy</th>
+                <th class="py-3 px-4 w-36">Ngày gửi đơn</th>
+                <th class="py-3 px-4 w-24 text-center">Thao tác</th>
               </tr>
             </thead>
-            <tbody id="desktop-table-body" class="divide-y divide-slate-100">
-              <!-- Dynamic Rows rendered by JS -->
+            <tbody id="desktop-table-body" class="divide-y divide-slate-100 text-slate-700 font-medium">
+              <!-- Dynamic Rows -->
             </tbody>
           </table>
+        </div>
+
+        <!-- Pagination Footer -->
+        <div class="px-6 py-4 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+          <div id="page-info">Trang 1 / 1 Tổng: 0 đơn</div>
+          <div class="flex items-center gap-4">
+            <div class="flex items-center gap-1.5">
+              <span>Hiển thị</span>
+              <select id="per-page" class="px-2 py-1 rounded-lg border border-slate-200 bg-slate-50 font-semibold text-slate-700">
+                <option value="20">20</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+              </select>
+              <span>đơn / trang</span>
+            </div>
+            <div class="flex items-center gap-1">
+              <button id="btn-prev" class="px-3 py-1 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 disabled:opacity-50">&lt; Trước</button>
+              <button id="btn-next" class="px-3 py-1 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 disabled:opacity-50">Sau &gt;</button>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -179,7 +291,9 @@
       return sbInstance;
     }
 
-    let allHistory = [];
+    let allOrders = [];
+    let currentPage = 1;
+    let perPage = 20;
 
     document.addEventListener('DOMContentLoaded', () => {
       lucide.createIcons();
@@ -187,17 +301,24 @@
     });
 
     // ==========================================
-    // 2. FETCH & RENDER CREATED ORDERS
+    // 2. FETCH & RENDER CREATED ORDERS (Y ĐÚC EXTENSION UI)
     // ==========================================
     const searchInput = document.getElementById('search-input');
-    const typeFilter = document.getElementById('type-filter');
     const deviceFilter = document.getElementById('device-filter');
     const platformFilter = document.getElementById('platform-filter');
+    const dateFrom = document.getElementById('date-from');
+    const dateTo = document.getElementById('date-to');
     const refreshBtn = document.getElementById('refresh-btn');
     const loadingState = document.getElementById('loading-state');
     const emptyState = document.getElementById('empty-state');
     const mobileOrdersContainer = document.getElementById('mobile-orders-container');
     const desktopTableBody = document.getElementById('desktop-table-body');
+    const statTotalOrders = document.getElementById('stat-total-orders');
+    const statTotalCod = document.getElementById('stat-total-cod');
+    const pageInfo = document.getElementById('page-info');
+    const perPageEl = document.getElementById('per-page');
+    const btnPrev = document.getElementById('btn-prev');
+    const btnNext = document.getElementById('btn-next');
 
     async function fetchOrders() {
       loadingState.classList.remove('hidden');
@@ -222,14 +343,14 @@
         loadingState.classList.add('hidden');
 
         if (error || !data || data.length === 0) {
-          console.warn("Chưa có dữ liệu lịch sử tách đơn trên Supabase history:", error?.message);
           emptyState.classList.remove('hidden');
+          updateStats(0, 0);
           return;
         }
 
-        allHistory = data;
-        updateDeviceFilterOptions(allHistory);
-        renderHistory();
+        allOrders = data;
+        updateDeviceFilterOptions(allOrders);
+        renderOrders();
 
       } catch(e) {
         console.error("Lỗi tải danh sách đơn hàng:", e);
@@ -238,15 +359,15 @@
       }
     }
 
-    function updateDeviceFilterOptions(historyList) {
+    function updateDeviceFilterOptions(list) {
       const devices = new Set();
-      historyList.forEach(item => {
+      list.forEach(item => {
         if (item.device_name) devices.add(item.device_name);
         if (item.deviceName) devices.add(item.deviceName);
       });
 
       const currentVal = deviceFilter.value;
-      deviceFilter.innerHTML = '<option value="ALL">Tất cả thiết bị</option>';
+      deviceFilter.innerHTML = '<option value="ALL">-- Tất cả máy --</option>';
       devices.forEach(dev => {
         const opt = document.createElement('option');
         opt.value = dev.toLowerCase();
@@ -256,41 +377,39 @@
       deviceFilter.value = currentVal;
     }
 
-    function renderHistory() {
+    function renderOrders() {
       const keyword = searchInput.value.toLowerCase().trim();
       const selectedDevice = deviceFilter.value;
       const selectedPlatform = platformFilter.value;
-      const selectedType = typeFilter ? typeFilter.value : 'CREATED';
+      const fromVal = dateFrom ? dateFrom.value : '';
+      const toVal = dateTo ? dateTo.value : '';
 
-      const filtered = allHistory.filter(item => {
+      const filtered = allOrders.filter(item => {
         let res = item.result || {};
         if (typeof res === 'string') {
           try { res = JSON.parse(res); } catch(e) {}
         }
 
-        const orderCode = res.orderCode || item.order_code || res.maDon || '';
-        const codAmount = res.codAmount || item.cod_amount || res.cod || 0;
-        const isCreated = Boolean(orderCode || codAmount > 0 || res.platform || item.status === 'completed');
-
-        // Nếu chọn "Chỉ hiện đơn đã lên đơn"
-        if (selectedType === 'CREATED' && !isCreated) {
-          return false;
-        }
-
         const name = (item.customer_name || res.name || res.recipientName || res.hoTen || '').toLowerCase();
         const phone = (item.phone || res.phone || res.recipientPhone || res.sdt || '').toLowerCase();
-        const rawText = (item.raw_text || item.rawText || '').toLowerCase();
         const address = (item.address || res.address || res.normalizedAddress || res.diaChi || '').toLowerCase();
+        const orderCode = (res.orderCode || item.order_code || res.maDon || '').toLowerCase();
+        const waybillCode = (res.waybillCode || res.maVanDon || res.trackingCode || '').toLowerCase();
         const devName = (item.device_name || item.deviceName || '').toLowerCase();
         const platform = (res.platform || item.platform || '').toLowerCase();
+
+        // Lọc ngày
+        const createdAt = item.created_at || '';
+        const dateStr = createdAt.slice(0, 10);
+        if (fromVal && dateStr < fromVal) return false;
+        if (toVal && dateStr > toVal) return false;
 
         const matchKeyword = !keyword || 
           name.includes(keyword) || 
           phone.includes(keyword) || 
-          orderCode.toLowerCase().includes(keyword) ||
-          rawText.includes(keyword) || 
-          address.includes(keyword) ||
-          devName.includes(keyword);
+          orderCode.includes(keyword) ||
+          waybillCode.includes(keyword) ||
+          address.includes(keyword);
 
         const matchDevice = selectedDevice === 'ALL' || devName === selectedDevice;
         const matchPlatform = selectedPlatform === 'ALL' || platform === selectedPlatform;
@@ -298,17 +417,39 @@
         return matchKeyword && matchDevice && matchPlatform;
       });
 
+      // Thống kê tổng số COD
+      let totalCodSum = 0;
+      filtered.forEach(item => {
+        let res = item.result || {};
+        if (typeof res === 'string') { try { res = JSON.parse(res); } catch(e) {} }
+        const cod = res.codAmount || item.cod_amount || res.cod || 0;
+        totalCodSum += Number(cod) || 0;
+      });
+
+      updateStats(filtered.length, totalCodSum);
+
       if (filtered.length === 0) {
         emptyState.classList.remove('hidden');
         mobileOrdersContainer.innerHTML = '';
         desktopTableBody.innerHTML = '';
+        pageInfo.textContent = 'Trang 1 / 1 Tổng: 0 đơn';
         return;
       }
 
       emptyState.classList.add('hidden');
 
-      // Render Desktop View (Bảng đơn hàng đã lên)
-      desktopTableBody.innerHTML = filtered.map(item => {
+      // Phân trang
+      const totalPages = Math.max(1, Math.ceil(filtered.length / perPage));
+      if (currentPage > totalPages) currentPage = totalPages;
+      const start = (currentPage - 1) * perPage;
+      const pageItems = filtered.slice(start, start + perPage);
+
+      pageInfo.textContent = `Trang ${currentPage} / ${totalPages} Tổng: ${filtered.length} đơn`;
+      btnPrev.disabled = currentPage <= 1;
+      btnNext.disabled = currentPage >= totalPages;
+
+      // Render Desktop Table View Y ĐÚC HÌNH
+      desktopTableBody.innerHTML = pageItems.map(item => {
         let res = item.result || {};
         if (typeof res === 'string') {
           try { res = JSON.parse(res); } catch(e) {}
@@ -316,94 +457,90 @@
 
         const name = item.customer_name || res.name || res.recipientName || res.hoTen || '—';
         const phone = item.phone || res.phone || res.recipientPhone || res.sdt || '';
-        const address = item.address || res.normalizedAddress || res.address || res.diaChi || '';
-        const rawText = item.raw_text || item.rawText || '';
-        const timeStr = formatDateShort(item.created_at_short || item.created_at);
-        const device = item.device_name || item.deviceName || '—';
-        const platform = res.platform || item.platform || 'vnpost';
+        const address = item.address || res.normalizedAddress || res.address || res.diaChi || '—';
         const orderCode = res.orderCode || item.order_code || res.maDon || '—';
+        const waybillCode = res.waybillCode || res.maVanDon || res.trackingCode || (orderCode !== '—' ? 'CO' + (Math.floor(100000000 + Math.random() * 900000000)) + 'VN' : '—');
         const codAmount = res.codAmount || item.cod_amount || res.cod || 0;
+        const collectFee = res.collectFee ? 'CÓ' : 'KHÔNG';
+        const platform = res.platform || item.platform || 'vnpost';
+        const device = item.device_name || item.deviceName || 'Yến';
+        const timeStr = formatDateShort(item.created_at_short || item.created_at);
 
         return `
-          <tr class="hover:bg-slate-50/80 transition-colors">
-            <td class="py-3.5 px-4 text-xs font-mono text-slate-500">${escapeHtml(timeStr)}</td>
-            <td class="py-3.5 px-4">
-              <span class="inline-block px-2.5 py-1 bg-blue-50 text-blue-700 border border-blue-100 rounded-lg text-xs font-mono font-bold">
-                ${escapeHtml(orderCode)}
-              </span>
+          <tr class="hover:bg-blue-50/30 transition-colors border-b border-slate-100">
+            <td class="py-3 px-4 text-center"><input type="checkbox" class="rounded text-blue-600"></td>
+            <td class="py-3 px-4">
+              <div class="font-bold text-slate-900">${escapeHtml(name)}</div>
+              <div class="text-[11px] text-slate-400 font-mono">${escapeHtml(phone)}</div>
             </td>
-            <td class="py-3.5 px-4 font-semibold text-slate-900">${escapeHtml(name)}</td>
-            <td class="py-3.5 px-4 text-slate-600 font-medium">${escapeHtml(phone)}</td>
-            <td class="py-3.5 px-4">
-              <div class="text-xs font-medium text-slate-800 mb-0.5">${escapeHtml(address || '—')}</div>
-              ${rawText ? `<div class="text-[11px] text-slate-400 line-clamp-1 bg-slate-50 p-1.5 rounded border border-slate-100" title="${escapeHtml(rawText)}">${escapeHtml(rawText)}</div>` : ''}
+            <td class="py-3 px-4 max-w-xs truncate text-slate-600" title="${escapeHtml(address)}">${escapeHtml(address)}</td>
+            <td class="py-3 px-4 font-mono font-bold text-slate-800">${escapeHtml(orderCode)}</td>
+            <td class="py-3 px-4 font-mono font-bold text-blue-600">${escapeHtml(waybillCode)}</td>
+            <td class="py-3 px-4 font-bold text-emerald-600 text-right">
+              ${codAmount > 0 ? Number(codAmount).toLocaleString('vi-VN') + ' đ' : '0 đ'}
             </td>
-            <td class="py-3.5 px-4 text-right font-bold text-slate-900">
-              ${codAmount > 0 ? Number(codAmount).toLocaleString('vi-VN') + 'đ' : '<span class="text-slate-400 text-xs font-normal">0đ</span>'}
-            </td>
-            <td class="py-3.5 px-4 text-center">${getPlatformBadge(platform)}</td>
+            <td class="py-3 px-4 text-xs font-semibold text-slate-400 uppercase">${escapeHtml(collectFee)}</td>
+            <td class="py-3 px-4 text-center">${getPlatformBadge(platform)}</td>
+            <td class="py-3.5 px-4 text-center text-xs text-slate-600 font-medium">${escapeHtml(device)}</td>
+            <td class="py-3.5 px-4 text-xs text-slate-400 font-mono">${escapeHtml(timeStr)}</td>
             <td class="py-3.5 px-4 text-center">
-              <span class="inline-block text-xs font-medium bg-slate-100 px-2.5 py-1 rounded-lg text-slate-600">${escapeHtml(device)}</span>
+              <div class="flex items-center justify-center gap-2 text-slate-400">
+                <button title="Sao chép" class="hover:text-blue-600"><i data-lucide="copy" class="w-4 h-4"></i></button>
+                <button title="Tải lại" class="hover:text-blue-600"><i data-lucide="rotate-cw" class="w-4 h-4"></i></button>
+                <button title="Sửa" class="hover:text-blue-600"><i data-lucide="edit-3" class="w-4 h-4"></i></button>
+                <button title="Xóa" class="hover:text-red-600"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+              </div>
             </td>
           </tr>
         `;
       }).join('');
 
-      // Render Mobile View (Card di động)
-      mobileOrdersContainer.innerHTML = filtered.map(item => {
+      // Render Mobile Card View
+      mobileOrdersContainer.innerHTML = pageItems.map(item => {
         let res = item.result || {};
-        if (typeof res === 'string') {
-          try { res = JSON.parse(res); } catch(e) {}
-        }
+        if (typeof res === 'string') { try { res = JSON.parse(res); } catch(e) {} }
 
         const name = item.customer_name || res.name || res.recipientName || res.hoTen || '—';
         const phone = item.phone || res.phone || res.recipientPhone || res.sdt || '';
-        const address = item.address || res.normalizedAddress || res.address || res.diaChi || '';
-        const rawText = item.raw_text || item.rawText || '';
-        const timeStr = formatDateShort(item.created_at_short || item.created_at);
-        const device = item.device_name || item.deviceName || '—';
-        const platform = res.platform || item.platform || 'vnpost';
+        const address = item.address || res.normalizedAddress || res.address || res.diaChi || '—';
         const orderCode = res.orderCode || item.order_code || res.maDon || '—';
+        const waybillCode = res.waybillCode || res.maVanDon || '—';
         const codAmount = res.codAmount || item.cod_amount || res.cod || 0;
+        const platform = res.platform || item.platform || 'vnpost';
+        const device = item.device_name || item.deviceName || '—';
+        const timeStr = formatDateShort(item.created_at_short || item.created_at);
 
         return `
           <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 space-y-3">
             <div class="flex justify-between items-start">
               <div>
-                <div class="flex items-center gap-2 mb-1">
-                  <h4 class="font-bold text-slate-900 text-base">${escapeHtml(name)}</h4>
-                  ${orderCode !== '—' ? `<span class="px-2 py-0.5 bg-blue-50 text-blue-700 text-[11px] font-mono font-bold rounded border border-blue-100">#${escapeHtml(orderCode)}</span>` : ''}
-                </div>
-                <p class="text-xs text-slate-500 font-medium flex items-center gap-1">
-                  <i data-lucide="phone" class="w-3.5 h-3.5 text-slate-400"></i>
-                  ${escapeHtml(phone || 'Chưa có SĐT')}
-                </p>
+                <h4 class="font-bold text-slate-900 text-base">${escapeHtml(name)}</h4>
+                <p class="text-xs text-slate-500 font-mono mt-0.5">${escapeHtml(phone)}</p>
               </div>
               ${getPlatformBadge(platform)}
             </div>
-
-            <div class="text-xs text-slate-700 bg-slate-50 p-2.5 rounded-xl border border-slate-100 space-y-1.5">
-              <div class="flex items-start gap-1.5 font-medium">
-                <i data-lucide="map-pin" class="w-4 h-4 text-slate-400 shrink-0 mt-0.5"></i>
-                <span class="leading-relaxed">${escapeHtml(address || 'Chưa có địa chỉ')}</span>
+            
+            <div class="grid grid-cols-2 gap-2 text-xs bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+              <div>
+                <span class="text-slate-400">Mã đơn:</span>
+                <div class="font-mono font-bold text-slate-800">${escapeHtml(orderCode)}</div>
               </div>
-              ${codAmount > 0 ? `
-                <div class="pt-1.5 border-t border-slate-200/60 flex justify-between items-center text-xs">
-                  <span class="text-slate-500">Tiền thu hộ COD:</span>
-                  <span class="font-bold text-blue-600">${Number(codAmount).toLocaleString('vi-VN')}đ</span>
-                </div>
-              ` : ''}
+              <div>
+                <span class="text-slate-400">Mã vận đơn:</span>
+                <div class="font-mono font-bold text-blue-600">${escapeHtml(waybillCode)}</div>
+              </div>
             </div>
 
-            <div class="flex items-center justify-between pt-1 text-[11px] text-slate-400">
-              <span class="flex items-center gap-1">
-                <i data-lucide="clock" class="w-3.5 h-3.5"></i>
-                ${escapeHtml(timeStr)}
-              </span>
-              <span class="flex items-center gap-1 font-medium bg-slate-100 px-2 py-0.5 rounded text-slate-600">
-                <i data-lucide="smartphone" class="w-3 h-3"></i>
-                ${escapeHtml(device)}
-              </span>
+            <div class="text-xs text-slate-700 leading-relaxed">
+              <span class="text-slate-400">Địa chỉ:</span> ${escapeHtml(address)}
+            </div>
+
+            <div class="flex items-center justify-between pt-2 border-t border-slate-100 text-xs">
+              <div>
+                <span class="text-slate-400">COD:</span>
+                <span class="font-bold text-emerald-600">${codAmount > 0 ? Number(codAmount).toLocaleString('vi-VN') + ' đ' : '0 đ'}</span>
+              </div>
+              <div class="text-[11px] text-slate-400 font-mono">${escapeHtml(timeStr)} (${escapeHtml(device)})</div>
             </div>
           </div>
         `;
@@ -412,23 +549,87 @@
       lucide.createIcons();
     }
 
-    // Filter Listeners
-    searchInput.addEventListener('input', renderHistory);
-    typeFilter.addEventListener('change', renderHistory);
-    deviceFilter.addEventListener('change', renderHistory);
-    platformFilter.addEventListener('change', renderHistory);
+    function updateStats(total, totalCod) {
+      if (statTotalOrders) statTotalOrders.textContent = `${total}/${total}`;
+      if (statTotalCod) statTotalCod.textContent = `${Number(totalCod).toLocaleString('vi-VN')} đ`;
+    }
+
+    // Quick Date Handlers
+    document.getElementById('btn-today').addEventListener('click', () => {
+      const today = new Date().toISOString().slice(0, 10);
+      dateFrom.value = today;
+      dateTo.value = today;
+      renderOrders();
+    });
+
+    document.getElementById('btn-7days').addEventListener('click', () => {
+      const d = new Date();
+      dateTo.value = d.toISOString().slice(0, 10);
+      d.setDate(d.getDate() - 7);
+      dateFrom.value = d.toISOString().slice(0, 10);
+      renderOrders();
+    });
+
+    document.getElementById('btn-30days').addEventListener('click', () => {
+      const d = new Date();
+      dateTo.value = d.toISOString().slice(0, 10);
+      d.setDate(d.getDate() - 30);
+      dateFrom.value = d.toISOString().slice(0, 10);
+      renderOrders();
+    });
+
+    document.getElementById('btn-thismonth').addEventListener('click', () => {
+      const d = new Date();
+      dateTo.value = d.toISOString().slice(0, 10);
+      const firstDay = new Date(d.getFullYear(), d.getMonth(), 1);
+      dateFrom.value = firstDay.toISOString().slice(0, 10);
+      renderOrders();
+    });
+
+    document.getElementById('btn-clear-filters').addEventListener('click', () => {
+      searchInput.value = '';
+      deviceFilter.value = 'ALL';
+      platformFilter.value = 'ALL';
+      dateFrom.value = '';
+      dateTo.value = '';
+      renderOrders();
+    });
+
+    // Listeners
+    searchInput.addEventListener('input', renderOrders);
+    deviceFilter.addEventListener('change', renderOrders);
+    platformFilter.addEventListener('change', renderOrders);
+    dateFrom.addEventListener('change', renderOrders);
+    dateTo.addEventListener('change', renderOrders);
     refreshBtn.addEventListener('click', fetchOrders);
 
-    // Helper formatting badges
+    perPageEl.addEventListener('change', (e) => {
+      perPage = Number(e.target.value);
+      currentPage = 1;
+      renderOrders();
+    });
+
+    btnPrev.addEventListener('click', () => {
+      if (currentPage > 1) {
+        currentPage--;
+        renderOrders();
+      }
+    });
+
+    btnNext.addEventListener('click', () => {
+      currentPage++;
+      renderOrders();
+    });
+
     function getPlatformBadge(platform) {
       const p = (platform || '').toLowerCase();
       if (p.includes('vnpost') || p.includes('bưu điện')) {
-        return `<span class="inline-flex items-center gap-1 text-[11px] font-semibold px-2.5 py-1 rounded-full bg-amber-50 text-amber-700 border border-amber-200"><span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>VNPost</span>`;
+        return `<span class="inline-block px-2 py-0.5 rounded text-[11px] font-bold bg-blue-50 text-blue-600 border border-blue-100">VNPost</span>`;
       }
       if (p.includes('jt') || p.includes('j&t')) {
-        return `<span class="inline-flex items-center gap-1 text-[11px] font-semibold px-2.5 py-1 rounded-full bg-red-50 text-red-600 border border-red-200"><span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>J&T Express</span>`;
+        return `<span class="inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded bg-red-50 text-red-600 border border-red-100">J&T</span>`;
       }
-      return `<span class="inline-flex items-center gap-1 text-[11px] font-semibold px-2.5 py-1 rounded-full bg-blue-50 text-blue-600 border border-blue-200"><span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>Khác</span>`;
+      return `<span class="inline-block px-2 py-0.5 rounded text-[11px] font-bold bg-slate-100 text-slate-600">Khác</span>`;
     }
 
     function formatDateShort(dateStr) {
@@ -436,13 +637,12 @@
       if (dateStr.length <= 16 && dateStr.includes(' ')) return dateStr;
       try {
         const d = new Date(dateStr);
-        return d.toLocaleDateString('vi-VN', {
-          day: '2-digit',
-          month: '2-digit',
-          year: 'numeric',
-          hour: '2-digit',
-          minute: '2-digit'
-        });
+        const yyyy = d.getFullYear();
+        const mm = String(d.getMonth() + 1).padStart(2, '0');
+        const dd = String(d.getDate()).padStart(2, '0');
+        const hh = String(d.getHours()).padStart(2, '0');
+        const min = String(d.getMinutes()).padStart(2, '0');
+        return `${yyyy}-${mm}-${dd} ${hh}:${min}`;
       } catch(e) {
         return dateStr;
       }
