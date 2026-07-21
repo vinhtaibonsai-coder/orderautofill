@@ -87,6 +87,20 @@
           <span>Đăng nhập</span>
           <i data-lucide="arrow-right" class="w-4 h-4"></i>
         </button>
+
+        <div class="relative my-4 text-center">
+          <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-slate-200"></div></div>
+          <span class="relative bg-white px-3 text-xs text-slate-400">hoặc</span>
+        </div>
+
+        <button 
+          type="button" 
+          id="demo-login-btn"
+          class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium py-2.5 rounded-xl transition-all flex items-center justify-center gap-2 text-sm"
+        >
+          <i data-lucide="user-check" class="w-4 h-4 text-slate-500"></i>
+          <span>Vào nhanh giao diện Demo</span>
+        </button>
       </form>
     </div>
   </div>
@@ -350,6 +364,13 @@
         lucide.createIcons();
       }
     });
+
+    const demoLoginBtn = document.getElementById('demo-login-btn');
+    if (demoLoginBtn) {
+      demoLoginBtn.addEventListener('click', () => {
+        showDashboard({ email: 'admin@demo.com' });
+      });
+    }
 
     logoutBtn.addEventListener('click', async () => {
       const sb = initSupabase();
