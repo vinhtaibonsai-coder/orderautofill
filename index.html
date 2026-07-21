@@ -223,8 +223,8 @@
       ? SUPABASE_CONFIG.anonKey 
       : 'sb_publishable_i7Ox-gsXTnPbP_AghSxb4Q_w6-5vbMg';
     
-    // Khởi tạo Supabase Client
-    let supabase = null;
+    // Khởi tạo Supabase Client biến riêng tránh trùng tên với CDN window.supabase
+    var sbInstance = null;
 
     // ==========================================
     // 2. MOCK DATA (Dành cho việc test UI)
@@ -284,13 +284,13 @@
     const logoutBtn = document.getElementById('logout-btn');
 
     function initSupabase() {
-      if (!supabase) {
+      if (!sbInstance) {
         const createClientFn = window.supabase?.createClient || window.supabaseClient?.createClient;
         if (createClientFn) {
-          supabase = createClientFn(SUPABASE_URL, SUPABASE_ANON_KEY);
+          sbInstance = createClientFn(SUPABASE_URL, SUPABASE_ANON_KEY);
         }
       }
-      return supabase;
+      return sbInstance;
     }
 
     function showLogin() {
