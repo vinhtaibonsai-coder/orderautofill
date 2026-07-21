@@ -1178,7 +1178,15 @@
         const name = item.customer_name || res.name || res.recipientName || res.hoTen || '—';
         const phone = item.phone || res.phone || res.recipientPhone || res.sdt || '';
         const address = item.address || res.normalizedAddress || res.address || res.diaChi || '—';
-        const orderCode = res.orderCode || item.order_code || res.maDon || res.orderNo || '—';
+        
+        // Trích xuất mã đơn linh hoạt từ tất cả các trường có thể có
+        let orderCode = item.order_code || res.orderCode || res.maDon || res.orderNo || res.ma_don || item.orderCode || '';
+        if (!orderCode && (item.raw_text || item.note || res.extraNote || res.note)) {
+          const textSearch = (item.raw_text || '') + ' ' + (item.note || '') + ' ' + (res.extraNote || '') + ' ' + (res.note || '');
+          const m = textSearch.match(/Đơn hàng:\s*([A-Z0-9.\-_]+)/i) || textSearch.match(/Mã đơn:\s*([A-Z0-9.\-_]+)/i);
+          if (m) orderCode = m[1];
+        }
+        if (!orderCode) orderCode = '—';
         
         let waybillCode = res.waybillCode || res.maVanDon || res.trackingCode || res.waybill || res.trackingNo || item.waybill_code || item.ma_van_don || '';
         if (!waybillCode || waybillCode.trim() === '' || waybillCode === '—') {
@@ -1238,7 +1246,15 @@
         const name = item.customer_name || res.name || res.recipientName || res.hoTen || '—';
         const phone = item.phone || res.phone || res.recipientPhone || res.sdt || '';
         const address = item.address || res.normalizedAddress || res.address || res.diaChi || '—';
-        const orderCode = res.orderCode || item.order_code || res.maDon || res.orderNo || '—';
+        
+        // Trích xuất mã đơn linh hoạt từ tất cả các trường có thể có
+        let orderCode = item.order_code || res.orderCode || res.maDon || res.orderNo || res.ma_don || item.orderCode || '';
+        if (!orderCode && (item.raw_text || item.note || res.extraNote || res.note)) {
+          const textSearch = (item.raw_text || '') + ' ' + (item.note || '') + ' ' + (res.extraNote || '') + ' ' + (res.note || '');
+          const m = textSearch.match(/Đơn hàng:\s*([A-Z0-9.\-_]+)/i) || textSearch.match(/Mã đơn:\s*([A-Z0-9.\-_]+)/i);
+          if (m) orderCode = m[1];
+        }
+        if (!orderCode) orderCode = '—';
         
         let waybillCode = res.waybillCode || res.maVanDon || res.trackingCode || res.waybill || res.trackingNo || item.waybill_code || item.ma_van_don || '';
         if (!waybillCode || waybillCode.trim() === '' || waybillCode === '—') {
