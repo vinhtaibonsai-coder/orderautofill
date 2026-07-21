@@ -407,22 +407,28 @@
       const sb = initSupabase();
 
       if (sb) {
-        // Lấy dữ liệu từ bảng orders (hoặc history)
-        const { data, error } = await sb
-          .from('orders')
-          .select('*')
-          .order('created_at', { ascending: false });
+        try {
+          // Lấy dữ liệu từ bảng orders (hoặc history)
+          const { data, error } = await sb
+            .from('orders')
+            .select('*')
+            .order('created_at', { ascending: false });
 
-        loadingState.classList.add('hidden');
+          loadingState.classList.add('hidden');
 
-        if (error) {
-          console.error("Lỗi lấy dữ liệu orders:", error);
-          emptyState.classList.remove('hidden');
-          return;
+          if (error || !data || data.length === 0) {
+            console.warn("Chưa có dữ liệu từ Supabase hoặc chưa tạo bảng orders, hiển thị dữ liệu mẫu Demo:", error?.message);
+            currentOrders = MOCK_ORDERS;
+          } else {
+            currentOrders = data;
+          }
+        } catch(e) {
+          console.warn("Gặp lỗi kết nối Supabase, tự chuyển sang dữ liệu Demo:", e);
+          loadingState.classList.add('hidden');
+          currentOrders = MOCK_ORDERS;
         }
-        currentOrders = data || [];
       } else {
-        await new Promise(res => setTimeout(res, 300));
+        await new Promise(res => setTimeout(res, 200));
         loadingState.classList.add('hidden');
         currentOrders = MOCK_ORDERS;
       }
