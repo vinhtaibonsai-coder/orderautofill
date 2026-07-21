@@ -45,7 +45,7 @@
         <p class="text-sm text-slate-500">Vui lòng đăng nhập tài khoản Supabase Auth để quản lý đơn hàng</p>
       </div>
 
-      <form id="login-form" class="space-y-4">
+      <form id="login-form" class="space-y-4" novalidate>
         <div>
           <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1">Email</label>
           <div class="relative">
@@ -53,7 +53,6 @@
             <input 
               type="email" 
               id="login-email" 
-              required 
               placeholder="admin@example.com"
               class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm"
             >
@@ -67,7 +66,6 @@
             <input 
               type="password" 
               id="login-password" 
-              required 
               placeholder="••••••••"
               class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm"
             >
