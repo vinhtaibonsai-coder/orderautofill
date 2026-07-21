@@ -222,23 +222,23 @@
       <!-- Mobile View: Clean Bento Card -->
       <div id="mobile-orders-container" class="space-y-4 md:hidden"></div>
 
-      <!-- Desktop View Table (Modern Clean Fonts) -->
-      <div class="hidden md:block bg-[#FFFFFF] rounded-xl border border-[#EAEAEA] overflow-hidden">
+      <!-- Desktop View Table (Chống tràn màn hình & Cân đối cột) -->
+      <div class="hidden md:block bg-[#FFFFFF] rounded-xl border border-[#EAEAEA] overflow-hidden shadow-sm">
         <div class="overflow-x-auto">
-          <table class="w-full text-left border-collapse text-xs">
+          <table class="w-full text-left border-collapse text-xs min-w-[1100px]">
             <thead>
-              <tr class="bg-[#F9F9F8] border-b border-[#EAEAEA] text-[11px] font-semibold text-[#787774] uppercase tracking-wider">
-                <th class="py-3.5 px-4 w-10 text-center"><input type="checkbox" id="select-all" class="rounded border-[#EAEAEA]"></th>
-                <th class="py-3.5 px-4 w-40">Khách hàng</th>
-                <th class="py-3.5 px-4">Địa chỉ chi tiết</th>
-                <th class="py-3.5 px-4 w-28">Mã đơn</th>
-                <th class="py-3.5 px-4 w-36">Mã vận đơn</th>
-                <th class="py-3.5 px-4 w-32 text-right font-bold">Thu hộ COD</th>
-                <th class="py-3.5 px-4 w-20 text-center">Thu cước</th>
-                <th class="py-3.5 px-4 w-24 text-center">ĐVVC</th>
-                <th class="py-3.5 px-4 w-20 text-center">Máy</th>
-                <th class="py-3.5 px-4 w-36">Ngày gửi đơn</th>
-                <th class="py-3.5 px-4 w-24 text-center">Thao tác</th>
+              <tr class="bg-[#F9F9F8] border-b border-[#EAEAEA] text-[11px] font-semibold text-[#787774] uppercase tracking-wider whitespace-nowrap">
+                <th class="py-3.5 px-3 w-8 text-center"><input type="checkbox" id="select-all" class="rounded border-[#EAEAEA]"></th>
+                <th class="py-3.5 px-3 w-36">Khách hàng</th>
+                <th class="py-3.5 px-3">Địa chỉ chi tiết</th>
+                <th class="py-3.5 px-3 w-28">Mã đơn</th>
+                <th class="py-3.5 px-3 w-36">Mã vận đơn</th>
+                <th class="py-3.5 px-3 w-32 text-right font-semibold">Thu hộ COD</th>
+                <th class="py-3.5 px-3 w-20 text-center">Thu cước</th>
+                <th class="py-3.5 px-3 w-24 text-center">ĐVVC</th>
+                <th class="py-3.5 px-3 w-20 text-center">Máy</th>
+                <th class="py-3.5 px-3 w-32 text-center">Ngày gửi đơn</th>
+                <th class="py-3.5 px-3 w-24 text-center">Thao tác</th>
               </tr>
             </thead>
             <tbody id="desktop-table-body" class="divide-y divide-[#EAEAEA] text-[#2F3437]">
@@ -484,33 +484,33 @@
         const timeStr = formatDateShort(item.created_at_short || item.created_at);
 
         return `
-          <tr class="hover:bg-[#F9F9F8] transition-colors border-b border-[#EAEAEA]">
-            <td class="py-3.5 px-4 text-center"><input type="checkbox" class="rounded border-[#EAEAEA]"></td>
-            <td class="py-3.5 px-4">
-              <div class="font-bold text-[#111111] text-xs">${escapeHtml(name)}</div>
+          <tr class="hover:bg-[#F9F9F8] transition-colors border-b border-[#EAEAEA] whitespace-nowrap">
+            <td class="py-3 px-3 text-center"><input type="checkbox" class="rounded border-[#EAEAEA]"></td>
+            <td class="py-3 px-3">
+              <div class="font-bold text-[#111111] text-xs max-w-[140px] truncate" title="${escapeHtml(name)}">${escapeHtml(name)}</div>
               <div class="text-[11px] text-[#787774] font-medium mt-0.5">${escapeHtml(phone)}</div>
             </td>
-            <td class="py-3.5 px-4 max-w-xs truncate text-[#2F3437]" title="${escapeHtml(address)}">${escapeHtml(address)}</td>
-            <td class="py-3.5 px-4">
+            <td class="py-3 px-3 max-w-[260px] truncate text-[#2F3437]" title="${escapeHtml(address)}">${escapeHtml(address)}</td>
+            <td class="py-3 px-3">
               <span class="inline-block font-semibold text-xs text-[#111111] bg-[#F7F6F3] px-2 py-0.5 rounded border border-[#EAEAEA]">${escapeHtml(orderCode)}</span>
             </td>
-            <td class="py-3.5 px-4">
-              <span class="inline-block text-xs font-bold bg-pastel-blue px-2.5 py-0.5 rounded">${escapeHtml(waybillCode)}</span>
+            <td class="py-3 px-3">
+              <span class="inline-block text-xs font-bold bg-pastel-blue px-2 py-0.5 rounded">${escapeHtml(waybillCode)}</span>
             </td>
-            <td class="py-3.5 px-4 font-extrabold text-emerald-800 text-right">
+            <td class="py-3 px-3 font-extrabold text-emerald-800 text-right">
               ${codAmount > 0 ? Number(codAmount).toLocaleString('vi-VN') + ' đ' : '0 đ'}
             </td>
-            <td class="py-3.5 px-4 text-center text-[11px] font-medium text-[#787774]">${escapeHtml(collectFee)}</td>
-            <td class="py-3.5 px-4 text-center">${getPlatformBadge(platform)}</td>
-            <td class="py-3.5 px-4 text-center">
+            <td class="py-3 px-3 text-center text-[11px] font-medium text-[#787774]">${escapeHtml(collectFee)}</td>
+            <td class="py-3 px-3 text-center">${getPlatformBadge(platform)}</td>
+            <td class="py-3 px-3 text-center">
               <span class="inline-block text-[11px] font-medium bg-[#F7F6F3] text-[#787774] px-2 py-0.5 rounded border border-[#EAEAEA]">${escapeHtml(device)}</span>
             </td>
-            <td class="py-3.5 px-4 text-xs text-[#787774] font-medium">${escapeHtml(timeStr)}</td>
-            <td class="py-3.5 px-4 text-center">
-              <div class="flex items-center justify-center gap-2 text-[#787774]">
-                <button title="Sao chép" class="hover:text-[#111111] transition-all"><i class="ph ph-copy text-base"></i></button>
-                <button title="Tải lại" class="hover:text-[#111111] transition-all"><i class="ph ph-arrows-clockwise text-base"></i></button>
-                <button title="Xóa" class="hover:text-[#9F2F2D] transition-all"><i class="ph ph-trash text-base"></i></button>
+            <td class="py-3 px-3 text-center text-xs text-[#787774] font-medium">${escapeHtml(timeStr)}</td>
+            <td class="py-3 px-3 text-center">
+              <div class="flex items-center justify-center gap-1.5 text-[#787774]">
+                <button title="Sao chép" class="p-1 hover:text-[#111111] transition-all"><i class="ph ph-copy text-base"></i></button>
+                <button title="Tải lại" class="p-1 hover:text-[#111111] transition-all"><i class="ph ph-arrows-clockwise text-base"></i></button>
+                <button title="Xóa" class="p-1 hover:text-[#9F2F2D] transition-all"><i class="ph ph-trash text-base"></i></button>
               </div>
             </td>
           </tr>
