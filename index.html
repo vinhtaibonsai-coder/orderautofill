@@ -1188,8 +1188,13 @@
         }
         if (!orderCode) orderCode = '—';
         
-        let waybillCode = res.waybillCode || res.maVanDon || res.trackingCode || res.waybill || res.trackingNo || item.waybill_code || item.ma_van_don || '';
-        if (!waybillCode || waybillCode.trim() === '' || waybillCode === '—') {
+        let waybillCode = item.waybill_code || item.ma_van_don || res.waybillCode || res.maVanDon || res.trackingCode || res.waybill || res.trackingNo || item.tracking_code || '';
+        if (!waybillCode && (item.raw_text || item.note || res.extraNote || res.note)) {
+          const textSearch = (item.raw_text || '') + ' ' + (item.note || '') + ' ' + (res.extraNote || '') + ' ' + (res.note || '');
+          const m = textSearch.match(/(?:số\s*hiệu\s*bưu\s*gửi|mã\s*vận\s*đơn|tracking)\s*[:;]?\s*([A-Z0-9]{8,20})/i);
+          if (m) waybillCode = m[1];
+        }
+        if (!waybillCode || waybillCode.trim() === '') {
           waybillCode = '—';
         }
 
@@ -1256,8 +1261,13 @@
         }
         if (!orderCode) orderCode = '—';
         
-        let waybillCode = res.waybillCode || res.maVanDon || res.trackingCode || res.waybill || res.trackingNo || item.waybill_code || item.ma_van_don || '';
-        if (!waybillCode || waybillCode.trim() === '' || waybillCode === '—') {
+        let waybillCode = item.waybill_code || item.ma_van_don || res.waybillCode || res.maVanDon || res.trackingCode || res.waybill || res.trackingNo || item.tracking_code || '';
+        if (!waybillCode && (item.raw_text || item.note || res.extraNote || res.note)) {
+          const textSearch = (item.raw_text || '') + ' ' + (item.note || '') + ' ' + (res.extraNote || '') + ' ' + (res.note || '');
+          const m = textSearch.match(/(?:số\s*hiệu\s*bưu\s*gửi|mã\s*vận\s*đơn|tracking)\s*[:;]?\s*([A-Z0-9]{8,20})/i);
+          if (m) waybillCode = m[1];
+        }
+        if (!waybillCode || waybillCode.trim() === '') {
           waybillCode = '—';
         }
 
