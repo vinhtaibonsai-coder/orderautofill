@@ -1138,17 +1138,8 @@
         const orderCode = res.orderCode || item.order_code || res.maDon || res.orderNo || '—';
         
         let waybillCode = res.waybillCode || res.maVanDon || res.trackingCode || res.waybill || res.trackingNo || item.waybill_code || item.ma_van_don || '';
-        if (!waybillCode || waybillCode === '—') {
-          if (orderCode !== '—') {
-            const platformStr = (res.platform || item.platform || '').toLowerCase();
-            if (platformStr.includes('jt')) {
-              waybillCode = '848' + Math.floor(1000000000 + Math.random() * 9000000000);
-            } else {
-              waybillCode = 'CO' + Math.floor(100000000 + Math.random() * 900000000) + 'VN';
-            }
-          } else {
-            waybillCode = 'Chờ cập nhật';
-          }
+        if (!waybillCode || waybillCode.trim() === '' || waybillCode === '—') {
+          waybillCode = '—';
         }
 
         const codAmount = res.codAmount || item.cod_amount || res.cod || 0;
@@ -1207,17 +1198,8 @@
         const orderCode = res.orderCode || item.order_code || res.maDon || res.orderNo || '—';
         
         let waybillCode = res.waybillCode || res.maVanDon || res.trackingCode || res.waybill || res.trackingNo || item.waybill_code || item.ma_van_don || '';
-        if (!waybillCode || waybillCode === '—') {
-          if (orderCode !== '—') {
-            const platformStr = (res.platform || item.platform || '').toLowerCase();
-            if (platformStr.includes('jt')) {
-              waybillCode = '848' + Math.floor(1000000000 + Math.random() * 9000000000);
-            } else {
-              waybillCode = 'CO' + Math.floor(100000000 + Math.random() * 900000000) + 'VN';
-            }
-          } else {
-            waybillCode = 'Chờ cập nhật';
-          }
+        if (!waybillCode || waybillCode.trim() === '' || waybillCode === '—') {
+          waybillCode = '—';
         }
 
         const codAmount = res.codAmount || item.cod_amount || res.cod || 0;
