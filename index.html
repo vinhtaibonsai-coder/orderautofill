@@ -405,22 +405,53 @@
 
       if (sb) {
         try {
-          // Lấy dữ liệu từ bảng orders (hoặc history)
-          const { data, error } = await sb
+          // 1. Thử lấy từ bảng 'orders'
+          let { data, error } = await sb
             .from('orders')
             .select('*')
             .order('created_at', { ascending: false });
 
+          // 2. Nếu bảng 'orders' rỗng hoặc chưa có, thử lấy từ bảng 'history' của extension
+          if (error || !data || data.length === 0) {
+            const historyRes = await sb
+              .from('history')
+              .select('*')
+              .order('created_at', { ascending: false });
+
+            if (historyRes.data && historyRes.data.length > 0) {
+              data = historyRes.data.map(item => {
+                const res = item.result || {};
+                return {
+                  id: item.id,
+                  customer_name: item.customer_name || res.recipientName || res.name || 'Khách hàng',
+                  phone: item.phone || res.recipientPhone || res.phone || 'N/A',
+                  address: item.address || res.normalizedAddress || res.address || item.raw_text || 'Chưa cập nhật',
+                  status: item.status || 'completed',
+                  created_at: item.created_at
+                };
+              });
+              error = null;
+            }
+          }
+
           loadingState.classList.add('hidden');
 
           if (error || !data || data.length === 0) {
-            console.warn("Chưa có dữ liệu từ Supabase hoặc chưa tạo bảng orders, hiển thị dữ liệu mẫu Demo:", error?.message);
+            console.warn("Chưa có dữ liệu trong Database Supabase (bảng orders/history). Đang hiển thị dữ liệu mẫu Demo:", error?.message);
             currentOrders = MOCK_ORDERS;
           } else {
-            currentOrders = data;
+            // Đã chuẩn hóa dữ liệu từ Supabase Database
+            currentOrders = data.map(item => ({
+              id: item.id || 'N/A',
+              customer_name: item.customer_name || item.recipient_name || item.name || 'Khách hàng',
+              phone: item.phone || item.recipient_phone || 'N/A',
+              address: item.address || item.normalized_address || item.raw_text || 'Chưa cập nhật',
+              status: item.status || 'completed',
+              created_at: item.created_at || new Date().toISOString()
+            }));
           }
         } catch(e) {
-          console.warn("Gặp lỗi kết nối Supabase, tự chuyển sang dữ liệu Demo:", e);
+          console.warn("Lỗi đọc Database Supabase, tự chuyển sang dữ liệu mẫu:", e);
           loadingState.classList.add('hidden');
           currentOrders = MOCK_ORDERS;
         }
