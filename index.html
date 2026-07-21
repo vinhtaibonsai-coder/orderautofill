@@ -267,12 +267,10 @@
       }
     ];
 
-    let currentOrders = [];
-
-    // Initialize Lucide icons
+    // Initialize Lucide icons & load orders immediately
     document.addEventListener('DOMContentLoaded', () => {
       lucide.createIcons();
-      checkInitialAuth();
+      fetchOrders();
     });
 
     // ==========================================
