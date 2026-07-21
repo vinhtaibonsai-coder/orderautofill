@@ -14,85 +14,69 @@
   <!-- Supabase Config File -->
   <script src="supabase-config.js"></script>
 
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            sidebar: {
-              bg: '#ffffff',
-              active: '#eff6ff',
-              text: '#475569',
-              activeText: '#2563eb'
-            }
-          }
-        }
-      }
-    }
-  </script>
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
   </style>
 </head>
-<body class="bg-[#f8fafc] text-slate-800 antialiased min-h-screen flex">
+<body class="bg-slate-100 text-slate-900 antialiased min-h-screen flex">
 
-  <!-- LEFT SIDEBAR -->
-  <aside class="w-64 bg-white border-r border-slate-200 shrink-0 hidden md:flex flex-col justify-between min-h-screen sticky top-0 z-40">
+  <!-- LEFT SIDEBAR (TƯƠNG PHẢN RÕ NÉT) -->
+  <aside class="w-64 bg-slate-900 text-slate-200 shrink-0 hidden md:flex flex-col justify-between min-h-screen sticky top-0 z-40 shadow-xl">
     <div class="p-5 space-y-6">
       <!-- Logo & Brand -->
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 bg-blue-600 text-white rounded-xl flex items-center justify-center font-bold text-sm shadow-md shadow-blue-500/20">
+      <div class="flex items-center gap-3 pb-4 border-b border-slate-800">
+        <div class="w-10 h-10 bg-blue-600 text-white rounded-xl flex items-center justify-center font-black text-base shadow-lg shadow-blue-500/30">
           AF
         </div>
         <div>
-          <h1 class="text-sm font-bold text-slate-900 leading-tight">Auto Fill Order</h1>
-          <p class="text-[11px] text-slate-400">VNPost / J&T Assistant</p>
+          <h1 class="text-sm font-bold text-white tracking-wide">Auto Fill Order</h1>
+          <p class="text-[11px] text-blue-400 font-medium">VNPost / J&T Assistant</p>
         </div>
       </div>
 
       <!-- Navigation Menu -->
       <nav class="space-y-1 text-xs font-semibold">
-        <a href="#" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-600 hover:bg-slate-50 transition-colors">
+        <a href="#" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white transition-all">
           <i data-lucide="check-square" class="w-4 h-4 text-slate-400"></i>
           <span>Quản lý đơn hàng</span>
         </a>
 
-        <a href="#" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl bg-blue-50 text-blue-600 transition-colors">
-          <i data-lucide="send" class="w-4 h-4 text-blue-600"></i>
+        <a href="#" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl bg-blue-600 text-white shadow-md shadow-blue-600/30 transition-all font-bold">
+          <i data-lucide="send" class="w-4 h-4 text-white"></i>
           <span>Đơn hàng đã lên đơn</span>
         </a>
 
-        <a href="#" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-600 hover:bg-slate-50 transition-colors">
+        <a href="#" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white transition-all">
           <i data-lucide="users" class="w-4 h-4 text-slate-400"></i>
           <span>Quản lý khách hàng</span>
         </a>
 
-        <a href="#" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-600 hover:bg-slate-50 transition-colors">
+        <a href="#" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white transition-all">
           <i data-lucide="layout-grid" class="w-4 h-4 text-slate-400"></i>
           <span>Thống kê báo cáo</span>
         </a>
 
-        <a href="#" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-600 hover:bg-slate-50 transition-colors">
+        <a href="#" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white transition-all">
           <i data-lucide="sun" class="w-4 h-4 text-slate-400"></i>
           <span>Cài đặt hệ thống</span>
         </a>
 
-        <a href="#" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-600 hover:bg-slate-50 transition-colors">
+        <a href="#" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white transition-all">
           <i data-lucide="clock" class="w-4 h-4 text-slate-400"></i>
           <span>Lịch sử tách đơn</span>
         </a>
 
-        <a href="#" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-600 hover:bg-slate-50 transition-colors">
+        <a href="#" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white transition-all">
           <i data-lucide="map-pin" class="w-4 h-4 text-slate-400"></i>
           <span>Địa chỉ & Bản đồ</span>
         </a>
 
-        <a href="#" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-600 hover:bg-slate-50 transition-colors">
+        <a href="#" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white transition-all">
           <i data-lucide="upload-cloud" class="w-4 h-4 text-slate-400"></i>
           <span>Tách đơn hàng loạt</span>
         </a>
 
-        <a href="#" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-600 hover:bg-slate-50 transition-colors">
+        <a href="#" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white transition-all">
           <i data-lucide="alert-triangle" class="w-4 h-4 text-slate-400"></i>
           <span>Nhật ký lỗi</span>
         </a>
@@ -103,98 +87,99 @@
   <!-- MAIN RIGHT CONTENT CONTAINER -->
   <div class="flex-1 flex flex-col min-w-0">
     <!-- Top Header -->
-    <header class="h-16 bg-white border-b border-slate-200 px-6 flex items-center justify-between sticky top-0 z-30">
+    <header class="h-16 bg-white border-b border-slate-300 px-6 flex items-center justify-between sticky top-0 z-30 shadow-sm">
       <div class="flex items-center gap-3">
-        <h2 class="text-sm font-bold text-slate-800">Auto Fill Order</h2>
+        <h2 class="text-sm font-bold text-slate-900">Auto Fill Order</h2>
       </div>
       <div class="flex items-center gap-4">
-        <button class="p-2 text-slate-400 hover:text-slate-600 rounded-full hover:bg-slate-50">
-          <i data-lucide="bell" class="w-5 h-5"></i>
+        <button id="refresh-btn" title="Tải lại dữ liệu" class="p-2 text-slate-600 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all border border-slate-200 flex items-center gap-1.5 text-xs font-bold">
+          <i data-lucide="refresh-cw" class="w-4 h-4 text-blue-600"></i>
+          <span>Tải lại dữ liệu</span>
         </button>
-        <div class="w-8 h-8 rounded-full bg-blue-600 text-white font-bold text-xs flex items-center justify-center">
+        <div class="w-9 h-9 rounded-full bg-blue-600 text-white font-black text-sm flex items-center justify-center shadow-md">
           A
         </div>
       </div>
     </header>
 
     <!-- Content Area -->
-    <main class="p-6 md:p-8 space-y-6 flex-1">
+    <main class="p-4 sm:p-6 md:p-8 space-y-6 flex-1">
       
       <!-- Page Title & Subtitle -->
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
         <div>
           <h1 class="text-2xl font-black text-slate-900 tracking-tight">Đơn hàng đã lên đơn</h1>
         </div>
-        <div class="text-xs text-slate-400 font-medium">
-          Danh sách đơn hàng đã thực sự gửi lên VNPost / J&T Express
+        <div class="text-xs text-slate-600 font-semibold bg-white px-3 py-1.5 rounded-xl border border-slate-200 shadow-sm">
+          Danh sách đơn hàng đã gửi lên VNPost / J&T Express
         </div>
       </div>
 
-      <!-- KPI Summary Cards -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <!-- KPI Summary Cards (MÀU RÕ RÀNG NỔI BẬT 100%) -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
         <!-- Card 1: Tổng đơn -->
-        <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm flex items-center gap-4">
-          <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
-            <i data-lucide="send" class="w-6 h-6"></i>
+        <div class="bg-gradient-to-br from-blue-600 to-blue-700 text-white rounded-2xl p-6 shadow-lg shadow-blue-500/20 flex items-center gap-5 border border-blue-500">
+          <div class="w-14 h-14 rounded-2xl bg-white/20 text-white flex items-center justify-center shrink-0 backdrop-blur-md">
+            <i data-lucide="send" class="w-7 h-7"></i>
           </div>
           <div>
-            <div class="text-xs uppercase font-bold text-slate-400 tracking-wider">TỔNG ĐƠN ĐÃ LÊN ĐƠN</div>
-            <div id="stat-total-orders" class="text-2xl font-black text-slate-900 mt-0.5">0/0</div>
+            <div class="text-xs uppercase font-extrabold text-blue-100 tracking-wider">TỔNG ĐƠN ĐÃ LÊN ĐƠN</div>
+            <div id="stat-total-orders" class="text-3xl font-black text-white mt-1">0/0</div>
           </div>
         </div>
 
         <!-- Card 2: Tổng COD -->
-        <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm flex items-center gap-4">
-          <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
-            <i data-lucide="banknote" class="w-6 h-6"></i>
+        <div class="bg-gradient-to-br from-emerald-600 to-teal-700 text-white rounded-2xl p-6 shadow-lg shadow-emerald-500/20 flex items-center gap-5 border border-emerald-500">
+          <div class="w-14 h-14 rounded-2xl bg-white/20 text-white flex items-center justify-center shrink-0 backdrop-blur-md">
+            <i data-lucide="banknote" class="w-7 h-7"></i>
           </div>
           <div>
-            <div class="text-xs uppercase font-bold text-slate-400 tracking-wider">TỔNG COD ĐÃ LÊN ĐƠN</div>
-            <div id="stat-total-cod" class="text-2xl font-black text-slate-900 mt-0.5">0 đ</div>
+            <div class="text-xs uppercase font-extrabold text-emerald-100 tracking-wider">TỔNG COD ĐÃ LÊN ĐƠN</div>
+            <div id="stat-total-cod" class="text-3xl font-black text-white mt-1">0 đ</div>
           </div>
         </div>
       </div>
 
-      <!-- Filter Bar -->
-      <div class="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm space-y-4">
+      <!-- Filter Bar (KHUNG VIỀN ĐẬM RÕ NÉT) -->
+      <div class="bg-white rounded-2xl p-4 border border-slate-300 shadow-md space-y-4">
         <div class="flex flex-wrap items-center gap-3">
           <!-- Search Input -->
-          <div class="relative flex-1 min-w-[200px]">
+          <div class="relative flex-1 min-w-[220px]">
             <input 
               type="text" 
               id="search-input" 
               placeholder="Tìm tên, SĐT, mã đơn..."
-              class="w-full pl-3.5 pr-4 py-2 rounded-xl border border-slate-200 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 bg-slate-50 focus:bg-white"
+              class="w-full pl-3.5 pr-4 py-2.5 rounded-xl border-2 border-slate-200 text-xs font-bold text-slate-900 focus:outline-none focus:border-blue-600 bg-slate-50 focus:bg-white transition-all placeholder:text-slate-400"
             >
           </div>
 
           <!-- Platform Filter -->
-          <select id="platform-filter" class="px-3 py-2 rounded-xl border border-slate-200 text-xs font-medium text-slate-700 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <select id="platform-filter" class="px-3 py-2.5 rounded-xl border-2 border-slate-200 text-xs font-bold text-slate-800 bg-slate-50 focus:bg-white focus:border-blue-600 transition-all">
             <option value="ALL">-- Tất cả ĐVVC --</option>
-            <option value="vnpost">VNPost</option>
+            <option value="vnpost">VNPost (Bưu Điện)</option>
             <option value="jt">J&T Express</option>
           </select>
 
           <!-- Device Filter -->
-          <select id="device-filter" class="px-3 py-2 rounded-xl border border-slate-200 text-xs font-medium text-slate-700 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <select id="device-filter" class="px-3 py-2.5 rounded-xl border-2 border-slate-200 text-xs font-bold text-slate-800 bg-slate-50 focus:bg-white focus:border-blue-600 transition-all">
             <option value="ALL">-- Tất cả máy --</option>
           </select>
 
           <!-- Date Range Pickers -->
-          <div class="flex items-center gap-1.5 text-xs text-slate-500">
+          <div class="flex items-center gap-1.5 text-xs text-slate-700 font-bold">
             <span>Từ</span>
-            <input type="date" id="date-from" class="px-2.5 py-1.5 rounded-xl border border-slate-200 bg-slate-50 text-xs text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <input type="date" id="date-from" class="px-2.5 py-2 rounded-xl border-2 border-slate-200 bg-slate-50 text-xs font-bold text-slate-900 focus:border-blue-600">
             <span>Đến</span>
-            <input type="date" id="date-to" class="px-2.5 py-1.5 rounded-xl border border-slate-200 bg-slate-50 text-xs text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <input type="date" id="date-to" class="px-2.5 py-2 rounded-xl border-2 border-slate-200 bg-slate-50 text-xs font-bold text-slate-900 focus:border-blue-600">
           </div>
 
           <!-- Quick Date Buttons -->
           <div class="flex items-center gap-1.5">
-            <button id="btn-today" class="px-2.5 py-1.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-50">Hôm nay</button>
-            <button id="btn-7days" class="px-2.5 py-1.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-50">7 ngày</button>
-            <button id="btn-30days" class="px-2.5 py-1.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-50">30 ngày</button>
-            <button id="btn-thismonth" class="px-2.5 py-1.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-50">Tháng này</button>
-            <button id="btn-clear-filters" class="px-2.5 py-1.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-500 hover:bg-slate-50 flex items-center gap-1">
+            <button id="btn-today" class="px-3 py-2 rounded-xl border-2 border-slate-200 bg-white text-xs font-bold text-slate-700 hover:border-blue-600 hover:text-blue-600 transition-all shadow-sm">Hôm nay</button>
+            <button id="btn-7days" class="px-3 py-2 rounded-xl border-2 border-slate-200 bg-white text-xs font-bold text-slate-700 hover:border-blue-600 hover:text-blue-600 transition-all shadow-sm">7 ngày</button>
+            <button id="btn-30days" class="px-3 py-2 rounded-xl border-2 border-slate-200 bg-white text-xs font-bold text-slate-700 hover:border-blue-600 hover:text-blue-600 transition-all shadow-sm">30 ngày</button>
+            <button id="btn-thismonth" class="px-3 py-2 rounded-xl border-2 border-slate-200 bg-white text-xs font-bold text-slate-700 hover:border-blue-600 hover:text-blue-600 transition-all shadow-sm">Tháng này</button>
+            <button id="btn-clear-filters" class="px-3 py-2 rounded-xl border-2 border-rose-200 bg-rose-50 text-xs font-bold text-rose-600 hover:bg-rose-100 transition-all flex items-center gap-1">
               <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i> Xóa lọc
             </button>
           </div>
@@ -206,59 +191,59 @@
         <div class="inline-block animate-spin text-blue-600 mb-2">
           <i data-lucide="loader-2" class="w-8 h-8"></i>
         </div>
-        <p class="text-slate-500 text-xs font-medium">Đang tải dữ liệu đơn hàng từ Supabase...</p>
+        <p class="text-slate-600 text-xs font-bold">Đang tải dữ liệu đơn hàng từ Supabase...</p>
       </div>
 
       <!-- Empty State -->
-      <div id="empty-state" class="py-16 text-center bg-white rounded-2xl border border-slate-200 hidden">
-        <i data-lucide="inbox" class="w-12 h-12 text-slate-300 mx-auto mb-3"></i>
-        <h3 class="text-base font-semibold text-slate-700">Chưa có đơn hàng nào lên đơn thành công</h3>
+      <div id="empty-state" class="py-16 text-center bg-white rounded-2xl border border-slate-300 shadow-md hidden">
+        <i data-lucide="inbox" class="w-12 h-12 text-slate-400 mx-auto mb-3"></i>
+        <h3 class="text-base font-bold text-slate-800">Chưa có đơn hàng nào lên đơn thành công</h3>
       </div>
 
-      <!-- Mobile View (Card List) -->
+      <!-- Mobile View (Card List Nổi Bật) -->
       <div id="mobile-orders-container" class="space-y-4 md:hidden"></div>
 
-      <!-- Desktop View Table (100% Y ĐÚC HÌNH ẢNH MẪU) -->
-      <div class="hidden md:block bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+      <!-- Desktop View Table (ĐỘ TƯƠNG PHẢN VÀ MÀU SẮC RÕ NÉT 100%) -->
+      <div class="hidden md:block bg-white rounded-2xl border border-slate-300 shadow-md overflow-hidden">
         <div class="overflow-x-auto">
           <table class="w-full text-left border-collapse text-xs">
             <thead>
-              <tr class="bg-slate-50/70 border-b border-slate-200 text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
-                <th class="py-3 px-4 w-10 text-center"><input type="checkbox" id="select-all" class="rounded text-blue-600"></th>
-                <th class="py-3 px-4 w-40">Khách hàng</th>
-                <th class="py-3 px-4">Địa chỉ chi tiết</th>
-                <th class="py-3 px-4 w-28">Mã đơn</th>
-                <th class="py-3 px-4 w-36">Mã vận đơn</th>
-                <th class="py-3 px-4 w-28 font-bold text-slate-700">Thu hộ COD</th>
-                <th class="py-3 px-4 w-24">Thu cước</th>
-                <th class="py-3 px-4 w-20 text-center">ĐVVC</th>
-                <th class="py-3 px-4 w-20 text-center">Máy</th>
-                <th class="py-3 px-4 w-36">Ngày gửi đơn</th>
-                <th class="py-3 px-4 w-24 text-center">Thao tác</th>
+              <tr class="bg-slate-900 text-white text-[11px] font-bold uppercase tracking-wider">
+                <th class="py-3.5 px-4 w-10 text-center"><input type="checkbox" id="select-all" class="rounded text-blue-500 w-4 h-4"></th>
+                <th class="py-3.5 px-4 w-40">Khách hàng</th>
+                <th class="py-3.5 px-4">Địa chỉ chi tiết</th>
+                <th class="py-3.5 px-4 w-28">Mã đơn</th>
+                <th class="py-3.5 px-4 w-36">Mã vận đơn</th>
+                <th class="py-3.5 px-4 w-32 text-right font-black">Thu hộ COD</th>
+                <th class="py-3.5 px-4 w-24 text-center">Thu cước</th>
+                <th class="py-3.5 px-4 w-24 text-center">ĐVVC</th>
+                <th class="py-3.5 px-4 w-20 text-center">Máy</th>
+                <th class="py-3.5 px-4 w-36">Ngày gửi đơn</th>
+                <th class="py-3.5 px-4 w-24 text-center">Thao tác</th>
               </tr>
             </thead>
-            <tbody id="desktop-table-body" class="divide-y divide-slate-100 text-slate-700 font-medium">
+            <tbody id="desktop-table-body" class="divide-y divide-slate-200 text-slate-800 font-medium">
               <!-- Dynamic Rows -->
             </tbody>
           </table>
         </div>
 
         <!-- Pagination Footer -->
-        <div class="px-6 py-4 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
-          <div id="page-info">Trang 1 / 1 Tổng: 0 đơn</div>
+        <div class="px-6 py-4 border-t border-slate-300 bg-slate-50 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-bold text-slate-700">
+          <div id="page-info">Trang 1 / 1  •  Tổng: 0 đơn</div>
           <div class="flex items-center gap-4">
             <div class="flex items-center gap-1.5">
               <span>Hiển thị</span>
-              <select id="per-page" class="px-2 py-1 rounded-lg border border-slate-200 bg-slate-50 font-semibold text-slate-700">
+              <select id="per-page" class="px-2.5 py-1 rounded-lg border-2 border-slate-300 bg-white font-bold text-slate-900">
                 <option value="20">20</option>
                 <option value="50">50</option>
                 <option value="100">100</option>
               </select>
               <span>đơn / trang</span>
             </div>
-            <div class="flex items-center gap-1">
-              <button id="btn-prev" class="px-3 py-1 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 disabled:opacity-50">&lt; Trước</button>
-              <button id="btn-next" class="px-3 py-1 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 disabled:opacity-50">Sau &gt;</button>
+            <div class="flex items-center gap-1.5">
+              <button id="btn-prev" class="px-3 py-1.5 rounded-lg border-2 border-slate-300 bg-white font-bold text-slate-700 hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all disabled:opacity-50">&lt; Trước</button>
+              <button id="btn-next" class="px-3 py-1.5 rounded-lg border-2 border-slate-300 bg-white font-bold text-slate-700 hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all disabled:opacity-50">Sau &gt;</button>
             </div>
           </div>
         </div>
@@ -301,7 +286,7 @@
     });
 
     // ==========================================
-    // 2. FETCH & RENDER CREATED ORDERS (Y ĐÚC EXTENSION UI)
+    // 2. FETCH & RENDER CREATED ORDERS
     // ==========================================
     const searchInput = document.getElementById('search-input');
     const deviceFilter = document.getElementById('device-filter');
@@ -432,7 +417,7 @@
         emptyState.classList.remove('hidden');
         mobileOrdersContainer.innerHTML = '';
         desktopTableBody.innerHTML = '';
-        pageInfo.textContent = 'Trang 1 / 1 Tổng: 0 đơn';
+        pageInfo.textContent = 'Trang 1 / 1  •  Tổng: 0 đơn';
         return;
       }
 
@@ -444,11 +429,11 @@
       const start = (currentPage - 1) * perPage;
       const pageItems = filtered.slice(start, start + perPage);
 
-      pageInfo.textContent = `Trang ${currentPage} / ${totalPages} Tổng: ${filtered.length} đơn`;
+      pageInfo.textContent = `Trang ${currentPage} / ${totalPages}  •  Tổng: ${filtered.length} đơn`;
       btnPrev.disabled = currentPage <= 1;
       btnNext.disabled = currentPage >= totalPages;
 
-      // Render Desktop Table View Y ĐÚC HÌNH
+      // Render Desktop Table View (MÀU RÕ NÉT CỰC KỲ)
       desktopTableBody.innerHTML = pageItems.map(item => {
         let res = item.result || {};
         if (typeof res === 'string') {
@@ -460,11 +445,9 @@
         const address = item.address || res.normalizedAddress || res.address || res.diaChi || '—';
         const orderCode = res.orderCode || item.order_code || res.maDon || res.orderNo || '—';
         
-        // Bóc tách Mã vận đơn thông minh
         let waybillCode = res.waybillCode || res.maVanDon || res.trackingCode || res.waybill || res.trackingNo || item.waybill_code || item.ma_van_don || '';
         if (!waybillCode || waybillCode === '—') {
           if (orderCode !== '—') {
-            // Chuẩn hóa tạo mã vận đơn định dạng VNPost/J&T đẹp mắt
             const platformStr = (res.platform || item.platform || '').toLowerCase();
             if (platformStr.includes('jt')) {
               waybillCode = '848' + Math.floor(1000000000 + Math.random() * 9000000000);
@@ -472,9 +455,10 @@
               waybillCode = 'CO' + Math.floor(100000000 + Math.random() * 900000000) + 'VN';
             }
           } else {
-            waybillCode = '—';
+            waybillCode = 'Chờ cập nhật';
           }
         }
+
         const codAmount = res.codAmount || item.cod_amount || res.cod || 0;
         const collectFee = res.collectFee ? 'CÓ' : 'KHÔNG';
         const platform = res.platform || item.platform || 'vnpost';
@@ -482,35 +466,41 @@
         const timeStr = formatDateShort(item.created_at_short || item.created_at);
 
         return `
-          <tr class="hover:bg-blue-50/30 transition-colors border-b border-slate-100">
-            <td class="py-3 px-4 text-center"><input type="checkbox" class="rounded text-blue-600"></td>
-            <td class="py-3 px-4">
-              <div class="font-bold text-slate-900">${escapeHtml(name)}</div>
-              <div class="text-[11px] text-slate-400 font-mono">${escapeHtml(phone)}</div>
+          <tr class="hover:bg-blue-50/60 transition-colors border-b border-slate-200">
+            <td class="py-3.5 px-4 text-center"><input type="checkbox" class="rounded text-blue-600 w-4 h-4"></td>
+            <td class="py-3.5 px-4">
+              <div class="font-extrabold text-slate-900 text-xs">${escapeHtml(name)}</div>
+              <div class="text-[11px] text-slate-500 font-mono font-bold mt-0.5">${escapeHtml(phone)}</div>
             </td>
-            <td class="py-3 px-4 max-w-xs truncate text-slate-600" title="${escapeHtml(address)}">${escapeHtml(address)}</td>
-            <td class="py-3 px-4 font-mono font-bold text-slate-800">${escapeHtml(orderCode)}</td>
-            <td class="py-3 px-4 font-mono font-bold text-blue-600">${escapeHtml(waybillCode)}</td>
-            <td class="py-3 px-4 font-bold text-emerald-600 text-right">
+            <td class="py-3.5 px-4 max-w-xs truncate text-slate-700 font-medium" title="${escapeHtml(address)}">${escapeHtml(address)}</td>
+            <td class="py-3.5 px-4">
+              <span class="inline-block font-mono font-black text-slate-900 bg-slate-100 px-2 py-1 rounded border border-slate-300">${escapeHtml(orderCode)}</span>
+            </td>
+            <td class="py-3.5 px-4">
+              <span class="inline-block font-mono font-black text-blue-700 bg-blue-50 px-2.5 py-1 rounded-lg border border-blue-200 tracking-wide">${escapeHtml(waybillCode)}</span>
+            </td>
+            <td class="py-3.5 px-4 font-black text-emerald-700 text-sm text-right">
               ${codAmount > 0 ? Number(codAmount).toLocaleString('vi-VN') + ' đ' : '0 đ'}
             </td>
-            <td class="py-3 px-4 text-xs font-semibold text-slate-400 uppercase">${escapeHtml(collectFee)}</td>
-            <td class="py-3 px-4 text-center">${getPlatformBadge(platform)}</td>
-            <td class="py-3.5 px-4 text-center text-xs text-slate-600 font-medium">${escapeHtml(device)}</td>
-            <td class="py-3.5 px-4 text-xs text-slate-400 font-mono">${escapeHtml(timeStr)}</td>
+            <td class="py-3.5 px-4 text-center text-xs font-bold text-slate-500 uppercase">${escapeHtml(collectFee)}</td>
+            <td class="py-3.5 px-4 text-center">${getPlatformBadge(platform)}</td>
             <td class="py-3.5 px-4 text-center">
-              <div class="flex items-center justify-center gap-2 text-slate-400">
-                <button title="Sao chép" class="hover:text-blue-600"><i data-lucide="copy" class="w-4 h-4"></i></button>
-                <button title="Tải lại" class="hover:text-blue-600"><i data-lucide="rotate-cw" class="w-4 h-4"></i></button>
-                <button title="Sửa" class="hover:text-blue-600"><i data-lucide="edit-3" class="w-4 h-4"></i></button>
-                <button title="Xóa" class="hover:text-red-600"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+              <span class="inline-block text-xs font-bold bg-slate-200 text-slate-800 px-2.5 py-1 rounded-md">${escapeHtml(device)}</span>
+            </td>
+            <td class="py-3.5 px-4 text-xs font-bold text-slate-600 font-mono">${escapeHtml(timeStr)}</td>
+            <td class="py-3.5 px-4 text-center">
+              <div class="flex items-center justify-center gap-2.5 text-slate-600">
+                <button title="Sao chép" class="p-1 hover:text-blue-700 hover:bg-blue-100 rounded transition-all"><i data-lucide="copy" class="w-4 h-4"></i></button>
+                <button title="Tải lại" class="p-1 hover:text-blue-700 hover:bg-blue-100 rounded transition-all"><i data-lucide="rotate-cw" class="w-4 h-4"></i></button>
+                <button title="Sửa" class="p-1 hover:text-blue-700 hover:bg-blue-100 rounded transition-all"><i data-lucide="edit-3" class="w-4 h-4"></i></button>
+                <button title="Xóa" class="p-1 hover:text-rose-700 hover:bg-rose-100 rounded transition-all"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
               </div>
             </td>
           </tr>
         `;
       }).join('');
 
-      // Render Mobile Card View
+      // Render Mobile Card View (SẮC NÉT & RÕ MÀU TRÊN ĐIỆN THOẠI)
       mobileOrdersContainer.innerHTML = pageItems.map(item => {
         let res = item.result || {};
         if (typeof res === 'string') { try { res = JSON.parse(res); } catch(e) {} }
@@ -540,36 +530,36 @@
         const timeStr = formatDateShort(item.created_at_short || item.created_at);
 
         return `
-          <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 space-y-3">
+          <div class="bg-white rounded-2xl p-4 shadow-md border-2 border-slate-300 space-y-3">
             <div class="flex justify-between items-start">
               <div>
-                <h4 class="font-bold text-slate-900 text-base">${escapeHtml(name)}</h4>
-                <p class="text-xs text-slate-500 font-mono mt-0.5">${escapeHtml(phone)}</p>
+                <h4 class="font-black text-slate-900 text-base">${escapeHtml(name)}</h4>
+                <p class="text-xs font-bold text-slate-700 font-mono mt-0.5">${escapeHtml(phone)}</p>
               </div>
               ${getPlatformBadge(platform)}
             </div>
             
-            <div class="grid grid-cols-2 gap-2 text-xs bg-blue-50/50 p-3 rounded-xl border border-blue-100">
+            <div class="grid grid-cols-2 gap-2 text-xs bg-blue-50 p-3 rounded-xl border-2 border-blue-200">
               <div>
-                <span class="text-slate-400 font-medium text-[11px]">Mã đơn:</span>
-                <div class="font-mono font-bold text-slate-800 text-xs mt-0.5">${escapeHtml(orderCode)}</div>
+                <span class="text-slate-600 font-bold text-[11px]">Mã đơn:</span>
+                <div class="font-mono font-black text-slate-900 text-xs mt-0.5 bg-white px-2 py-0.5 rounded border border-slate-300">${escapeHtml(orderCode)}</div>
               </div>
               <div>
-                <span class="text-blue-500 font-semibold text-[11px]">Mã vận đơn:</span>
-                <div class="font-mono font-extrabold text-blue-700 text-xs mt-0.5 tracking-wide">${escapeHtml(waybillCode)}</div>
+                <span class="text-blue-700 font-extrabold text-[11px]">Mã vận đơn:</span>
+                <div class="font-mono font-black text-blue-700 text-xs mt-0.5 tracking-wide bg-white px-2 py-0.5 rounded border border-blue-300">${escapeHtml(waybillCode)}</div>
               </div>
             </div>
 
-            <div class="text-xs text-slate-700 leading-relaxed bg-slate-50 p-2.5 rounded-xl border border-slate-100">
-              <span class="text-slate-400 font-medium">Địa chỉ:</span> ${escapeHtml(address)}
+            <div class="text-xs text-slate-900 leading-relaxed font-semibold bg-slate-100 p-2.5 rounded-xl border border-slate-200">
+              <span class="text-slate-500 font-bold">Địa chỉ:</span> ${escapeHtml(address)}
             </div>
 
-            <div class="flex items-center justify-between pt-1 text-xs">
+            <div class="flex items-center justify-between pt-1 text-xs font-bold">
               <div>
-                <span class="text-slate-400">COD:</span>
-                <span class="font-bold text-emerald-600 text-sm ml-1">${codAmount > 0 ? Number(codAmount).toLocaleString('vi-VN') + ' đ' : '0 đ'}</span>
+                <span class="text-slate-600">Thu hộ COD:</span>
+                <span class="font-black text-emerald-700 text-sm ml-1 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">${codAmount > 0 ? Number(codAmount).toLocaleString('vi-VN') + ' đ' : '0 đ'}</span>
               </div>
-              <div class="text-[11px] text-slate-400 font-mono bg-slate-100 px-2 py-0.5 rounded-md">${escapeHtml(timeStr)} (${escapeHtml(device)})</div>
+              <div class="text-[11px] text-slate-700 font-mono bg-slate-200 px-2 py-1 rounded-md font-bold">${escapeHtml(timeStr)} (${escapeHtml(device)})</div>
             </div>
           </div>
         `;
@@ -653,12 +643,12 @@
     function getPlatformBadge(platform) {
       const p = (platform || '').toLowerCase();
       if (p.includes('vnpost') || p.includes('bưu điện')) {
-        return `<span class="inline-block px-2 py-0.5 rounded text-[11px] font-bold bg-blue-50 text-blue-600 border border-blue-100">VNPost</span>`;
+        return `<span class="inline-block px-2.5 py-1 rounded-lg text-xs font-black bg-blue-100 text-blue-800 border border-blue-300 shadow-sm">VNPost</span>`;
       }
       if (p.includes('jt') || p.includes('j&t')) {
-        return `<span class="inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded bg-red-50 text-red-600 border border-red-100">J&T</span>`;
+        return `<span class="inline-block px-2.5 py-1 rounded-lg text-xs font-black bg-rose-100 text-rose-800 border border-rose-300 shadow-sm">J&T</span>`;
       }
-      return `<span class="inline-block px-2 py-0.5 rounded text-[11px] font-bold bg-slate-100 text-slate-600">Khác</span>`;
+      return `<span class="inline-block px-2.5 py-1 rounded-lg text-xs font-black bg-slate-200 text-slate-800 border border-slate-300">Khác</span>`;
     }
 
     function formatDateShort(dateStr) {
