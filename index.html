@@ -453,14 +453,27 @@
           return;
         }
 
-        // Chuẩn hóa dữ liệu thực từ Database Supabase
+        // Chuẩn hóa dữ liệu thực từ Database Supabase (hỗ trợ đầy đủ các key do extension sinh ra)
         currentOrders = data.map(item => {
-          const res = item.result || {};
+          let res = item.result || {};
+          if (typeof res === 'string') {
+            try { res = JSON.parse(res); } catch(e) { res = {}; }
+          }
+          
+          const name = item.customer_name || item.recipient_name || item.name || 
+                     res.recipientName || res.name || res.hoTen || res.ten || 'Khách hàng';
+                     
+          const phone = item.phone || item.recipient_phone || 
+                      res.recipientPhone || res.phone || res.sdt || res.soDienThoai || 'N/A';
+                      
+          const address = item.address || item.normalized_address || 
+                        res.normalizedAddress || res.address || res.diaChi || res.fullAddress || item.raw_text || 'Chưa cập nhật';
+
           return {
             id: item.id || 'N/A',
-            customer_name: item.customer_name || item.recipient_name || item.name || res.recipientName || res.name || 'Khách hàng',
-            phone: item.phone || item.recipient_phone || res.recipientPhone || res.phone || 'N/A',
-            address: item.address || item.normalized_address || res.normalizedAddress || res.address || item.raw_text || 'Chưa cập nhật',
+            customer_name: name,
+            phone: phone,
+            address: address,
             status: item.status || 'completed',
             created_at: item.created_at || new Date().toISOString()
           };
