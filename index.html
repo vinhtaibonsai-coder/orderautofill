@@ -275,87 +275,85 @@
 
     <!-- SECTION 2: BẢNG QUẢN LÝ KHÁCH HÀNG -->
     <main id="section-customers" class="p-6 md:p-8 space-y-6 flex-1 w-full hidden">
-      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-3 pb-2 border-b border-[#EAEAEA]">
+      <!-- Title Section -->
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pb-2">
         <div>
-          <span class="text-[11px] font-semibold text-[#787774] uppercase tracking-wider">CRM & Insights</span>
-          <h1 class="text-2xl sm:text-3xl font-extrabold text-[#111111] tracking-tight mt-0.5">Quản lý khách hàng</h1>
+          <h1 class="text-2xl sm:text-3xl font-extrabold text-[#111111] tracking-tight">Quản lý Khách hàng</h1>
         </div>
-        <div class="text-xs text-[#787774] font-medium bg-[#FFFFFF] px-3 py-1.5 rounded-md border border-[#EAEAEA]">
-          Tự động tổng hợp từ lịch sử đơn hàng
+        <div class="text-xs text-[#787774] font-medium">
+          Quản lý thông tin, phân hạng, ghi chú và các liên kết liên hệ của khách hàng.
         </div>
       </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
-        <div class="bg-pastel-blue rounded-xl p-6 border border-[#E1F3FE] flex items-center gap-5">
-          <div class="w-12 h-12 rounded-lg bg-white/80 text-[#1F6C9F] flex items-center justify-center shrink-0">
-            <i class="ph ph-users-three text-2xl"></i>
+      <!-- 2 Stats Cards (Tổng Khách Hàng & Khách Hàng VIP) -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div class="bg-white rounded-2xl p-6 border border-[#EAEAEA] shadow-sm flex items-center gap-5">
+          <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+            <i class="ph ph-users text-2xl"></i>
           </div>
-          <div>
-            <div class="text-[11px] uppercase font-bold tracking-wider opacity-80">TỔNG KHÁCH HÀNG</div>
-            <div id="stat-total-customers" class="text-3xl font-black tracking-tight mt-0.5">0</div>
-          </div>
-        </div>
-
-        <div class="bg-pastel-green rounded-xl p-6 border border-[#EDF3EC] flex items-center gap-5">
-          <div class="w-12 h-12 rounded-lg bg-white/80 text-[#346538] flex items-center justify-center shrink-0">
-            <i class="ph ph-shopping-bag text-2xl"></i>
-          </div>
-          <div>
-            <div class="text-[11px] uppercase font-bold tracking-wider opacity-80">TỔNG ĐƠN ĐẶT</div>
-            <div id="stat-cust-total-orders" class="text-3xl font-black tracking-tight mt-0.5">0</div>
+          <div class="flex items-baseline gap-3">
+            <span class="text-xs uppercase font-bold text-[#787774] tracking-wider">TỔNG KHÁCH HÀNG</span>
+            <span id="stat-total-customers" class="text-3xl font-extrabold text-[#111111]">0</span>
           </div>
         </div>
 
-        <div class="bg-pastel-amber rounded-xl p-6 border border-[#FBF3DB] flex items-center gap-5">
-          <div class="w-12 h-12 rounded-lg bg-white/80 text-[#956400] flex items-center justify-center shrink-0">
-            <i class="ph ph-coins text-2xl"></i>
+        <div class="bg-white rounded-2xl p-6 border border-[#EAEAEA] shadow-sm flex items-center gap-5">
+          <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+            <i class="ph ph-star text-2xl"></i>
           </div>
-          <div>
-            <div class="text-[11px] uppercase font-bold tracking-wider opacity-80">TỔNG CHI TIÊU COD</div>
-            <div id="stat-cust-total-cod" class="text-3xl font-black tracking-tight mt-0.5">0 đ</div>
+          <div class="flex items-baseline gap-3">
+            <span class="text-xs uppercase font-bold text-[#787774] tracking-wider">KHÁCH HÀNG VIP</span>
+            <span id="stat-vip-customers" class="text-3xl font-extrabold text-[#111111]">0</span>
           </div>
         </div>
       </div>
 
       <!-- Customer Filter Bar -->
-      <div class="bg-[#FFFFFF] rounded-xl p-4 border border-[#EAEAEA] space-y-4">
+      <div class="bg-[#FFFFFF] rounded-2xl p-4 border border-[#EAEAEA] shadow-sm">
         <div class="flex flex-wrap items-center gap-3">
-          <div class="relative flex-1 min-w-[220px]">
+          <div class="relative min-w-[240px]">
             <input 
               type="text" 
               id="search-customer-input" 
-              placeholder="Tìm tên khách hàng, SĐT hoặc địa chỉ..."
-              class="w-full pl-3.5 pr-4 py-2 rounded-md border border-[#EAEAEA] text-xs bg-[#F7F6F3] text-[#2F3437] focus:bg-white focus:outline-none focus:border-[#111111] transition-all font-medium"
+              placeholder="Tìm tên, SĐT, tỉnh thành..."
+              class="w-full pl-3.5 pr-4 py-2 rounded-xl border border-[#EAEAEA] text-xs bg-[#F7F6F3] text-[#2F3437] focus:bg-white focus:outline-none focus:border-[#111111] transition-all font-medium"
             >
           </div>
 
-          <select id="cust-order-filter" class="px-3 py-2 rounded-md border border-[#EAEAEA] text-xs font-semibold text-[#2F3437] bg-[#F7F6F3] focus:bg-white focus:outline-none focus:border-[#111111]">
-            <option value="ALL">Tất cả số đơn</option>
-            <option value="LOYAL">Khách thân thiết (≥ 2 đơn)</option>
+          <select id="cust-tier-filter" class="px-3.5 py-2 rounded-xl border border-[#EAEAEA] text-xs font-medium text-[#2F3437] bg-[#F7F6F3] focus:bg-white focus:outline-none focus:border-[#111111]">
+            <option value="ALL">-- Tất cả phân hạng --</option>
+            <option value="VIP">Khách hàng VIP (≥ 3 đơn)</option>
+            <option value="LOYAL">Thân thiết (2 đơn)</option>
             <option value="NEW">Khách mới (1 đơn)</option>
           </select>
 
-          <select id="cust-sort-filter" class="px-3 py-2 rounded-md border border-[#EAEAEA] text-xs font-semibold text-[#2F3437] bg-[#F7F6F3] focus:bg-white focus:outline-none focus:border-[#111111]">
-            <option value="ORDERS_DESC">Sắp xếp: Số đơn nhiều nhất</option>
-            <option value="COD_DESC">Sắp xếp: Chi tiêu COD cao nhất</option>
-            <option value="NAME_ASC">Sắp xếp: Tên A-Z</option>
+          <select id="cust-carrier-filter" class="px-3.5 py-2 rounded-xl border border-[#EAEAEA] text-xs font-medium text-[#2F3437] bg-[#F7F6F3] focus:bg-white focus:outline-none focus:border-[#111111]">
+            <option value="ALL">-- Hãng hay dùng --</option>
+            <option value="vnpost">VNPost</option>
+            <option value="jt">J&T Express</option>
           </select>
+
+          <button id="btn-cust-clear-filter" class="px-3.5 py-2 rounded-xl border border-[#EAEAEA] bg-[#FFFFFF] text-xs font-semibold text-[#787774] hover:bg-[#F7F6F3] hover:text-[#111111] transition-all flex items-center gap-1.5">
+            <i class="ph ph-[#787774] ph-scissors text-sm"></i>
+            <span>Xóa lọc</span>
+          </button>
         </div>
       </div>
 
       <!-- Customer Table -->
-      <div class="bg-[#FFFFFF] rounded-xl border border-[#EAEAEA] overflow-hidden shadow-sm">
+      <div class="bg-[#FFFFFF] rounded-2xl border border-[#EAEAEA] overflow-hidden shadow-sm">
         <div class="overflow-x-auto">
-          <table class="w-full text-left border-collapse text-xs min-w-[950px]">
+          <table class="w-full text-left border-collapse text-xs min-w-[1050px]">
             <thead>
               <tr class="bg-[#F9F9F8] border-b border-[#EAEAEA] text-[11px] font-semibold text-[#787774] uppercase tracking-wider whitespace-nowrap">
-                <th class="py-3.5 px-4 w-12 text-center">STT</th>
-                <th class="py-3.5 px-4 w-48">Tên khách hàng</th>
-                <th class="py-3.5 px-4 w-36">Số điện thoại</th>
-                <th class="py-3.5 px-4">Địa chỉ giao hàng gần nhất</th>
-                <th class="py-3.5 px-4 w-28 text-center">Số đơn đã mua</th>
-                <th class="py-3.5 px-4 w-36 text-right">Tổng tiền COD</th>
-                <th class="py-3.5 px-4 w-32 text-center">Đơn mới nhất</th>
+                <th class="py-3.5 px-4 w-44">Tên khách hàng</th>
+                <th class="py-3.5 px-4 w-32">Số điện thoại</th>
+                <th class="py-3.5 px-4 w-20 text-center">Số đơn</th>
+                <th class="py-3.5 px-4 w-32 text-right">Tổng chi tiêu</th>
+                <th class="py-3.5 px-4 w-28 text-center">Mua gần nhất</th>
+                <th class="py-3.5 px-4 w-28 text-center">Phân hạng</th>
+                <th class="py-3.5 px-4 w-32 text-center">Ưu tiên vận chuyển</th>
+                <th class="py-3.5 px-4 w-32 text-center">Liên hệ</th>
                 <th class="py-3.5 px-4 w-24 text-center">Thao tác</th>
               </tr>
             </thead>
@@ -365,8 +363,23 @@
           </table>
         </div>
 
-        <div class="px-6 py-4 border-t border-[#EAEAEA] bg-[#FBFBFA] text-xs text-[#787774] font-medium flex justify-between items-center">
+        <div class="px-6 py-4 border-t border-[#EAEAEA] bg-[#FBFBFA] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#787774] font-medium">
           <div id="customer-count-info">Hiển thị 0 khách hàng</div>
+          <div class="flex items-center gap-4">
+            <div class="flex items-center gap-2">
+              <span>Hiển thị</span>
+              <select id="cust-per-page" class="px-2 py-1 rounded-md border border-[#EAEAEA] bg-white text-[#111111]">
+                <option value="20">20</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+              </select>
+              <span>khách / trang</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <button id="cust-btn-prev" class="px-3 py-1 rounded-md border border-[#EAEAEA] bg-[#FFFFFF] text-[#111111] hover:bg-[#F7F6F3] disabled:opacity-40">&lt; Trước</button>
+              <button id="cust-btn-next" class="px-3 py-1 rounded-md border border-[#EAEAEA] bg-[#FFFFFF] text-[#111111] hover:bg-[#F7F6F3] disabled:opacity-40">Sau &gt;</button>
+            </div>
+          </div>
         </div>
       </div>
     </main>
@@ -573,6 +586,7 @@
         const address = item.address || res.normalizedAddress || res.address || res.diaChi || '—';
         const cod = Number(res.codAmount || item.cod_amount || res.cod || 0);
         const date = item.created_at || '';
+        const platform = res.platform || item.platform || 'vnpost';
 
         const key = phone ? phone.trim() : name.trim().toLowerCase();
         if (!key || key === '—') return;
@@ -584,7 +598,9 @@
             address: address,
             totalOrders: 1,
             totalCod: cod,
-            latestDate: date
+            latestDate: date,
+            platform: platform,
+            note: item.note || ''
           };
         } else {
           customerMap[key].totalOrders += 1;
@@ -592,18 +608,22 @@
           if (date > customerMap[key].latestDate) {
             customerMap[key].latestDate = date;
             customerMap[key].address = address;
+            customerMap[key].platform = platform;
           }
         }
       });
     }
 
-    const custOrderFilter = document.getElementById('cust-order-filter');
-    const custSortFilter = document.getElementById('cust-sort-filter');
+    const custTierFilter = document.getElementById('cust-tier-filter');
+    const custCarrierFilter = document.getElementById('cust-carrier-filter');
+    const btnCustClearFilter = document.getElementById('btn-cust-clear-filter');
+    let custCurrentPage = 1;
+    let custPerPage = 20;
 
     function renderCustomers() {
       const keyword = searchCustomerInput ? searchCustomerInput.value.toLowerCase().trim() : '';
-      const orderFilterVal = custOrderFilter ? custOrderFilter.value : 'ALL';
-      const sortFilterVal = custSortFilter ? custSortFilter.value : 'ORDERS_DESC';
+      const tierVal = custTierFilter ? custTierFilter.value : 'ALL';
+      const carrierVal = custCarrierFilter ? custCarrierFilter.value : 'ALL';
 
       let list = Object.values(customerMap).filter(c => {
         const matchKeyword = !keyword || 
@@ -611,82 +631,157 @@
           c.phone.includes(keyword) || 
           c.address.toLowerCase().includes(keyword);
 
-        let matchOrderCount = true;
-        if (orderFilterVal === 'LOYAL') matchOrderCount = c.totalOrders >= 2;
-        if (orderFilterVal === 'NEW') matchOrderCount = c.totalOrders === 1;
+        let matchTier = true;
+        if (tierVal === 'VIP') matchTier = c.totalOrders >= 3;
+        else if (tierVal === 'LOYAL') matchTier = c.totalOrders === 2;
+        else if (tierVal === 'NEW') matchTier = c.totalOrders === 1;
 
-        return matchKeyword && matchOrderCount;
+        let matchCarrier = true;
+        if (carrierVal !== 'ALL') {
+          matchCarrier = (c.platform || '').toLowerCase().includes(carrierVal);
+        }
+
+        return matchKeyword && matchTier && matchCarrier;
       });
 
-      // Sắp xếp
-      if (sortFilterVal === 'ORDERS_DESC') {
-        list.sort((a, b) => b.totalOrders - a.totalOrders || b.totalCod - a.totalCod);
-      } else if (sortFilterVal === 'COD_DESC') {
-        list.sort((a, b) => b.totalCod - a.totalCod || b.totalOrders - a.totalOrders);
-      } else if (sortFilterVal === 'NAME_ASC') {
-        list.sort((a, b) => a.name.localeCompare(b.name));
+      // Sắp xếp mặc định theo số đơn nhiều nhất
+      list.sort((a, b) => b.totalOrders - a.totalOrders || b.totalCod - a.totalCod);
+
+      const vipCount = Object.values(customerMap).filter(c => c.totalOrders >= 3).length;
+
+      if (statTotalCustomers) statTotalCustomers.textContent = Object.keys(customerMap).length;
+      const statVipEl = document.getElementById('stat-vip-customers');
+      if (statVipEl) statVipEl.textContent = vipCount;
+
+      const totalCust = list.length;
+      const totalPages = Math.max(1, Math.ceil(totalCust / custPerPage));
+      if (custCurrentPage > totalPages) custCurrentPage = totalPages;
+      const start = (custCurrentPage - 1) * custPerPage;
+      const pageItems = list.slice(start, start + custPerPage);
+
+      if (customerCountInfo) {
+        if (totalCust === 0) {
+          customerCountInfo.textContent = 'Hiển thị 0 trong tổng số 0 khách hàng';
+        } else {
+          customerCountInfo.textContent = `Hiển thị từ ${start + 1} đến ${Math.min(start + custPerPage, totalCust)} trong tổng số ${totalCust} khách hàng`;
+        }
       }
 
-      let grandTotalCod = 0;
-      let grandTotalOrders = 0;
-      list.forEach(c => {
-        grandTotalCod += c.totalCod;
-        grandTotalOrders += c.totalOrders;
-      });
+      const custBtnPrev = document.getElementById('cust-btn-prev');
+      const custBtnNext = document.getElementById('cust-btn-next');
+      if (custBtnPrev) custBtnPrev.disabled = custCurrentPage <= 1;
+      if (custBtnNext) custBtnNext.disabled = custCurrentPage >= totalPages;
 
-      if (statTotalCustomers) statTotalCustomers.textContent = list.length;
-      if (statCustTotalOrders) statCustTotalOrders.textContent = grandTotalOrders;
-      if (statCustTotalCod) statCustTotalCod.textContent = `${grandTotalCod.toLocaleString('vi-VN')} đ`;
-      if (customerCountInfo) customerCountInfo.textContent = `Hiển thị ${list.length} khách hàng`;
-
-      if (list.length === 0) {
-        customerTableBody.innerHTML = `<tr><td colspan="8" class="py-8 text-center text-[#787774]">Không tìm thấy khách hàng nào.</td></tr>`;
+      if (pageItems.length === 0) {
+        customerTableBody.innerHTML = `<tr><td colspan="9" class="py-12 text-center text-[#787774] font-medium">Không tìm thấy khách hàng phù hợp.</td></tr>`;
         return;
       }
 
-      customerTableBody.innerHTML = list.map((c, idx) => `
-        <tr class="hover:bg-[#F9F9F8] transition-colors border-b border-[#EAEAEA] whitespace-nowrap">
-          <td class="py-3.5 px-4 text-center font-mono-code text-[#787774]">${idx + 1}</td>
-          <td class="py-3.5 px-4 font-bold text-[#111111]">${escapeHtml(c.name)}</td>
-          <td class="py-3.5 px-4 font-mono-code text-blue-700 font-semibold">${escapeHtml(c.phone || '—')}</td>
-          <td class="py-3.5 px-4 max-w-[380px] truncate text-[#2F3437]" title="${escapeHtml(c.address)}">${escapeHtml(c.address)}</td>
-          <td class="py-3.5 px-4 text-center font-bold">
-            <span class="inline-block px-2.5 py-0.5 rounded-full ${c.totalOrders >= 2 ? 'bg-pastel-green' : 'bg-slate-100 text-[#111111]'} border border-[#EAEAEA]">${c.totalOrders} đơn</span>
-          </td>
-          <td class="py-3.5 px-4 text-right font-extrabold text-emerald-800">${c.totalCod.toLocaleString('vi-VN')} đ</td>
-          <td class="py-3.5 px-4 text-center font-mono-code text-xs text-[#787774]">${formatDateShort(c.latestDate)}</td>
-          <td class="py-3.5 px-4 text-center">
-            <div class="flex items-center justify-center gap-1.5 text-[#787774]">
-              <button onclick="copyCustomerInfo('${escapeHtml(c.name)}', '${escapeHtml(c.phone)}', '${escapeHtml(c.address)}')" title="Sao chép SĐT & Địa chỉ" class="p-1.5 hover:text-[#111111] hover:bg-[#F0EFEA] rounded transition-all">
-                <i class="ph ph-copy text-base"></i>
+      customerTableBody.innerHTML = pageItems.map(c => {
+        // Formatter mua gần nhất: DD/MM/YYYY
+        let dateFormatted = '—';
+        if (c.latestDate) {
+          const d = new Date(c.latestDate);
+          if (!isNaN(d.getTime())) {
+            const dd = String(d.getDate()).padStart(2, '0');
+            const mm = String(d.getMonth() + 1).padStart(2, '0');
+            const yyyy = d.getFullYear();
+            dateFormatted = `${dd}/${mm}/${yyyy}`;
+          }
+        }
+
+        // Tier Badge (Phân hạng)
+        let tierBadge = '';
+        if (c.totalOrders >= 3) {
+          tierBadge = `<span class="inline-block px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-[11px] font-bold">Khách VIP</span>`;
+        } else if (c.totalOrders === 2) {
+          tierBadge = `<span class="inline-block px-3 py-1 rounded-full bg-blue-100 text-blue-800 text-[11px] font-bold">Thân thiết</span>`;
+        } else {
+          tierBadge = `<span class="inline-block px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-[11px] font-medium">Khách mới</span>`;
+        }
+
+        // Carrier Badge (Ưu tiên vận chuyển)
+        const p = (c.platform || '').toLowerCase();
+        let carrierBadge = '';
+        if (p.includes('jt') || p.includes('j&t')) {
+          carrierBadge = `<span class="inline-block px-2.5 py-0.5 rounded text-[11px] font-bold bg-amber-50 text-amber-700 border border-amber-200">J&T Express</span>`;
+        } else {
+          carrierBadge = `<span class="inline-block px-2.5 py-0.5 rounded text-[11px] font-bold bg-orange-50 text-orange-700 border border-orange-200">VNPost</span>`;
+        }
+
+        return `
+          <tr class="hover:bg-[#F9F9F8] transition-colors border-b border-[#EAEAEA] whitespace-nowrap">
+            <td class="py-4 px-4 font-semibold text-blue-600 hover:underline cursor-pointer" onclick="filterCustomerOrders('${escapeHtml(c.phone || c.name)}')">${escapeHtml(c.name)}</td>
+            <td class="py-4 px-4 font-mono-code text-[#2F3437] font-medium">${escapeHtml(c.phone || '—')}</td>
+            <td class="py-4 px-4 text-center font-bold text-[#111111]">${c.totalOrders}</td>
+            <td class="py-4 px-4 text-right font-extrabold text-[#111111]">${c.totalCod.toLocaleString('vi-VN')}đ</td>
+            <td class="py-4 px-4 text-center font-mono-code text-xs text-[#787774]">${dateFormatted}</td>
+            <td class="py-4 px-4 text-center">${tierBadge}</td>
+            <td class="py-4 px-4 text-center">${carrierBadge}</td>
+            <td class="py-4 px-4 text-center">
+              <div class="flex items-center justify-center gap-1.5 text-xs font-semibold">
+                <a href="https://facebook.com" target="_blank" class="text-slate-500 hover:text-blue-600 hover:underline">+ Link FB</a>
+                <a href="https://zalo.me/${c.phone}" target="_blank" class="w-5 h-5 rounded bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-[10px]" title="Mở Zalo">Z</a>
+              </div>
+            </td>
+            <td class="py-4 px-4 text-center">
+              <button onclick="editCustomerNote('${escapeHtml(c.phone || c.name)}', '${escapeHtml(c.note)}')" class="px-3 py-1 rounded-md border border-[#EAEAEA] bg-white hover:bg-[#F7F6F3] text-xs font-medium text-[#2F3437] transition-all">
+                Ghi chú
               </button>
-              <button onclick="filterCustomerOrders('${escapeHtml(c.phone || c.name)}')" title="Xem danh sách đơn của khách" class="p-1.5 hover:text-blue-700 hover:bg-pastel-blue rounded transition-all">
-                <i class="ph ph-magnifying-glass text-base"></i>
-              </button>
-            </div>
-          </td>
-        </tr>
-      `).join('');
+            </td>
+          </tr>
+        `;
+      }).join('');
     }
 
-    function copyCustomerInfo(name, phone, address) {
-      const text = `Khách hàng: ${name}\nSĐT: ${phone}\nĐịa chỉ: ${address}`;
-      navigator.clipboard.writeText(text).then(() => {
-        alert(`✅ Đã sao chép thông tin khách hàng ${name}!\n\n${text}`);
-      });
-    }
-
-    function filterCustomerOrders(query) {
-      navTabOrders.click(); // Chuyển sang Tab đơn hàng
-      if (searchInput) {
-        searchInput.value = query;
-        renderOrders();
+    function editCustomerNote(key, currentNote) {
+      const newNote = prompt("✍️ Nhập ghi chú cho khách hàng:", currentNote || '');
+      if (newNote !== null) {
+        if (customerMap[key]) customerMap[key].note = newNote;
+        alert("✅ Đã lưu ghi chú thành công!");
+        renderCustomers();
       }
     }
 
     if (searchCustomerInput) searchCustomerInput.addEventListener('input', renderCustomers);
-    if (custOrderFilter) custOrderFilter.addEventListener('change', renderCustomers);
-    if (custSortFilter) custSortFilter.addEventListener('change', renderCustomers);
+    if (custTierFilter) custTierFilter.addEventListener('change', renderCustomers);
+    if (custCarrierFilter) custCarrierFilter.addEventListener('change', renderCustomers);
+
+    if (btnCustClearFilter) {
+      btnCustClearFilter.addEventListener('click', () => {
+        if (searchCustomerInput) searchCustomerInput.value = '';
+        if (custTierFilter) custTierFilter.value = 'ALL';
+        if (custCarrierFilter) custCarrierFilter.value = 'ALL';
+        renderCustomers();
+      });
+    }
+
+    const custPerPageEl = document.getElementById('cust-per-page');
+    if (custPerPageEl) {
+      custPerPageEl.addEventListener('change', (e) => {
+        custPerPage = Number(e.target.value);
+        custCurrentPage = 1;
+        renderCustomers();
+      });
+    }
+
+    const custBtnPrevEl = document.getElementById('cust-btn-prev');
+    if (custBtnPrevEl) {
+      custBtnPrevEl.addEventListener('click', () => {
+        if (custCurrentPage > 1) {
+          custCurrentPage--;
+          renderCustomers();
+        }
+      });
+    }
+
+    const custBtnNextEl = document.getElementById('cust-btn-next');
+    if (custBtnNextEl) {
+      custBtnNextEl.addEventListener('click', () => {
+        custCurrentPage++;
+        renderCustomers();
+      });
+    }
 
     function updateDeviceFilterOptions(list) {
       const devices = new Set();
