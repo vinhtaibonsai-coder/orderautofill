@@ -561,10 +561,53 @@
     const statTotalCustomers = document.getElementById('stat-total-customers');
     const customerCountInfo = document.getElementById('customer-count-info');
 
+    let realtimeChannel = null;
+
     document.addEventListener('DOMContentLoaded', () => {
       setupTabSwitching();
       fetchOrders();
+      subscribeRealtime();
     });
+
+    // Lắng nghe thay đổi hai chiều ngầm từ Supabase (Realtime Sync)
+    function subscribeRealtime() {
+      const sb = initSupabase();
+      if (!sb || realtimeChannel) return;
+
+      try {
+        realtimeChannel = sb
+          .channel('public:history')
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'history' }, (payload) => {
+            console.log('⚡ Dữ liệu Supabase thay đổi ngầm:', payload);
+            fetchOrdersSilently(); // Cập nhật ngầm không hiển thị màn hình loading
+          })
+          .subscribe();
+      } catch (err) {
+        console.warn('Lỗi kết nối Supabase Realtime:', err);
+      }
+    }
+
+    async function fetchOrdersSilently() {
+      const sb = initSupabase();
+      if (!sb) return;
+
+      try {
+        const { data, error } = await sb
+          .from('history')
+          .select('*')
+          .order('created_at', { ascending: false });
+
+        if (!error && data) {
+          allOrders = data;
+          processCustomerData(data);
+          updateDeviceFilterOptions(allOrders);
+          renderOrders();
+          renderCustomers();
+        }
+      } catch(e) {
+        console.warn("Lỗi tải ngầm dữ liệu:", e);
+      }
+    }
 
     // Navigation Tabs Handler
     function setupTabSwitching() {
