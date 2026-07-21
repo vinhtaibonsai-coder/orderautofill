@@ -333,7 +333,7 @@
       
       authError.classList.add('hidden');
       loginBtn.disabled = true;
-      loginBtn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i><span>Đang xử lý...</span>`;
+      loginBtn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i><span>Đang kiểm tra với Supabase...</span>`;
       lucide.createIcons();
 
       const sb = initSupabase();
@@ -343,21 +343,28 @@
           // Kết nối trực tiếp Supabase Auth
           const { data, error } = await sb.auth.signInWithPassword({ email, password });
           if (error) {
-            console.warn("Supabase Auth Error:", error.message);
-            authErrorMsg.textContent = error.message === 'Invalid login credentials'
-              ? 'Tài khoản/Mật khẩu chưa được tạo trên Supabase Auth!'
-              : error.message;
+            console.warn("Supabase Auth Error:", error);
+            const msg = error.message === 'Invalid login credentials'
+              ? '❌ Đăng nhập thất bại: Email hoặc Mật khẩu chưa được tạo/xác thực trên Supabase Auth!'
+              : '❌ Lỗi Supabase Auth: ' + error.message;
+              
+            authErrorMsg.textContent = msg;
             authError.classList.remove('hidden');
+            alert(msg); // Hiển thị alert popup trực tiếp
             return;
           }
+          alert("✅ Đăng nhập thành công!");
           showDashboard(data.user);
         } else {
-          // Fallback khi gọi từ môi trường local
+          alert("ℹ️ Đang vào dạng Demo Mock Data.");
           showDashboard({ email });
         }
       } catch (err) {
-        console.error("Login Error:", err);
-        showDashboard({ email });
+        console.error("Login Exception:", err);
+        const msg = "❌ Lỗi hệ thống: " + (err.message || err);
+        authErrorMsg.textContent = msg;
+        authError.classList.remove('hidden');
+        alert(msg);
       } finally {
         loginBtn.disabled = false;
         loginBtn.innerHTML = `<span>Đăng nhập</span><i data-lucide="arrow-right" class="w-4 h-4"></i>`;
