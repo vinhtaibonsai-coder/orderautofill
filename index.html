@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Auto Fill Order - Đơn Hàng Đã Lên Đơn</title>
+  <title>Auto Fill Order - Quản Lý Đơn Hàng & Khách Hàng</title>
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -36,6 +36,7 @@
     .bg-pastel-blue { background-color: #E1F3FE; color: #1F6C9F; }
     .bg-pastel-green { background-color: #EDF3EC; color: #346538; }
     .bg-pastel-rose { background-color: #FDEBEC; color: #9F2F2D; }
+    .bg-pastel-amber { background-color: #FBF3DB; color: #956400; }
 
     /* Custom subtle scrollbar */
     ::-webkit-scrollbar { width: 4px; height: 4px; }
@@ -45,7 +46,7 @@
 </head>
 <body class="bg-[#F7F6F3] text-[#2F3437] antialiased min-h-screen flex">
 
-  <!-- LEFT SIDEBAR (MINIMALIST EDITORIAL MONOCHROME) -->
+  <!-- LEFT SIDEBAR -->
   <aside class="w-64 bg-[#FBFBFA] border-r border-[#EAEAEA] shrink-0 hidden md:flex flex-col justify-between min-h-screen sticky top-0 z-40 p-6">
     <div class="space-y-8">
       <!-- Brand Logo Header -->
@@ -61,20 +62,15 @@
 
       <!-- Navigation Menu -->
       <nav class="space-y-1 text-xs font-medium">
-        <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-md text-[#787774] hover:bg-[#F0EFEA] hover:text-[#111111] transition-all">
-          <i class="ph ph-squares-four text-base text-[#787774]"></i>
-          <span>Quản lý đơn hàng</span>
-        </a>
-
-        <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-md bg-[#111111] text-white font-semibold transition-all">
-          <i class="ph ph-paper-plane-tilt text-base text-white"></i>
+        <button id="nav-tab-orders" class="w-full flex items-center gap-3 px-3 py-2 rounded-md bg-[#111111] text-white font-semibold transition-all">
+          <i class="ph ph-paper-plane-tilt text-base"></i>
           <span>Đơn hàng đã lên đơn</span>
-        </a>
+        </button>
 
-        <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-md text-[#787774] hover:bg-[#F0EFEA] hover:text-[#111111] transition-all">
-          <i class="ph ph-users text-base text-[#787774]"></i>
+        <button id="nav-tab-customers" class="w-full flex items-center gap-3 px-3 py-2 rounded-md text-[#787774] hover:bg-[#F0EFEA] hover:text-[#111111] transition-all">
+          <i class="ph ph-users text-base"></i>
           <span>Quản lý khách hàng</span>
-        </a>
+        </button>
 
         <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-md text-[#787774] hover:bg-[#F0EFEA] hover:text-[#111111] transition-all">
           <i class="ph ph-chart-bar text-base text-[#787774]"></i>
@@ -122,10 +118,10 @@
       </div>
     </header>
 
-    <!-- Main Editorial Content Area (Full Width Display) -->
-    <main class="p-6 md:p-8 space-y-6 flex-1 w-full">
+    <!-- SECTION 1: ĐƠN HÀNG ĐÃ LÊN ĐƠN -->
+    <main id="section-orders" class="p-6 md:p-8 space-y-6 flex-1 w-full">
       
-      <!-- Title Section with Modern Clean Fonts (Chuẩn hình mẫu Cài đặt hệ thống) -->
+      <!-- Title Section -->
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-3 pb-2 border-b border-[#EAEAEA]">
         <div>
           <span class="text-[11px] font-semibold text-[#787774] uppercase tracking-wider">Dashboard & Orders</span>
@@ -136,9 +132,8 @@
         </div>
       </div>
 
-      <!-- 2 Minimal Pastel Summary KPI Cards (CHỈ 2 MÀU PASTEL XANH BIỂN & XANH LÁ) -->
+      <!-- 2 Minimal Pastel Summary KPI Cards -->
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-        <!-- Card 1: Pastel Blue (Xanh biển dịu) -->
         <div class="bg-pastel-blue rounded-xl p-6 border border-[#E1F3FE] flex items-center gap-5 transition-transform hover:-translate-y-0.5">
           <div class="w-12 h-12 rounded-lg bg-white/80 text-[#1F6C9F] flex items-center justify-center shrink-0">
             <i class="ph ph-paper-plane-tilt text-2xl"></i>
@@ -149,7 +144,6 @@
           </div>
         </div>
 
-        <!-- Card 2: Pastel Green (Xanh lá dịu) -->
         <div class="bg-pastel-green rounded-xl p-6 border border-[#EDF3EC] flex items-center gap-5 transition-transform hover:-translate-y-0.5">
           <div class="w-12 h-12 rounded-lg bg-white/80 text-[#346538] flex items-center justify-center shrink-0">
             <i class="ph ph-currency-dollar-simple text-2xl"></i>
@@ -161,10 +155,9 @@
         </div>
       </div>
 
-      <!-- Minimal Filter Bar (Flat Bento Style) -->
+      <!-- Minimal Filter Bar -->
       <div class="bg-[#FFFFFF] rounded-xl p-4 border border-[#EAEAEA] space-y-4">
         <div class="flex flex-wrap items-center gap-3">
-          <!-- Search Bar -->
           <div class="relative flex-1 min-w-[200px]">
             <input 
               type="text" 
@@ -174,7 +167,6 @@
             >
           </div>
 
-          <!-- Select Filters -->
           <select id="platform-filter" class="px-3 py-2 rounded-md border border-[#EAEAEA] text-xs font-semibold text-[#2F3437] bg-[#F7F6F3] focus:bg-white focus:outline-none focus:border-[#111111]">
             <option value="ALL">Tất cả ĐVVC</option>
             <option value="vnpost">VNPost (Bưu Điện)</option>
@@ -185,7 +177,6 @@
             <option value="ALL">Tất cả máy</option>
           </select>
 
-          <!-- Date Filters -->
           <div class="flex items-center gap-2 text-xs font-semibold text-[#787774]">
             <span>Từ</span>
             <input type="date" id="date-from" class="px-2.5 py-1.5 rounded-md border border-[#EAEAEA] bg-[#F7F6F3] text-xs font-medium text-[#2F3437]">
@@ -193,7 +184,6 @@
             <input type="date" id="date-to" class="px-2.5 py-1.5 rounded-md border border-[#EAEAEA] bg-[#F7F6F3] text-xs font-medium text-[#2F3437]">
           </div>
 
-          <!-- Quick Date Buttons -->
           <div class="flex items-center gap-1.5">
             <button id="btn-today" class="px-3 py-1.5 rounded-md border border-[#EAEAEA] bg-[#FFFFFF] text-xs font-semibold text-[#2F3437] hover:bg-[#F7F6F3] transition-all">Hôm nay</button>
             <button id="btn-7days" class="px-3 py-1.5 rounded-md border border-[#EAEAEA] bg-[#FFFFFF] text-xs font-semibold text-[#2F3437] hover:bg-[#F7F6F3] transition-all">7 ngày</button>
@@ -219,25 +209,25 @@
         <h3 class="text-sm font-semibold text-[#111111]">Chưa có đơn hàng nào lên thành công</h3>
       </div>
 
-      <!-- Mobile View: Clean Bento Card -->
+      <!-- Mobile View -->
       <div id="mobile-orders-container" class="space-y-4 md:hidden"></div>
 
-      <!-- Desktop View Table (Chống tràn màn hình & Cân đối cột) -->
+      <!-- Desktop View Table -->
       <div class="hidden md:block bg-[#FFFFFF] rounded-xl border border-[#EAEAEA] overflow-hidden shadow-sm">
         <div class="overflow-x-auto">
           <table class="w-full text-left border-collapse text-xs min-w-[1100px]">
             <thead>
               <tr class="bg-[#F9F9F8] border-b border-[#EAEAEA] text-[11px] font-semibold text-[#787774] uppercase tracking-wider whitespace-nowrap">
                 <th class="py-3.5 px-3 w-8 text-center"><input type="checkbox" id="select-all" class="rounded border-[#EAEAEA]"></th>
-                <th class="py-3.5 px-3 w-36">Khách hàng</th>
+                <th class="py-3.5 px-3 w-44">Khách hàng</th>
                 <th class="py-3.5 px-3">Địa chỉ chi tiết</th>
-                <th class="py-3.5 px-3 w-28">Mã đơn</th>
-                <th class="py-3.5 px-3 w-36">Mã vận đơn</th>
-                <th class="py-3.5 px-3 w-32 text-right font-semibold">Thu hộ COD</th>
+                <th class="py-3.5 px-3 w-32">Mã đơn</th>
+                <th class="py-3.5 px-3 w-40">Mã vận đơn</th>
+                <th class="py-3.5 px-3 w-36 text-right font-semibold">Thu hộ COD</th>
                 <th class="py-3.5 px-3 w-20 text-center">Thu cước</th>
                 <th class="py-3.5 px-3 w-24 text-center">ĐVVC</th>
                 <th class="py-3.5 px-3 w-20 text-center">Máy</th>
-                <th class="py-3.5 px-3 w-32 text-center">Ngày gửi đơn</th>
+                <th class="py-3.5 px-3 w-36 text-center">Ngày gửi đơn</th>
                 <th class="py-3.5 px-3 w-24 text-center">Thao tác</th>
               </tr>
             </thead>
@@ -247,7 +237,7 @@
           </table>
         </div>
 
-        <!-- Minimal Pagination Footer -->
+        <!-- Pagination Footer -->
         <div class="px-6 py-4 border-t border-[#EAEAEA] bg-[#FBFBFA] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#787774] font-medium">
           <div id="page-info">Trang 1 / 1 • Tổng: 0 đơn</div>
           <div class="flex items-center gap-4">
@@ -261,14 +251,101 @@
               <span>đơn/trang</span>
             </div>
             <div class="flex items-center gap-1.5">
-              <button id="btn-prev" class="px-3 py-1 rounded-md border border-[#EAEAEA] bg-white text-[#111111] hover:bg-[#F7F6F3] disabled:opacity-40">&lt; Trước</button>
-              <button id="btn-next" class="px-3 py-1 rounded-md border border-[#EAEAEA] bg-white text-[#111111] hover:bg-[#F7F6F3] disabled:opacity-40">Sau &gt;</button>
+              <button id="btn-prev" class="px-3 py-1 rounded-md border border-[#EAEAEA] bg-[#FFFFFF] text-[#111111] hover:bg-[#F7F6F3] disabled:opacity-40">&lt; Trước</button>
+              <button id="btn-next" class="px-3 py-1 rounded-md border border-[#EAEAEA] bg-[#FFFFFF] text-[#111111] hover:bg-[#F7F6F3] disabled:opacity-40">Sau &gt;</button>
             </div>
           </div>
         </div>
       </div>
+    </main>
+
+    <!-- SECTION 2: BẢNG QUẢN LÝ KHÁCH HÀNG (CUSTOMER MANAGEMENT) -->
+    <main id="section-customers" class="p-6 md:p-8 space-y-6 flex-1 w-full hidden">
+      
+      <!-- Title Section -->
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-3 pb-2 border-b border-[#EAEAEA]">
+        <div>
+          <span class="text-[11px] font-semibold text-[#787774] uppercase tracking-wider">CRM & Insights</span>
+          <h1 class="text-2xl sm:text-3xl font-extrabold text-[#111111] tracking-tight mt-0.5">Quản lý khách hàng</h1>
+        </div>
+        <div class="text-xs text-[#787774] font-medium bg-[#FFFFFF] px-3 py-1.5 rounded-md border border-[#EAEAEA]">
+          Tự động tổng hợp từ lịch sử đơn hàng
+        </div>
+      </div>
+
+      <!-- Customer Summary Cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+        <div class="bg-pastel-blue rounded-xl p-6 border border-[#E1F3FE] flex items-center gap-5">
+          <div class="w-12 h-12 rounded-lg bg-white/80 text-[#1F6C9F] flex items-center justify-center shrink-0">
+            <i class="ph ph-users-three text-2xl"></i>
+          </div>
+          <div>
+            <div class="text-[11px] uppercase font-bold tracking-wider opacity-80">TỔNG KHÁCH HÀNG</div>
+            <div id="stat-total-customers" class="text-3xl font-black tracking-tight mt-0.5">0</div>
+          </div>
+        </div>
+
+        <div class="bg-pastel-green rounded-xl p-6 border border-[#EDF3EC] flex items-center gap-5">
+          <div class="w-12 h-12 rounded-lg bg-white/80 text-[#346538] flex items-center justify-center shrink-0">
+            <i class="ph ph-shopping-bag text-2xl"></i>
+          </div>
+          <div>
+            <div class="text-[11px] uppercase font-bold tracking-wider opacity-80">TỔNG ĐƠN ĐẶT</div>
+            <div id="stat-cust-total-orders" class="text-3xl font-black tracking-tight mt-0.5">0</div>
+          </div>
+        </div>
+
+        <div class="bg-pastel-amber rounded-xl p-6 border border-[#FBF3DB] flex items-center gap-5">
+          <div class="w-12 h-12 rounded-lg bg-white/80 text-[#956400] flex items-center justify-center shrink-0">
+            <i class="ph ph-[#956400] ph-coins text-2xl"></i>
+          </div>
+          <div>
+            <div class="text-[11px] uppercase font-bold tracking-wider opacity-80">TỔNG CHI TIÊU COD</div>
+            <div id="stat-cust-total-cod" class="text-3xl font-black tracking-tight mt-0.5">0 đ</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Customer Search Bar -->
+      <div class="bg-[#FFFFFF] rounded-xl p-4 border border-[#EAEAEA]">
+        <div class="relative flex-1">
+          <input 
+            type="text" 
+            id="search-customer-input" 
+            placeholder="Tìm tên khách hàng, SĐT hoặc địa chỉ..."
+            class="w-full pl-3.5 pr-4 py-2 rounded-md border border-[#EAEAEA] text-xs bg-[#F7F6F3] text-[#2F3437] focus:bg-white focus:outline-none focus:border-[#111111] transition-all font-medium"
+          >
+        </div>
+      </div>
+
+      <!-- Customer Table -->
+      <div class="bg-[#FFFFFF] rounded-xl border border-[#EAEAEA] overflow-hidden shadow-sm">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse text-xs min-w-[900px]">
+            <thead>
+              <tr class="bg-[#F9F9F8] border-b border-[#EAEAEA] text-[11px] font-semibold text-[#787774] uppercase tracking-wider whitespace-nowrap">
+                <th class="py-3.5 px-4 w-12 text-center">STT</th>
+                <th class="py-3.5 px-4 w-48">Tên khách hàng</th>
+                <th class="py-3.5 px-4 w-36">Số điện thoại</th>
+                <th class="py-3.5 px-4">Địa chỉ giao hàng gần nhất</th>
+                <th class="py-3.5 px-4 w-28 text-center">Số đơn đã mua</th>
+                <th class="py-3.5 px-4 w-36 text-right">Tổng tiền COD</th>
+                <th class="py-3.5 px-4 w-36 text-center">Đơn mới nhất</th>
+              </tr>
+            </thead>
+            <tbody id="customer-table-body" class="divide-y divide-[#EAEAEA] text-[#2F3437]">
+              <!-- Dynamic Rows -->
+            </tbody>
+          </table>
+        </div>
+
+        <div class="px-6 py-4 border-t border-[#EAEAEA] bg-[#FBFBFA] text-xs text-[#787774] font-medium flex justify-between items-center">
+          <div id="customer-count-info">Hiển thị 0 khách hàng</div>
+        </div>
+      </div>
 
     </main>
+
   </div>
 
   <script>
@@ -296,16 +373,16 @@
     }
 
     let allOrders = [];
+    let customerMap = {};
     let currentPage = 1;
     let perPage = 20;
 
-    document.addEventListener('DOMContentLoaded', () => {
-      fetchOrders();
-    });
+    // DOM Elements
+    const navTabOrders = document.getElementById('nav-tab-orders');
+    const navTabCustomers = document.getElementById('nav-tab-customers');
+    const sectionOrders = document.getElementById('section-orders');
+    const sectionCustomers = document.getElementById('section-customers');
 
-    // ==========================================
-    // 2. FETCH & RENDER CREATED ORDERS
-    // ==========================================
     const searchInput = document.getElementById('search-input');
     const deviceFilter = document.getElementById('device-filter');
     const platformFilter = document.getElementById('platform-filter');
@@ -323,6 +400,40 @@
     const btnPrev = document.getElementById('btn-prev');
     const btnNext = document.getElementById('btn-next');
 
+    // Customer Elements
+    const searchCustomerInput = document.getElementById('search-customer-input');
+    const customerTableBody = document.getElementById('customer-table-body');
+    const statTotalCustomers = document.getElementById('stat-total-customers');
+    const statCustTotalOrders = document.getElementById('stat-cust-total-orders');
+    const statCustTotalCod = document.getElementById('stat-cust-total-cod');
+    const customerCountInfo = document.getElementById('customer-count-info');
+
+    document.addEventListener('DOMContentLoaded', () => {
+      setupTabSwitching();
+      fetchOrders();
+    });
+
+    // Navigation Tabs Handler
+    function setupTabSwitching() {
+      navTabOrders.addEventListener('click', () => {
+        navTabOrders.className = "w-full flex items-center gap-3 px-3 py-2 rounded-md bg-[#111111] text-white font-semibold transition-all";
+        navTabCustomers.className = "w-full flex items-center gap-3 px-3 py-2 rounded-md text-[#787774] hover:bg-[#F0EFEA] hover:text-[#111111] transition-all";
+        sectionOrders.classList.remove('hidden');
+        sectionCustomers.classList.add('hidden');
+      });
+
+      navTabCustomers.addEventListener('click', () => {
+        navTabCustomers.className = "w-full flex items-center gap-3 px-3 py-2 rounded-md bg-[#111111] text-white font-semibold transition-all";
+        navTabOrders.className = "w-full flex items-center gap-3 px-3 py-2 rounded-md text-[#787774] hover:bg-[#F0EFEA] hover:text-[#111111] transition-all";
+        sectionCustomers.classList.remove('hidden');
+        sectionOrders.classList.add('hidden');
+        renderCustomers();
+      });
+    }
+
+    // ==========================================
+    // 2. FETCH & PROCESS ORDERS & CUSTOMERS
+    // ==========================================
     async function fetchOrders() {
       loadingState.classList.remove('hidden');
       emptyState.classList.add('hidden');
@@ -352,14 +463,100 @@
         }
 
         allOrders = data;
+        processCustomerData(data);
         updateDeviceFilterOptions(allOrders);
         renderOrders();
+        renderCustomers();
 
       } catch(e) {
         console.error("Lỗi tải danh sách đơn hàng:", e);
         loadingState.classList.add('hidden');
         emptyState.classList.remove('hidden');
       }
+    }
+
+    function processCustomerData(orders) {
+      customerMap = {};
+      orders.forEach(item => {
+        let res = item.result || {};
+        if (typeof res === 'string') { try { res = JSON.parse(res); } catch(e) {} }
+
+        const name = item.customer_name || res.name || res.recipientName || res.hoTen || '—';
+        const phone = item.phone || res.phone || res.recipientPhone || res.sdt || '';
+        const address = item.address || res.normalizedAddress || res.address || res.diaChi || '—';
+        const cod = Number(res.codAmount || item.cod_amount || res.cod || 0);
+        const date = item.created_at || '';
+
+        // Group Key theo Số điện thoại hoặc Tên
+        const key = phone ? phone.trim() : name.trim().toLowerCase();
+        if (!key || key === '—') return;
+
+        if (!customerMap[key]) {
+          customerMap[key] = {
+            name: name,
+            phone: phone,
+            address: address,
+            totalOrders: 1,
+            totalCod: cod,
+            latestDate: date
+          };
+        } else {
+          customerMap[key].totalOrders += 1;
+          customerMap[key].totalCod += cod;
+          if (date > customerMap[key].latestDate) {
+            customerMap[key].latestDate = date;
+            customerMap[key].address = address; // Cập nhật địa chỉ mới nhất
+          }
+        }
+      });
+    }
+
+    function renderCustomers() {
+      const keyword = searchCustomerInput ? searchCustomerInput.value.toLowerCase().trim() : '';
+      const list = Object.values(customerMap).filter(c => {
+        return !keyword || 
+          c.name.toLowerCase().includes(keyword) || 
+          c.phone.includes(keyword) || 
+          c.address.toLowerCase().includes(keyword);
+      });
+
+      // Sắp xếp khách hàng có nhiều đơn nhất lên trước
+      list.sort((a, b) => b.totalOrders - a.totalOrders || b.totalCod - a.totalCod);
+
+      let grandTotalCod = 0;
+      let grandTotalOrders = 0;
+      list.forEach(c => {
+        grandTotalCod += c.totalCod;
+        grandTotalOrders += c.totalOrders;
+      });
+
+      if (statTotalCustomers) statTotalCustomers.textContent = list.length;
+      if (statCustTotalOrders) statCustTotalOrders.textContent = grandTotalOrders;
+      if (statCustTotalCod) statCustTotalCod.textContent = `${grandTotalCod.toLocaleString('vi-VN')} đ`;
+      if (customerCountInfo) customerCountInfo.textContent = `Hiển thị ${list.length} khách hàng`;
+
+      if (list.length === 0) {
+        customerTableBody.innerHTML = `<tr><td colspan="7" class="py-8 text-center text-[#787774]">Không tìm thấy khách hàng nào.</td></tr>`;
+        return;
+      }
+
+      customerTableBody.innerHTML = list.map((c, idx) => `
+        <tr class="hover:bg-[#F9F9F8] transition-colors border-b border-[#EAEAEA] whitespace-nowrap">
+          <td class="py-3.5 px-4 text-center font-mono-code text-[#787774]">${idx + 1}</td>
+          <td class="py-3.5 px-4 font-bold text-[#111111]">${escapeHtml(c.name)}</td>
+          <td class="py-3.5 px-4 font-mono-code text-blue-700 font-semibold">${escapeHtml(c.phone || '—')}</td>
+          <td class="py-3.5 px-4 max-w-[400px] truncate text-[#2F3437]" title="${escapeHtml(c.address)}">${escapeHtml(c.address)}</td>
+          <td class="py-3.5 px-4 text-center font-bold">
+            <span class="inline-block px-2.5 py-0.5 rounded-full bg-slate-100 text-[#111111] border border-[#EAEAEA]">${c.totalOrders} đơn</span>
+          </td>
+          <td class="py-3.5 px-4 text-right font-extrabold text-emerald-800">${c.totalCod.toLocaleString('vi-VN')} đ</td>
+          <td class="py-3.5 px-4 text-center font-mono-code text-xs text-[#787774]">${formatDateShort(c.latestDate)}</td>
+        </tr>
+      `).join('');
+    }
+
+    if (searchCustomerInput) {
+      searchCustomerInput.addEventListener('input', renderCustomers);
     }
 
     function updateDeviceFilterOptions(list) {
@@ -401,7 +598,6 @@
         const devName = (item.device_name || item.deviceName || '').toLowerCase();
         const platform = (res.platform || item.platform || '').toLowerCase();
 
-        // Lọc ngày
         const createdAt = item.created_at || '';
         const dateStr = createdAt.slice(0, 10);
         if (fromVal && dateStr < fromVal) return false;
@@ -420,7 +616,6 @@
         return matchKeyword && matchDevice && matchPlatform;
       });
 
-      // Thống kê tổng COD
       let totalCodSum = 0;
       filtered.forEach(item => {
         let res = item.result || {};
@@ -441,7 +636,6 @@
 
       emptyState.classList.add('hidden');
 
-      // Phân trang
       const totalPages = Math.max(1, Math.ceil(filtered.length / perPage));
       if (currentPage > totalPages) currentPage = totalPages;
       const start = (currentPage - 1) * perPage;
@@ -451,7 +645,6 @@
       btnPrev.disabled = currentPage <= 1;
       btnNext.disabled = currentPage >= totalPages;
 
-      // Render Desktop Table View (Plus Jakarta Sans / Inter Fonts)
       desktopTableBody.innerHTML = pageItems.map(item => {
         let res = item.result || {};
         if (typeof res === 'string') {
@@ -491,22 +684,22 @@
               <div class="text-[11px] text-[#787774] font-medium mt-0.5">${escapeHtml(phone)}</div>
             </td>
             <td class="py-3.5 px-3 max-w-[450px] truncate text-[#2F3437]" title="${escapeHtml(address)}">${escapeHtml(address)}</td>
-            <td class="py-3 px-3">
+            <td class="py-3.5 px-3">
               <span class="inline-block font-semibold text-xs text-[#111111] bg-[#F7F6F3] px-2 py-0.5 rounded border border-[#EAEAEA]">${escapeHtml(orderCode)}</span>
             </td>
-            <td class="py-3 px-3">
+            <td class="py-3.5 px-3">
               <span class="inline-block text-xs font-bold bg-pastel-blue px-2 py-0.5 rounded">${escapeHtml(waybillCode)}</span>
             </td>
-            <td class="py-3 px-3 font-extrabold text-emerald-800 text-right">
+            <td class="py-3.5 px-3 font-extrabold text-emerald-800 text-right">
               ${codAmount > 0 ? Number(codAmount).toLocaleString('vi-VN') + ' đ' : '0 đ'}
             </td>
-            <td class="py-3 px-3 text-center text-[11px] font-medium text-[#787774]">${escapeHtml(collectFee)}</td>
-            <td class="py-3 px-3 text-center">${getPlatformBadge(platform)}</td>
-            <td class="py-3 px-3 text-center">
+            <td class="py-3.5 px-3 text-center text-[11px] font-medium text-[#787774]">${escapeHtml(collectFee)}</td>
+            <td class="py-3.5 px-3 text-center">${getPlatformBadge(platform)}</td>
+            <td class="py-3.5 px-3 text-center">
               <span class="inline-block text-[11px] font-medium bg-[#F7F6F3] text-[#787774] px-2 py-0.5 rounded border border-[#EAEAEA]">${escapeHtml(device)}</span>
             </td>
-            <td class="py-3 px-3 text-center text-xs text-[#787774] font-medium">${escapeHtml(timeStr)}</td>
-            <td class="py-3 px-3 text-center">
+            <td class="py-3.5 px-3 text-center text-xs text-[#787774] font-medium">${escapeHtml(timeStr)}</td>
+            <td class="py-3.5 px-3 text-center">
               <div class="flex items-center justify-center gap-1.5 text-[#787774]">
                 <button title="Sao chép" class="p-1 hover:text-[#111111] transition-all"><i class="ph ph-copy text-base"></i></button>
                 <button title="Tải lại" class="p-1 hover:text-[#111111] transition-all"><i class="ph ph-arrows-clockwise text-base"></i></button>
@@ -517,7 +710,6 @@
         `;
       }).join('');
 
-      // Render Mobile Card View
       mobileOrdersContainer.innerHTML = pageItems.map(item => {
         let res = item.result || {};
         if (typeof res === 'string') { try { res = JSON.parse(res); } catch(e) {} }
@@ -612,14 +804,17 @@
       renderOrders();
     });
 
-    document.getElementById('btn-[#787774]').addEventListener('click', () => {
-      searchInput.value = '';
-      deviceFilter.value = 'ALL';
-      platformFilter.value = 'ALL';
-      dateFrom.value = '';
-      dateTo.value = '';
-      renderOrders();
-    });
+    const btnClearFilters = document.getElementById('btn-clear-filters');
+    if (btnClearFilters) {
+      btnClearFilters.addEventListener('click', () => {
+        searchInput.value = '';
+        deviceFilter.value = 'ALL';
+        platformFilter.value = 'ALL';
+        dateFrom.value = '';
+        dateTo.value = '';
+        renderOrders();
+      });
+    }
 
     // Listeners
     searchInput.addEventListener('input', renderOrders);
