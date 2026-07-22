@@ -1117,6 +1117,37 @@ function handleCheckboxChange() {
   }
 }
 
+// ─── XÓA ĐƠN HÀNG ĐƠN LẺ & HÀNG LOẠT ───
+async function deleteOrder(id) {
+  if (!id) return;
+  const item = (allOrders || []).find(o => String(o.id) === String(id));
+  const orderInfo = item ? `đơn hàng của "${item.customer_name || 'Khách hàng'}" (${item.phone || ''})` : `đơn hàng này`;
+
+  if (!confirm(`⚠️ Bạn có chắc chắn muốn XÓA vĩnh viễn ${orderInfo} khỏi Supabase?`)) return;
+
+  const sb = initSupabase();
+  if (!sb) return alert("Lỗi kết nối Supabase!");
+
+  try {
+    const [histRes, subRes] = await Promise.all([
+      sb.from('history').delete().eq('id', id),
+      sb.from('submitted_orders').delete().or(`id.eq.${id},saved_order_id.eq.${id}`)
+    ]);
+
+    if (histRes.error && subRes.error) {
+      alert("Lỗi khi xóa đơn hàng: " + (histRes.error.message || subRes.error.message));
+    } else {
+      if (typeof writeAuditLog === 'function') {
+        writeAuditLog('Xóa đơn hàng', `Đã xóa vĩnh viễn ${orderInfo} khỏi hệ thống.`);
+      }
+      alert("🎉 Đã xóa thành công đơn hàng!");
+      fetchOrders();
+    }
+  } catch(e) {
+    alert("Lỗi hệ thống khi xóa đơn hàng: " + e.message);
+  }
+}
+
 const btnBulkDelete = document.getElementById('btn-bulk-delete');
 if (btnBulkDelete) {
   btnBulkDelete.addEventListener('click', async () => {
@@ -1131,20 +1162,17 @@ if (btnBulkDelete) {
     if (!sb) return alert("Lỗi kết nối Supabase!");
 
     try {
-      const { error } = await sb
-        .from('history')
-        .delete()
-        .in('id', idsToDelete);
+      await Promise.all([
+        sb.from('history').delete().in('id', idsToDelete),
+        sb.from('submitted_orders').delete().in('id', idsToDelete),
+        sb.from('submitted_orders').delete().in('saved_order_id', idsToDelete)
+      ]);
 
-      if (error) {
-        alert("Lỗi khi xóa hàng loạt: " + error.message);
-      } else {
-        if (typeof writeAuditLog === 'function') {
-          writeAuditLog('Xóa hàng loạt', `Đã xóa vĩnh viễn ${idsToDelete.length} đơn hàng khỏi hệ thống.`);
-        }
-        alert(`🎉 Đã xóa thành công ${idsToDelete.length} đơn hàng!`);
-        fetchOrders();
+      if (typeof writeAuditLog === 'function') {
+        writeAuditLog('Xóa hàng loạt', `Đã xóa vĩnh viễn ${idsToDelete.length} đơn hàng khỏi hệ thống.`);
       }
+      alert(`🎉 Đã xóa thành công ${idsToDelete.length} đơn hàng!`);
+      fetchOrders();
     } catch(e) {
       alert("Lỗi hệ thống: " + e.message);
     }
