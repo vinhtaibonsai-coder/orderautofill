@@ -1539,6 +1539,7 @@ function renderCharts(orders) {
 // ==========================================
 const statDateFrom = document.getElementById('stat-date-from');
 const statDateTo = document.getElementById('stat-date-to');
+let activeStatFilter = null; // Theo dõi nút lọc đang được chọn ('today', '7days', '30days', 'month')
 
 function handleStatDateChange() {
   if (!statDateFrom || !statDateTo) return;
@@ -1567,8 +1568,16 @@ function handleStatDateChange() {
   if (codStatic) codStatic.textContent = `${Number(totalCodSum).toLocaleString('vi-VN')} đ`;
 }
 
-if (statDateFrom) statDateFrom.addEventListener('change', handleStatDateChange);
-if (statDateTo) statDateTo.addEventListener('change', handleStatDateChange);
+if (statDateFrom) statDateFrom.addEventListener('change', () => {
+  activeStatFilter = null;
+  setStatBtnActive(null);
+  handleStatDateChange();
+});
+if (statDateTo) statDateTo.addEventListener('change', () => {
+  activeStatFilter = null;
+  setStatBtnActive(null);
+  handleStatDateChange();
+});
 
 function setStatBtnActive(activeBtnId) {
   const btns = ['stat-btn-today', 'stat-btn-7days', 'stat-btn-30days', 'stat-btn-month'];
@@ -1584,49 +1593,77 @@ function setStatBtnActive(activeBtnId) {
   });
 }
 
+function clearStatDateFilters() {
+  activeStatFilter = null;
+  setStatBtnActive(null);
+  if (statDateFrom) statDateFrom.value = '';
+  if (statDateTo) statDateTo.value = '';
+  handleStatDateChange();
+}
+
 const statBtnToday = document.getElementById('stat-btn-today');
 if (statBtnToday) {
   statBtnToday.addEventListener('click', () => {
-    setStatBtnActive('stat-btn-today');
-    const today = new Date().toISOString().slice(0, 10);
-    statDateFrom.value = today;
-    statDateTo.value = today;
-    handleStatDateChange();
+    if (activeStatFilter === 'today') {
+      clearStatDateFilters();
+    } else {
+      activeStatFilter = 'today';
+      setStatBtnActive('stat-btn-today');
+      const today = new Date().toISOString().slice(0, 10);
+      statDateFrom.value = today;
+      statDateTo.value = today;
+      handleStatDateChange();
+    }
   });
 }
 
 const statBtn7Days = document.getElementById('stat-btn-7days');
 if (statBtn7Days) {
   statBtn7Days.addEventListener('click', () => {
-    setStatBtnActive('stat-btn-7days');
-    const d = new Date();
-    statDateTo.value = d.toISOString().slice(0, 10);
-    d.setDate(d.getDate() - 7);
-    statDateFrom.value = d.toISOString().slice(0, 10);
-    handleStatDateChange();
+    if (activeStatFilter === '7days') {
+      clearStatDateFilters();
+    } else {
+      activeStatFilter = '7days';
+      setStatBtnActive('stat-btn-7days');
+      const d = new Date();
+      statDateTo.value = d.toISOString().slice(0, 10);
+      d.setDate(d.getDate() - 7);
+      statDateFrom.value = d.toISOString().slice(0, 10);
+      handleStatDateChange();
+    }
   });
 }
 
 const statBtn30Days = document.getElementById('stat-btn-30days');
 if (statBtn30Days) {
   statBtn30Days.addEventListener('click', () => {
-    setStatBtnActive('stat-btn-30days');
-    const d = new Date();
-    statDateTo.value = d.toISOString().slice(0, 10);
-    d.setDate(d.getDate() - 30);
-    statDateFrom.value = d.toISOString().slice(0, 10);
-    handleStatDateChange();
+    if (activeStatFilter === '30days') {
+      clearStatDateFilters();
+    } else {
+      activeStatFilter = '30days';
+      setStatBtnActive('stat-btn-30days');
+      const d = new Date();
+      statDateTo.value = d.toISOString().slice(0, 10);
+      d.setDate(d.getDate() - 30);
+      statDateFrom.value = d.toISOString().slice(0, 10);
+      handleStatDateChange();
+    }
   });
 }
 
 const statBtnMonth = document.getElementById('stat-btn-month');
 if (statBtnMonth) {
   statBtnMonth.addEventListener('click', () => {
-    setStatBtnActive('stat-btn-month');
-    const d = new Date();
-    statDateTo.value = d.toISOString().slice(0, 10);
-    d.setDate(1);
-    statDateFrom.value = d.toISOString().slice(0, 10);
-    handleStatDateChange();
+    if (activeStatFilter === 'month') {
+      clearStatDateFilters();
+    } else {
+      activeStatFilter = 'month';
+      setStatBtnActive('stat-btn-month');
+      const d = new Date();
+      statDateTo.value = d.toISOString().slice(0, 10);
+      d.setDate(1);
+      statDateFrom.value = d.toISOString().slice(0, 10);
+      handleStatDateChange();
+    }
   });
 }
