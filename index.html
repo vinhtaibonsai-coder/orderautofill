@@ -1796,10 +1796,40 @@
         try {
           // Xác thực thông tin đăng nhập trực tiếp qua bảng auth.users hoặc bảng profiles tùy chọn.
           // Ở đây sử dụng auth.signInWithPassword chuẩn của Supabase
-          const { data, error } = await sb.auth.signInWithPassword({
+          let { data, error } = await sb.auth.signInWithPassword({
             email: email,
             password: pass
           });
+
+          // Tự động tạo tài khoản Admin mặc định khi nhập đúng và nhận lỗi chưa đăng ký từ Supabase
+          if (error && email === 'admin@luathuysinh.vn' && pass === 'admin123@') {
+            console.log('Khởi tạo tự động tài khoản admin mặc định...');
+            const registerRes = await sb.auth.signUp({
+              email: email,
+              password: pass,
+              options: {
+                data: { role: 'admin' }
+              }
+            });
+
+            if (!registerRes.error) {
+              // Ghi đè cấu hình vào bảng profiles để nhận quyền Quản trị viên
+              await sb.from('profiles').insert({
+                id: registerRes.data.user.id,
+                email: email,
+                role: 'admin'
+              }).select();
+
+              // Thử đăng nhập lại sau khi đăng ký thành công
+              const retryLogin = await sb.auth.signInWithPassword({
+                email: email,
+                password: pass
+              });
+              
+              data = retryLogin.data;
+              error = retryLogin.error;
+            }
+          }
 
           if (error) {
             alert("❌ Đăng nhập thất bại: " + error.message);
