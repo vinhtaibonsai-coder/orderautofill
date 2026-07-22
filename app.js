@@ -196,6 +196,17 @@ function setupTabSwitching() {
       renderCustomers();
     });
   }
+
+  if (navTabUsers) {
+    navTabUsers.addEventListener('click', () => {
+      setActiveTab(navTabUsers);
+      sectionUsers.classList.remove('hidden');
+      sectionStatistics.classList.add('hidden');
+      sectionOrders.classList.add('hidden');
+      sectionCustomers.classList.add('hidden');
+      fetchUsers();
+    });
+  }
 }
 
 function setActiveTab(activeTabEl) {
