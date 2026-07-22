@@ -622,9 +622,9 @@ function renderCustomers() {
       const p = (c.platform || '').toLowerCase();
       let carrierBadge = '';
       if (p.includes('jt') || p.includes('j&t')) {
-        carrierBadge = `<span class="inline-block px-2.5 py-0.5 rounded text-[11px] font-bold bg-amber-50 text-amber-700 border border-amber-200">J&T Express</span>`;
+        carrierBadge = `<span class="inline-block px-2.5 py-0.5 rounded text-[11px] font-extrabold bg-red-100 text-red-700 border border-red-200">J&T Express</span>`;
       } else {
-        carrierBadge = `<span class="inline-block px-2.5 py-0.5 rounded text-[11px] font-bold bg-orange-50 text-orange-700 border border-orange-200">VNPost</span>`;
+        carrierBadge = `<span class="inline-block px-2.5 py-0.5 rounded text-[11px] font-extrabold bg-[#FACC15] text-[#713F12] border border-[#EAB308] shadow-sm">VNPost</span>`;
       }
 
       return `
@@ -980,7 +980,15 @@ function renderOrders() {
           <span class="inline-block font-semibold text-xs text-[#111111] bg-[#F7F6F3] px-2 py-0.5 rounded border border-[#EAEAEA]">${escapeHtml(orderCode)}</span>
         </td>
         <td class="py-3.5 px-3">
-          <span class="inline-block text-xs font-bold bg-pastel-blue px-2 py-0.5 rounded">${escapeHtml(waybillCode)}</span>
+          <div class="flex items-center gap-1.5">
+            <span class="inline-block text-xs font-bold bg-pastel-blue px-2 py-0.5 rounded font-mono">${escapeHtml(waybillCode)}</span>
+            ${waybillCode && waybillCode !== '—' ? `
+              <button onclick="copyWaybillCode('${escapeHtml(waybillCode)}', '${escapeHtml(platform)}')" title="Sao chép mã vận đơn cho khách (${escapeHtml(waybillCode)} - ${platform.includes('jt') ? 'J&T' : 'VNPost'})" class="px-1.5 py-0.5 bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200 rounded transition-all flex items-center gap-0.5 text-[10px] font-bold">
+                <i class="ph ph-copy text-xs"></i>
+                <span>Copy</span>
+              </button>
+            ` : ''}
+          </div>
         </td>
         <td class="py-3.5 px-3 font-extrabold text-emerald-800 text-right">
           ${codAmount > 0 ? Number(codAmount).toLocaleString('vi-VN') + ' đ' : '0 đ'}
@@ -1057,7 +1065,15 @@ function renderOrders() {
             </div>
             <div>
               <span class="text-[#1F6C9F] font-medium text-[11px]">Mã vận đơn:</span>
-              <div class="font-bold text-[#1F6C9F] text-xs mt-0.5">${escapeHtml(waybillCode)}</div>
+              <div class="flex items-center gap-1.5 mt-0.5">
+                <span class="font-bold text-[#1F6C9F] text-xs">${escapeHtml(waybillCode)}</span>
+                ${waybillCode && waybillCode !== '—' ? `
+                  <button onclick="copyWaybillCode('${escapeHtml(waybillCode)}', '${escapeHtml(platform)}')" title="Sao chép mã vận đơn" class="px-1.5 py-0.5 bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200 rounded flex items-center gap-0.5 font-bold text-[10px]">
+                    <i class="ph ph-copy text-xs"></i>
+                    <span>Copy</span>
+                  </button>
+                ` : ''}
+              </div>
             </div>
           </div>
 
@@ -1407,12 +1423,47 @@ if (btnNext) {
 function getPlatformBadge(platform) {
   const p = (platform || '').toLowerCase();
   if (p.includes('vnpost') || p.includes('bưu điện')) {
-    return `<span class="inline-block px-2 py-0.5 rounded text-[11px] font-semibold bg-pastel-blue">VNPost</span>`;
+    return `<span class="inline-block px-2.5 py-0.5 rounded text-[11px] font-extrabold bg-[#FACC15] text-[#713F12] border border-[#EAB308] shadow-sm">VNPost</span>`;
   }
   if (p.includes('jt') || p.includes('j&t')) {
-    return `<span class="inline-block px-2 py-0.5 rounded text-[11px] font-semibold bg-pastel-rose">J&T</span>`;
+    return `<span class="inline-block px-2.5 py-0.5 rounded text-[11px] font-extrabold bg-red-100 text-red-700 border border-red-200">J&T Express</span>`;
   }
   return `<span class="inline-block px-2 py-0.5 rounded text-[11px] font-semibold bg-[#F7F6F3] text-[#787774] border border-[#EAEAEA]">Khác</span>`;
+}
+
+// ─── SAO CHÉP MÃ VẬN ĐƠN KÈM ĐƠN VỊ VẬN CHUYỂN (DVVC) ───
+function copyWaybillCode(waybillCode, platform) {
+  if (!waybillCode || waybillCode === '—' || waybillCode === '-') {
+    alert("Chưa có mã vận đơn để sao chép!");
+    return;
+  }
+  const p = (platform || '').toLowerCase();
+  const carrierName = (p.includes('jt') || p.includes('j&t')) ? 'J&T' : 'VNPost';
+  const formattedText = `${waybillCode.trim()} - ${carrierName}`;
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(formattedText).then(() => {
+      if (typeof showToast === 'function') showToast(`📋 Đã sao chép: ${formattedText}`, 'success');
+      else alert(`📋 Đã sao chép: ${formattedText}`);
+    }).catch(() => fallbackCopyWaybillText(formattedText));
+  } else {
+    fallbackCopyWaybillText(formattedText);
+  }
+}
+
+function fallbackCopyWaybillText(text) {
+  const input = document.createElement('input');
+  input.value = text;
+  document.body.appendChild(input);
+  input.select();
+  try {
+    document.execCommand('copy');
+    if (typeof showToast === 'function') showToast(`📋 Đã sao chép: ${text}`, 'success');
+    else alert(`📋 Đã sao chép: ${text}`);
+  } catch (e) {
+    alert("Lỗi sao chép: " + text);
+  }
+  document.body.removeChild(input);
 }
 
 function formatDateShort(dateStr) {
