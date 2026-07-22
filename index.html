@@ -13,18 +13,16 @@
         extend: {
           colors: {
             brand: {
-              // 60% Nền trung tính sạch sẽ (Shadcn/ui style)
-              neutralBg: '#F8FAFC',
-              neutralCard: '#FFFFFF',
+              // Mono-Mart layout: 60% neutral light gray, 30% white cards/dark text, 10% bright royal blue
+              neutralBg: '#F3F4F6',    // Light gray background
+              neutralCard: '#FFFFFF',  // Pure white card panels
+              darkText: '#1F2937',     // Dark gray/black typography
+              borderLight: '#E5E7EB',  // Light gray dividers
               
-              // 30% Màu thương hiệu & Cấu trúc phụ (Sage Green & Mint)
-              sage: '#3C7363',
-              mint: '#8FD9C4',
-              mintLight: '#F1F7F5',
-              
-              // 10% Màu nhấn Action nổi bật (Vibrant Mint Accent / Status Warning)
-              accent: '#84D9BA',
-              ice: '#E8F1FD',
+              // Mono-Mart primary action blue (10% accent color)
+              primaryBlue: '#0066FF',  // Bright Royal Blue
+              primaryBlueLight: '#EFF6FF',
+              primaryBlueHover: '#0052CC',
             }
           }
         }
@@ -44,74 +42,74 @@
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
     
     body { 
-      font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background-color: #F8FAFC; /* 60% Nền trung tính */
-      color: #1E293B;
+      font-family: 'Inter', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #F3F4F6; /* Mono-mart neutral bg */
+      color: #1F2937;
     }
 
     .font-serif-title {
-      font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
-      font-weight: 800;
+      font-family: 'Inter', sans-serif;
+      font-weight: 700;
     }
 
     .font-mono-code {
       font-family: 'Inter', ui-monospace, SFMono-Regular, monospace;
     }
 
-    /* Minimalist Pastels matching the 60-30-10 logic */
-    .bg-pastel-blue { background-color: #F1F7F5; color: #3C7363; }
-    .bg-pastel-green { background-color: #8FD9C4; color: #1C4D3E; }
-    .bg-pastel-rose { background-color: #FDEBEC; color: #9F2F2D; }
-    .bg-pastel-amber { background-color: #FBF3DB; color: #956400; }
+    /* Minimalist status styling */
+    .bg-pastel-blue { background-color: #EFF6FF; color: #0066FF; }
+    .bg-pastel-green { background-color: #ECFDF5; color: #059669; }
+    .bg-pastel-rose { background-color: #FEF2F2; color: #DC2626; }
+    .bg-pastel-amber { background-color: #FFFBEB; color: #D97706; }
 
     /* Custom subtle scrollbar */
     ::-webkit-scrollbar { width: 4px; height: 4px; }
-    ::-webkit-scrollbar-track { background: #F8FAFC; }
-    ::-webkit-scrollbar-thumb { background: #B8D9D0; border-radius: 4px; }
+    ::-webkit-scrollbar-track { background: #F3F4F6; }
+    ::-webkit-scrollbar-thumb { background: #D1D5DB; border-radius: 4px; }
   </style>
 </head>
-</head>
-<body class="bg-brand-neutralBg text-[#1E293B] antialiased min-h-screen flex font-medium">
+<body class="bg-brand-neutralBg text-brand-darkText antialiased min-h-screen flex font-medium">
 
   <!-- LEFT SIDEBAR -->
-  <aside class="w-64 bg-brand-neutralCard border-r border-brand-mintLight shrink-0 hidden md:flex flex-col justify-between min-h-screen sticky top-0 z-40 p-6">
+  <!-- LEFT SIDEBAR -->
+  <aside class="w-64 bg-brand-neutralCard border-r border-brand-borderLight shrink-0 hidden md:flex flex-col justify-between min-h-screen sticky top-0 z-40 p-6">
     <div class="space-y-8">
       <!-- Brand Logo Header -->
-      <div class="flex items-center gap-3 pb-6 border-b border-brand-mintLight">
-        <div class="w-8 h-8 bg-brand-sage text-white rounded-md flex items-center justify-center font-mono-code text-xs font-semibold">
+      <div class="flex items-center gap-3 pb-6 border-b border-brand-borderLight">
+        <div class="w-8 h-8 bg-brand-primaryBlue text-white rounded-md flex items-center justify-center font-mono-code text-xs font-semibold">
           AF
         </div>
         <div>
-          <h1 class="text-xs font-bold text-brand-sage tracking-tight uppercase">Auto Fill Order</h1>
-          <p class="text-[10px] text-brand-sage/70 font-mono-code">VNPost & J&T System</p>
+          <h1 class="text-xs font-bold text-brand-darkText tracking-tight uppercase">Auto Fill Order</h1>
+          <p class="text-[10px] text-brand-darkText/60 font-mono-code">VNPost & J&T System</p>
         </div>
       </div>
 
       <!-- Navigation Menu -->
       <nav class="space-y-1 text-xs font-medium">
-        <button id="nav-tab-statistics" class="w-full flex items-center gap-3 px-3 py-2 rounded-md bg-[#3C7363] text-white font-semibold transition-all">
+        <button id="nav-tab-statistics" class="w-full flex items-center gap-3 px-3 py-2 rounded-md bg-brand-primaryBlue text-white font-semibold transition-all">
           <i class="ph ph-chart-bar text-base"></i>
           <span>Thống kê báo cáo</span>
         </button>
 
-        <button id="nav-tab-orders" class="w-full flex items-center gap-3 px-3 py-2 rounded-md text-brand-sage/70 hover:bg-brand-mintLight hover:text-brand-sage transition-all">
+        <button id="nav-tab-orders" class="w-full flex items-center gap-3 px-3 py-2 rounded-md text-brand-darkText/70 hover:bg-brand-primaryBlueLight hover:text-brand-primaryBlue transition-all">
           <i class="ph ph-paper-plane-tilt text-base"></i>
           <span>Đơn hàng đã lên đơn</span>
         </button>
 
-        <button id="nav-tab-customers" class="w-full flex items-center gap-3 px-3 py-2 rounded-md text-brand-sage/70 hover:bg-brand-mintLight hover:text-brand-sage transition-all">
+        <button id="nav-tab-customers" class="w-full flex items-center gap-3 px-3 py-2 rounded-md text-brand-darkText/70 hover:bg-brand-primaryBlueLight hover:text-brand-primaryBlue transition-all">
           <i class="ph ph-users text-base"></i>
           <span>Quản lý khách hàng</span>
         </button>
 
-        <button id="nav-tab-users" class="w-full flex items-center gap-3 px-3 py-2 rounded-md text-brand-sage/70 hover:bg-brand-mintLight hover:text-brand-sage transition-all">
+        <button id="nav-tab-users" class="w-full flex items-center gap-3 px-3 py-2 rounded-md text-brand-darkText/70 hover:bg-brand-primaryBlueLight hover:text-brand-primaryBlue transition-all">
           <i class="ph ph-shield-check text-base"></i>
           <span>Quản lý người dùng</span>
         </button>
       </nav>
     </div>
     
-    <div class="pt-4 border-t border-brand-mintLight">
+    <div class="pt-4 border-t border-brand-borderLight">
       <button id="sidebar-logout-btn" class="w-full flex items-center gap-3 px-3 py-2 rounded-md text-red-600 hover:bg-red-50 transition-all text-xs font-bold">
         <i class="ph ph-sign-out text-base"></i>
         <span>Đăng xuất</span>
@@ -122,20 +120,20 @@
   <!-- MAIN RIGHT CONTENT CONTAINER -->
   <div class="flex-1 flex flex-col min-w-0">
     <!-- Minimal Header -->
-    <header class="h-14 bg-brand-neutralCard border-b border-brand-mintLight px-8 flex items-center justify-between sticky top-0 z-30">
+    <header class="h-14 bg-brand-neutralCard border-b border-brand-borderLight px-8 flex items-center justify-between sticky top-0 z-30">
       <div class="flex items-center gap-3">
-        <h2 class="text-xs font-bold text-brand-sage uppercase tracking-wider font-mono-code">Auto Fill Assistant</h2>
+        <h2 class="text-xs font-bold text-brand-darkText uppercase tracking-wider font-mono-code">Auto Fill Assistant</h2>
       </div>
       <div class="flex items-center gap-4">
-        <button id="refresh-btn" title="Tải lại dữ liệu" class="px-3 py-1.5 text-xs font-medium text-brand-sage bg-brand-mintLight border border-brand-mintLight rounded-md hover:bg-brand-mint/20 transition-all flex items-center gap-2">
+        <button id="refresh-btn" title="Tải lại dữ liệu" class="px-3 py-1.5 text-xs font-medium text-brand-darkText bg-brand-neutralBg border border-brand-borderLight rounded-md hover:bg-brand-borderLight transition-all flex items-center gap-2">
           <i class="ph ph-arrows-clockwise text-sm"></i>
           <span>Tải lại</span>
         </button>
         
         <!-- Admin Profile Info with Avatar -->
-        <div class="flex items-center gap-2.5 pl-2 border-l border-brand-mintLight">
-          <span id="header-admin-name" class="hidden sm:inline text-xs font-bold text-brand-sage max-w-[120px] truncate">Admin</span>
-          <div class="w-8 h-8 rounded-full bg-brand-sage text-white flex items-center justify-center font-bold text-xs shadow-inner overflow-hidden border border-brand-mintLight flex items-center justify-center">
+        <div class="flex items-center gap-2.5 pl-2 border-l border-brand-borderLight">
+          <span id="header-admin-name" class="hidden sm:inline text-xs font-bold text-brand-darkText max-w-[120px] truncate">Admin</span>
+          <div class="w-8 h-8 rounded-full bg-brand-primaryBlue text-white flex items-center justify-center font-bold text-xs shadow-inner overflow-hidden border border-brand-borderLight flex items-center justify-center">
             <span id="header-admin-avatar" class="avatar-text">A</span>
           </div>
         </div>
@@ -145,9 +143,9 @@
     <!-- SECTION 1: ĐƠN HÀNG ĐÃ LÊN ĐƠN -->
     <main id="section-orders" class="p-6 md:p-8 space-y-6 flex-1 w-full hidden">
       <!-- Title Section -->
-      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-3 pb-2 border-b border-brand-mintLight">
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-3 pb-2 border-b border-brand-borderLight">
         <div>
-          <span class="text-[11px] font-semibold text-brand-sage/70 uppercase tracking-wider">Dashboard & Orders</span>
+          <span class="text-[11px] font-semibold text-brand-darkText/60 uppercase tracking-wider">Dashboard & Orders</span>
           <h1 class="text-2xl sm:text-3xl font-extrabold text-[#111111] tracking-tight mt-0.5">Đơn hàng đã lên đơn</h1>
         </div>
         <div class="text-xs text-[#787774] font-medium bg-[#FFFFFF] px-3 py-1.5 rounded-md border border-[#EAEAEA]">
