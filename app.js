@@ -309,7 +309,7 @@ function combineOrdersAndSubmitted(historyData, submittedData) {
   const subBySavedId = {};
   const subById = {};
   const subByCode = {};
-  const subByPhone = {};
+  const subByPhoneName = {};
 
   (submittedData || []).forEach(sub => {
     const tracking = sub.tracking_code || sub.trackingCode || sub.waybill_code || sub.waybillCode || sub.ma_van_don || sub.maVanDon || '';
@@ -321,11 +321,12 @@ function combineOrdersAndSubmitted(historyData, submittedData) {
     }
     if (sub.order_code || sub.orderCode) {
       const codeKey = String(sub.order_code || sub.orderCode).trim().toLowerCase();
-      if (codeKey && codeKey !== '—') subByCode[codeKey] = sub;
+      if (codeKey && codeKey !== '—' && codeKey !== '-') subByCode[codeKey] = sub;
     }
-    if (sub.phone) {
+    if (sub.phone && (sub.name || sub.customer_name)) {
       const phoneKey = String(sub.phone).replace(/\D/g, '');
-      if (phoneKey) subByPhone[phoneKey] = sub;
+      const nameKey = String(sub.name || sub.customer_name).trim().toLowerCase();
+      if (phoneKey && nameKey) subByPhoneName[phoneKey + '_' + nameKey] = sub;
     }
   });
 
@@ -339,8 +340,9 @@ function combineOrdersAndSubmitted(historyData, submittedData) {
     const histId = hist.id;
     const histCode = String(hist.order_code || res.orderCode || res.maDon || res.orderNo || '').trim().toLowerCase();
     const histPhone = String(hist.phone || res.phone || res.recipientPhone || '').replace(/\D/g, '');
+    const histName = String(hist.customer_name || hist.name || res.name || res.recipientName || '').trim().toLowerCase();
 
-    const matchedSub = subBySavedId[histId] || subById[histId] || (histCode && subByCode[histCode]) || (histPhone && subByPhone[histPhone]) || null;
+    const matchedSub = subBySavedId[histId] || subById[histId] || (histCode && subByCode[histCode]) || (histPhone && histName && subByPhoneName[histPhone + '_' + histName]) || null;
 
     if (matchedSub) {
       processedSubIds.add(matchedSub.id);
@@ -388,7 +390,59 @@ function combineOrdersAndSubmitted(historyData, submittedData) {
     }
   });
 
-  return mergedList;
+  return deduplicateOrders(mergedList);
+}
+
+function deduplicateOrders(list) {
+  if (!Array.isArray(list) || list.length === 0) return [];
+  const map = new Map();
+
+  list.forEach(item => {
+    if (!item) return;
+
+    let res = item.result || {};
+    if (typeof res === 'string') { try { res = JSON.parse(res); } catch(e) {} }
+
+    const id = item.id || item.savedOrderId || item.saved_order_id || '';
+    const name = (item.customer_name || item.name || res.name || res.recipientName || res.hoTen || '').trim().toLowerCase();
+    const phone = (item.phone || res.phone || res.recipientPhone || res.sdt || '').replace(/\D/g, '');
+    const orderCode = (item.order_code || item.orderCode || res.orderCode || res.maDon || res.orderNo || '').trim().toLowerCase();
+    const trackingCode = (item.waybill_code || item.waybillCode || item.tracking_code || item.trackingCode || item.ma_van_don || res.waybillCode || res.trackingCode || '').trim();
+
+    let key = '';
+    if (orderCode && orderCode !== '—' && orderCode !== '-') {
+      key = 'code_' + orderCode;
+    } else if (id) {
+      key = 'id_' + id;
+    } else if (name && phone) {
+      key = 'np_' + name + '_' + phone;
+    } else {
+      key = 'raw_' + Math.random();
+    }
+
+    if (!map.has(key)) {
+      map.set(key, item);
+    } else {
+      const existing = map.get(key);
+      let existingRes = existing.result || {};
+      if (typeof existingRes === 'string') { try { existingRes = JSON.parse(existingRes); } catch(e) {} }
+
+      const existingTracking = existing.waybill_code || existing.tracking_code || existing.waybillCode || existing.trackingCode || existingRes.waybillCode || existingRes.trackingCode || '';
+      
+      if ((!existingTracking || existingTracking === '—' || existingTracking === '-') && trackingCode && trackingCode !== '—' && trackingCode !== '-') {
+        existing.waybill_code = trackingCode;
+        existing.tracking_code = trackingCode;
+        if (typeof existingRes === 'object') {
+          existingRes.waybillCode = trackingCode;
+          existingRes.trackingCode = trackingCode;
+          existing.result = existingRes;
+        }
+      }
+      map.set(key, existing);
+    }
+  });
+
+  return Array.from(map.values());
 }
 
 async function fetchOrders() {
