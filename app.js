@@ -622,9 +622,9 @@ function renderCustomers() {
       const p = (c.platform || '').toLowerCase();
       let carrierBadge = '';
       if (p.includes('jt') || p.includes('j&t')) {
-        carrierBadge = `<span class="inline-block px-2.5 py-0.5 rounded text-[11px] font-extrabold bg-red-100 text-red-700 border border-red-200">J&T Express</span>`;
+        carrierBadge = `<span class="font-extrabold text-[#ff3333] text-xs">J&T Express</span>`;
       } else {
-        carrierBadge = `<span class="inline-block px-2.5 py-0.5 rounded text-[11px] font-extrabold bg-[#FACC15] text-[#713F12] border border-[#EAB308] shadow-sm">VNPost</span>`;
+        carrierBadge = `<span class="font-extrabold text-[#fdb813] text-xs">VNPost</span>`;
       }
 
       return `
@@ -1423,12 +1423,12 @@ if (btnNext) {
 function getPlatformBadge(platform) {
   const p = (platform || '').toLowerCase();
   if (p.includes('vnpost') || p.includes('bưu điện')) {
-    return `<span class="inline-block px-2.5 py-0.5 rounded text-[11px] font-extrabold bg-[#FACC15] text-[#713F12] border border-[#EAB308] shadow-sm">VNPost</span>`;
+    return `<span class="font-extrabold text-[#fdb813] text-xs">VNPost</span>`;
   }
   if (p.includes('jt') || p.includes('j&t')) {
-    return `<span class="inline-block px-2.5 py-0.5 rounded text-[11px] font-extrabold bg-red-100 text-red-700 border border-red-200">J&T Express</span>`;
+    return `<span class="font-extrabold text-[#ff3333] text-xs">J&T Express</span>`;
   }
-  return `<span class="inline-block px-2 py-0.5 rounded text-[11px] font-semibold bg-[#F7F6F3] text-[#787774] border border-[#EAEAEA]">Khác</span>`;
+  return `<span class="font-semibold text-[#787774] text-xs">Khác</span>`;
 }
 
 // ─── SAO CHÉP MÃ VẬN ĐƠN KÈM ĐƠN VỊ VẬN CHUYỂN (DVVC) ───
