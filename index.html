@@ -9,6 +9,8 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Supabase JS Client CDN (UMD bundle) -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <!-- Chart.js CDN for Revenue and Order Count Charts -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <!-- Phosphor Icons CDN (Minimalist Iconography) -->
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
   <!-- Supabase Config File -->
@@ -173,6 +175,37 @@
           <div>
             <div class="text-[11px] uppercase font-bold tracking-wider opacity-80">TỔNG COD ĐÃ LÊN ĐƠN</div>
             <div id="stat-total-cod" class="text-3xl font-black tracking-tight mt-0.5">0 đ</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BIỂU ĐỒ BÁO CÁO THỐNG KÊ DOANH THU & ĐƠN HÀNG (TanStack / Chart.JS style) -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Biểu đồ doanh thu COD -->
+        <div class="bg-white rounded-xl p-5 border border-[#EAEAEA] shadow-sm space-y-3">
+          <div class="flex items-center justify-between border-b border-[#F1F1F0] pb-2">
+            <h3 class="text-xs font-extrabold text-[#111111] uppercase tracking-wider flex items-center gap-2">
+              <i class="ph ph-chart-line-up text-base text-[#346538]"></i>
+              Thống kê doanh thu COD theo ngày (VNĐ)
+            </h3>
+            <span class="text-[10px] text-[#787774] font-semibold bg-[#EDF3EC] px-2 py-0.5 rounded text-[#346538]">Doanh thu</span>
+          </div>
+          <div class="h-64 w-full relative">
+            <canvas id="revenueChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Biểu đồ sản lượng đơn hàng -->
+        <div class="bg-white rounded-xl p-5 border border-[#EAEAEA] shadow-sm space-y-3">
+          <div class="flex items-center justify-between border-b border-[#F1F1F0] pb-2">
+            <h3 class="text-xs font-extrabold text-[#111111] uppercase tracking-wider flex items-center gap-2">
+              <i class="ph ph-chart-bar text-base text-[#1F6C9F]"></i>
+              Số lượng đơn hàng thành công theo ngày
+            </h3>
+            <span class="text-[10px] text-[#787774] font-semibold bg-[#E1F3FE] px-2 py-0.5 rounded text-[#1F6C9F]">Sản lượng</span>
+          </div>
+          <div class="h-64 w-full relative">
+            <canvas id="ordersCountChart"></canvas>
           </div>
         </div>
       </div>
@@ -1443,6 +1476,7 @@
       }
 
       handleCheckboxChange();
+      renderCharts(filtered);
     }
 
     // ==========================================
@@ -2144,6 +2178,137 @@
 
     // Kích hoạt kiểm tra Login ngay sau khi khởi chạy
     checkLoginStatus();
+
+    // ==========================================
+    // 6. BIỂU ĐỒ BÁO CÁO THỐNG KÊ (CHART.JS)
+    // ==========================================
+    let revenueChartInstance = null;
+    let ordersChartInstance = null;
+
+    function renderCharts(orders) {
+      if (typeof Chart === 'undefined') return;
+
+      // Nhóm dữ liệu theo ngày
+      const groupedData = {};
+      
+      // Khởi tạo 7 ngày gần nhất để biểu đồ luôn có dữ liệu liên tục
+      for (let i = 6; i >= 0; i--) {
+        const d = new Date();
+        d.setDate(d.getDate() - i);
+        const dateStr = d.toISOString().slice(0, 10);
+        groupedData[dateStr] = { revenue: 0, count: 0 };
+      }
+
+      orders.forEach(item => {
+        let res = item.result || {};
+        if (typeof res === 'string') { try { res = JSON.parse(res); } catch(e) {} }
+        const createdAt = item.created_at || '';
+        const dateStr = createdAt.slice(0, 10);
+        
+        // Chỉ thống kê các ngày đã được khởi tạo hoặc ngày hợp lệ
+        if (dateStr) {
+          if (!groupedData[dateStr]) {
+            groupedData[dateStr] = { revenue: 0, count: 0 };
+          }
+          const cod = Number(res.codAmount || item.cod_amount || res.cod || 0);
+          groupedData[dateStr].revenue += cod;
+          groupedData[dateStr].count += 1;
+        }
+      });
+
+      // Sắp xếp các ngày theo thứ tự tăng dần
+      const sortedDates = Object.keys(groupedData).sort();
+      const labels = sortedDates.map(date => {
+        const parts = date.split('-');
+        return parts.length === 3 ? `${parts[2]}/${parts[1]}` : date; // Chuyển sang dạng DD/MM
+      });
+      const revenues = sortedDates.map(date => groupedData[date].revenue);
+      const counts = sortedDates.map(date => groupedData[date].count);
+
+      // 1. Biểu đồ doanh thu (Revenue - Line Chart)
+      const ctxRev = document.getElementById('revenueChart');
+      if (ctxRev) {
+        if (revenueChartInstance) revenueChartInstance.destroy();
+        revenueChartInstance = new Chart(ctxRev, {
+          type: 'line',
+          data: {
+            labels: labels,
+            datasets: [{
+              label: 'Doanh thu COD (VNĐ)',
+              data: revenues,
+              borderColor: '#346538', // Muted pastel green
+              backgroundColor: 'rgba(237, 243, 236, 0.4)',
+              borderWidth: 2,
+              tension: 0.3,
+              fill: true,
+              pointBackgroundColor: '#346538',
+              pointRadius: 3
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { display: false }
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                grid: { color: '#EAEAEA' },
+                ticks: {
+                  callback: (value) => value.toLocaleString('vi-VN') + ' đ',
+                  font: { size: 10 }
+                }
+              },
+              x: {
+                grid: { display: false },
+                ticks: { font: { size: 10 } }
+              }
+            }
+          }
+        });
+      }
+
+      // 2. Biểu đồ sản lượng đơn hàng (Orders Count - Bar Chart)
+      const ctxOrd = document.getElementById('ordersCountChart');
+      if (ctxOrd) {
+        if (ordersChartInstance) ordersChartInstance.destroy();
+        ordersChartInstance = new Chart(ctxOrd, {
+          type: 'bar',
+          data: {
+            labels: labels,
+            datasets: [{
+              label: 'Số lượng đơn hàng',
+              data: counts,
+              backgroundColor: '#1F6C9F', // Pale blue
+              borderRadius: 6,
+              barPercentage: 0.5
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { display: false }
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                grid: { color: '#EAEAEA' },
+                ticks: {
+                  stepSize: 1,
+                  font: { size: 10 }
+                }
+              },
+              x: {
+                grid: { display: false },
+                ticks: { font: { size: 10 } }
+              }
+            }
+          }
+        });
+      }
+    }
   </script>
 </body>
 </html>
