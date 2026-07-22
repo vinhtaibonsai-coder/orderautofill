@@ -1585,8 +1585,10 @@ function setStatBtnActive(activeBtnId) {
     const btn = document.getElementById(id);
     if (btn) {
       if (id === activeBtnId) {
-        btn.className = "px-3.5 py-1.5 rounded-lg border border-[#EAEAEA] bg-[#F7F6F3] text-xs font-semibold text-[#111111] hover:bg-[#EAEAEA] transition-all";
+        // Nút được chọn sẽ đậm màu hơn hẳn (nền đen, chữ trắng)
+        btn.className = "px-3.5 py-1.5 rounded-lg border border-[#111111] bg-[#111111] text-white text-xs font-bold transition-all shadow-sm";
       } else {
+        // Nút bình thường
         btn.className = "px-3.5 py-1.5 rounded-lg border border-[#EAEAEA] bg-white text-xs font-semibold text-[#787774] hover:bg-[#F7F6F3] hover:text-[#111111] transition-all";
       }
     }
