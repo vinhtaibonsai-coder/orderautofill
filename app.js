@@ -66,6 +66,7 @@ let realtimeChannel = null;
 
 document.addEventListener('DOMContentLoaded', () => {
   setupTabSwitching();
+  setupRightMenu();
   fetchOrders();
   subscribeRealtime();
   checkLoginStatus();
@@ -89,11 +90,19 @@ function checkLoginStatus() {
 function updateHeaderAdminInfo(email) {
   const headerName = document.getElementById('header-admin-name');
   const headerAvatar = document.getElementById('header-admin-avatar');
-  if (headerName) {
-    headerName.textContent = email.split('@')[0];
-  }
+  const rightName = document.getElementById('right-admin-name');
+  const rightEmail = document.getElementById('right-admin-email');
+  const rightAvatar = document.getElementById('right-admin-avatar');
+
+  const username = email.split('@')[0];
+  const initial = email.charAt(0).toUpperCase();
+
+  if (headerName) headerName.textContent = username;
+  if (rightName) rightName.textContent = username;
+  if (rightEmail) rightEmail.textContent = email;
+  if (rightAvatar) rightAvatar.textContent = initial;
+
   if (headerAvatar) {
-    const initial = email.charAt(0).toUpperCase();
     headerAvatar.style.display = 'none';
     let parentNode = headerAvatar.parentNode;
     const oldText = parentNode.querySelector('.avatar-text');
@@ -103,6 +112,68 @@ function updateHeaderAdminInfo(email) {
     textNode.className = 'avatar-text font-bold text-white text-xs';
     textNode.textContent = initial;
     parentNode.appendChild(textNode);
+  }
+}
+
+function setupRightMenu() {
+  const headerUserMenuBtn = document.getElementById('header-user-menu-btn');
+  const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+  const rightUserMenu = document.getElementById('right-user-menu');
+  const rightMenuBackdrop = document.getElementById('right-menu-backdrop');
+  const rightMenuCloseBtn = document.getElementById('right-menu-close-btn');
+
+  function openRightMenu() {
+    if (rightUserMenu) {
+      rightUserMenu.classList.remove('hidden');
+      setTimeout(() => {
+        rightUserMenu.classList.remove('opacity-0', 'pointer-events-none');
+        const panel = document.getElementById('right-menu-panel');
+        if (panel) panel.classList.remove('translate-x-full');
+      }, 10);
+    }
+  }
+
+  function closeRightMenu() {
+    if (rightUserMenu) {
+      const panel = document.getElementById('right-menu-panel');
+      if (panel) panel.classList.add('translate-x-full');
+      rightUserMenu.classList.add('opacity-0', 'pointer-events-none');
+      setTimeout(() => {
+        rightUserMenu.classList.add('hidden');
+      }, 200);
+    }
+  }
+
+  if (headerUserMenuBtn) headerUserMenuBtn.addEventListener('click', (e) => { e.stopPropagation(); openRightMenu(); });
+  if (mobileMenuBtn) mobileMenuBtn.addEventListener('click', (e) => { e.stopPropagation(); openRightMenu(); });
+  if (rightMenuCloseBtn) rightMenuCloseBtn.addEventListener('click', closeRightMenu);
+  if (rightMenuBackdrop) rightMenuBackdrop.addEventListener('click', closeRightMenu);
+
+  // Wire right menu nav tabs
+  const rightNavStats = document.getElementById('right-nav-statistics');
+  const rightNavOrders = document.getElementById('right-nav-orders');
+  const rightNavCust = document.getElementById('right-nav-customers');
+  const rightNavUsers = document.getElementById('right-nav-users');
+  const rightNavRefresh = document.getElementById('right-nav-refresh');
+  const rightLogoutBtn = document.getElementById('right-menu-logout-btn');
+
+  if (rightNavStats && navTabStatistics) {
+    rightNavStats.addEventListener('click', () => { navTabStatistics.click(); closeRightMenu(); });
+  }
+  if (rightNavOrders && navTabOrders) {
+    rightNavOrders.addEventListener('click', () => { navTabOrders.click(); closeRightMenu(); });
+  }
+  if (rightNavCust && navTabCustomers) {
+    rightNavCust.addEventListener('click', () => { navTabCustomers.click(); closeRightMenu(); });
+  }
+  if (rightNavUsers && navTabUsers) {
+    rightNavUsers.addEventListener('click', () => { navTabUsers.click(); closeRightMenu(); });
+  }
+  if (rightNavRefresh && refreshBtn) {
+    rightNavRefresh.addEventListener('click', () => { refreshBtn.click(); closeRightMenu(); });
+  }
+  if (rightLogoutBtn && sidebarLogoutBtn) {
+    rightLogoutBtn.addEventListener('click', () => { sidebarLogoutBtn.click(); closeRightMenu(); });
   }
 }
 
@@ -127,9 +198,13 @@ function subscribeRealtime() {
 
   try {
     realtimeChannel = sb
-      .channel('public:history')
+      .channel('public:all_changes')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'history' }, (payload) => {
-        console.log('⚡ Dữ liệu Supabase thay đổi ngầm:', payload);
+        console.log('⚡ Dữ liệu history Supabase thay đổi:', payload);
+        fetchOrdersSilently();
+      })
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'submitted_orders' }, (payload) => {
+        console.log('⚡ Dữ liệu submitted_orders Supabase thay đổi:', payload);
         fetchOrdersSilently();
       })
       .subscribe();
@@ -143,14 +218,19 @@ async function fetchOrdersSilently() {
   if (!sb) return;
 
   try {
-    const { data, error } = await sb
-      .from('history')
-      .select('*')
-      .order('created_at', { ascending: false });
+    const [subRes, histRes] = await Promise.all([
+      sb.from('submitted_orders').select('*').order('submitted_at', { ascending: false }).then(r => r, () => ({ data: [] })),
+      sb.from('history').select('*').order('created_at', { ascending: false }).then(r => r, () => ({ data: [] }))
+    ]);
 
-    if (!error && data) {
-      allOrders = data;
-      processCustomerData(data);
+    const submittedData = (subRes && subRes.data) ? subRes.data : [];
+    const historyData = (histRes && histRes.data) ? histRes.data : [];
+
+    const merged = combineOrdersAndSubmitted(historyData, submittedData);
+
+    if (merged.length > 0) {
+      allOrders = merged;
+      processCustomerData(allOrders);
       updateDeviceFilterOptions(allOrders);
       renderOrders();
       renderCustomers();
@@ -225,6 +305,92 @@ function setActiveTab(activeTabEl) {
 // ==========================================
 // 3. FETCH & PROCESS ORDERS & CUSTOMERS
 // ==========================================
+function combineOrdersAndSubmitted(historyData, submittedData) {
+  const subBySavedId = {};
+  const subById = {};
+  const subByCode = {};
+  const subByPhone = {};
+
+  (submittedData || []).forEach(sub => {
+    const tracking = sub.tracking_code || sub.trackingCode || sub.waybill_code || sub.waybillCode || sub.ma_van_don || sub.maVanDon || '';
+    if (sub.saved_order_id || sub.savedOrderId) {
+      subBySavedId[sub.saved_order_id || sub.savedOrderId] = sub;
+    }
+    if (sub.id) {
+      subById[sub.id] = sub;
+    }
+    if (sub.order_code || sub.orderCode) {
+      const codeKey = String(sub.order_code || sub.orderCode).trim().toLowerCase();
+      if (codeKey && codeKey !== '—') subByCode[codeKey] = sub;
+    }
+    if (sub.phone) {
+      const phoneKey = String(sub.phone).replace(/\D/g, '');
+      if (phoneKey) subByPhone[phoneKey] = sub;
+    }
+  });
+
+  const mergedList = [];
+  const processedSubIds = new Set();
+
+  (historyData || []).forEach(hist => {
+    let res = hist.result || {};
+    if (typeof res === 'string') { try { res = JSON.parse(res); } catch(e) {} }
+
+    const histId = hist.id;
+    const histCode = String(hist.order_code || res.orderCode || res.maDon || res.orderNo || '').trim().toLowerCase();
+    const histPhone = String(hist.phone || res.phone || res.recipientPhone || '').replace(/\D/g, '');
+
+    const matchedSub = subBySavedId[histId] || subById[histId] || (histCode && subByCode[histCode]) || (histPhone && subByPhone[histPhone]) || null;
+
+    if (matchedSub) {
+      processedSubIds.add(matchedSub.id);
+      const tracking = matchedSub.tracking_code || matchedSub.trackingCode || matchedSub.waybill_code || matchedSub.waybillCode || matchedSub.ma_van_don || matchedSub.maVanDon || '';
+      
+      hist.waybill_code = tracking || hist.waybill_code || hist.tracking_code || hist.ma_van_don || '';
+      if (typeof res === 'object') {
+        res.trackingCode = tracking || res.trackingCode || res.waybillCode || '';
+        res.waybillCode = tracking || res.waybillCode || '';
+        hist.result = res;
+      }
+      if (matchedSub.submitted_at || matchedSub.submittedAt) {
+        hist.submitted_at = matchedSub.submitted_at || matchedSub.submittedAt;
+      }
+    }
+    mergedList.push(hist);
+  });
+
+  (submittedData || []).forEach(sub => {
+    if (!processedSubIds.has(sub.id)) {
+      const tracking = sub.tracking_code || sub.trackingCode || sub.waybill_code || sub.waybillCode || sub.ma_van_don || sub.maVanDon || '';
+      mergedList.push({
+        id: sub.id,
+        customer_name: sub.name || sub.customer_name || '—',
+        phone: sub.phone || '',
+        address: sub.address || '—',
+        order_code: sub.order_code || sub.orderCode || '—',
+        waybill_code: tracking,
+        tracking_code: tracking,
+        cod_amount: sub.cod_amount || sub.codAmount || 0,
+        platform: sub.platform || 'vnpost',
+        device_name: sub.device_name || sub.deviceName || '—',
+        created_at: sub.submitted_at || sub.submittedAt || sub.created_at || new Date().toISOString(),
+        result: {
+          name: sub.name || sub.customer_name || '',
+          phone: sub.phone || '',
+          address: sub.address || '',
+          orderCode: sub.order_code || sub.orderCode || '',
+          trackingCode: tracking,
+          waybillCode: tracking,
+          codAmount: sub.cod_amount || sub.codAmount || 0,
+          platform: sub.platform || 'vnpost'
+        }
+      });
+    }
+  });
+
+  return mergedList;
+}
+
 async function fetchOrders() {
   if (loadingState) loadingState.classList.remove('hidden');
   if (emptyState) emptyState.classList.add('hidden');
@@ -239,21 +405,26 @@ async function fetchOrders() {
   }
 
   try {
-    const { data, error } = await sb
-      .from('history')
-      .select('*')
-      .order('created_at', { ascending: false });
+    const [subRes, histRes] = await Promise.all([
+      sb.from('submitted_orders').select('*').order('submitted_at', { ascending: false }).then(r => r, () => ({ data: [] })),
+      sb.from('history').select('*').order('created_at', { ascending: false }).then(r => r, () => ({ data: [] }))
+    ]);
+
+    const submittedData = (subRes && subRes.data) ? subRes.data : [];
+    const historyData = (histRes && histRes.data) ? histRes.data : [];
+
+    const merged = combineOrdersAndSubmitted(historyData, submittedData);
 
     if (loadingState) loadingState.classList.add('hidden');
 
-    if (error || !data || data.length === 0) {
+    if (!merged || merged.length === 0) {
       if (emptyState) emptyState.classList.remove('hidden');
       updateStats(0, 0);
       return;
     }
 
-    allOrders = data;
-    processCustomerData(data);
+    allOrders = merged;
+    processCustomerData(allOrders);
     updateDeviceFilterOptions(allOrders);
     renderOrders();
     renderCustomers();
@@ -995,12 +1166,14 @@ function viewOrderDetails(id) {
     try { res = JSON.parse(res); } catch(e) {}
   }
 
+  const waybill = item.waybill_code || item.tracking_code || item.ma_van_don || res.waybillCode || res.maVanDon || res.trackingCode || '';
+
   document.getElementById('edit-order-id').value = item.id;
   document.getElementById('edit-name').value = item.customer_name || res.name || res.recipientName || '';
   document.getElementById('edit-phone').value = item.phone || res.phone || res.recipientPhone || '';
   document.getElementById('edit-address').value = item.address || res.normalizedAddress || res.address || '';
   document.getElementById('edit-order-code').value = res.orderCode || item.order_code || res.maDon || '';
-  document.getElementById('edit-waybill-code').value = res.waybillCode || res.maVanDon || res.trackingCode || '';
+  document.getElementById('edit-waybill-code').value = waybill;
   document.getElementById('edit-cod-amount').value = res.codAmount || item.cod_amount || res.cod || 0;
 
   if (editModal) editModal.classList.remove('hidden');
@@ -1037,6 +1210,7 @@ if (editForm) {
     res.normalizedAddress = address;
     res.orderCode = orderCode;
     res.waybillCode = waybillCode;
+    res.trackingCode = waybillCode;
     res.codAmount = codAmount;
 
     const sb = initSupabase();
@@ -1046,19 +1220,30 @@ if (editForm) {
       const { error } = await sb
         .from('history')
         .update({
-          customer_name: name,
-          phone: phone,
-          address: address,
           result: res
         })
         .eq('id', id);
+
+      // Cập nhật song song vào bảng submitted_orders nếu đơn hàng đã được lưu trên cloud
+      const subUpdateObj = {
+        name: name,
+        phone: phone,
+        address: address,
+        order_code: orderCode,
+        cod_amount: codAmount
+      };
+      if (waybillCode) {
+        subUpdateObj.tracking_code = waybillCode;
+        subUpdateObj.waybill_code = waybillCode;
+      }
+      await sb.from('submitted_orders').update(subUpdateObj).or(`id.eq.${id},saved_order_id.eq.${id}`).then(r => r, () => {});
 
       if (error) {
         alert("Lỗi khi lưu đơn hàng: " + error.message);
       } else {
         // Ghi nhận nhật ký audit log
         if (typeof writeAuditLog === 'function') {
-          writeAuditLog('Sửa đơn hàng', `Đã cập nhật thông tin đơn hàng của khách hàng: ${name}, SĐT: ${phone}, COD: ${codAmount.toLocaleString('vi-VN')}đ`);
+          writeAuditLog('Sửa đơn hàng', `Đã cập nhật thông tin đơn hàng của khách hàng: ${name}, SĐT: ${phone}, Mã vận đơn: ${waybillCode}, COD: ${codAmount.toLocaleString('vi-VN')}đ`);
         }
         alert("🎉 Đã cập nhật thông tin đơn hàng thành công!");
         closeEditModal();
