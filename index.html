@@ -72,6 +72,11 @@
           <span>Quản lý khách hàng</span>
         </button>
 
+        <button id="nav-tab-users" class="w-full flex items-center gap-3 px-3 py-2 rounded-md text-[#787774] hover:bg-[#F0EFEA] hover:text-[#111111] transition-all">
+          <i class="ph ph-shield-check text-base"></i>
+          <span>Quản lý người dùng</span>
+        </button>
+
         <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-md text-[#787774] hover:bg-[#F0EFEA] hover:text-[#111111] transition-all">
           <i class="ph ph-chart-bar text-base text-[#787774]"></i>
           <span>Thống kê báo cáo</span>
@@ -97,6 +102,13 @@
           <span>Tách đơn hàng loạt</span>
         </a>
       </nav>
+    </div>
+    
+    <div class="pt-4 border-t border-[#EAEAEA]">
+      <button id="sidebar-logout-btn" class="w-full flex items-center gap-3 px-3 py-2 rounded-md text-red-600 hover:bg-red-50 transition-all text-xs font-bold">
+        <i class="ph ph-sign-out text-base"></i>
+        <span>Đăng xuất</span>
+      </button>
     </div>
   </aside>
 
@@ -250,24 +262,24 @@
             </tbody>
           </table>
         </div>
-
-        <!-- Pagination Footer -->
-        <div class="px-6 py-4 border-t border-[#EAEAEA] bg-[#FBFBFA] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#787774] font-medium">
-          <div id="page-info">Trang 1 / 1 • Tổng: 0 đơn</div>
-          <div class="flex items-center gap-4">
-            <div class="flex items-center gap-2">
-              <span>Hiển thị</span>
-              <select id="per-page" class="px-2 py-1 rounded-md border border-[#EAEAEA] bg-white text-[#111111]">
-                <option value="20">20</option>
-                <option value="50">50</option>
-                <option value="100">100</option>
-              </select>
-              <span>đơn/trang</span>
-            </div>
-            <div class="flex items-center gap-1.5">
-              <button id="btn-prev" class="px-3 py-1 rounded-md border border-[#EAEAEA] bg-[#FFFFFF] text-[#111111] hover:bg-[#F7F6F3] disabled:opacity-40">&lt; Trước</button>
-              <button id="btn-next" class="px-3 py-1 rounded-md border border-[#EAEAEA] bg-[#FFFFFF] text-[#111111] hover:bg-[#F7F6F3] disabled:opacity-40">Sau &gt;</button>
-            </div>
+      </div>
+      
+      <!-- Pagination Footer cho Đơn hàng (Đưa ra ngoài để luôn hiện trên Điện thoại và Máy tính) -->
+      <div class="px-6 py-4 mt-4 bg-[#FFFFFF] rounded-xl border border-[#EAEAEA] shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#787774] font-medium">
+        <div id="page-info">Trang 1 / 1 • Tổng: 0 đơn</div>
+        <div class="flex items-center gap-4 flex-wrap justify-center sm:justify-end">
+          <div class="flex items-center gap-2">
+            <span>Hiển thị</span>
+            <select id="per-page" class="px-2 py-1 rounded-md border border-[#EAEAEA] bg-white text-[#111111]">
+              <option value="20">20</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+            </select>
+            <span>đơn/trang</span>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <button id="btn-prev" class="px-3 py-1.5 rounded-md border border-[#EAEAEA] bg-[#FFFFFF] text-[#111111] font-semibold hover:bg-[#F7F6F3] disabled:opacity-40">&lt; Trước</button>
+            <button id="btn-next" class="px-3 py-1.5 rounded-md border border-[#EAEAEA] bg-[#FFFFFF] text-[#111111] font-semibold hover:bg-[#F7F6F3] disabled:opacity-40">Sau &gt;</button>
           </div>
         </div>
       </div>
@@ -387,6 +399,84 @@
         </div>
       </div>
     </main>
+
+    <!-- SECTION 3: BẢNG QUẢN LÝ NGƯỜI DÙNG -->
+    <main id="section-users" class="p-6 md:p-8 space-y-6 flex-1 w-full hidden">
+      <!-- Title Section -->
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pb-2 border-b border-[#EAEAEA]">
+        <div>
+          <h1 class="text-2xl sm:text-3xl font-extrabold text-[#111111] tracking-tight">Quản lý người dùng</h1>
+        </div>
+        <button id="btn-add-user" class="px-4 py-2 bg-[#111111] text-white rounded-xl text-xs font-bold hover:bg-[#333333] flex items-center gap-1.5 shadow-md">
+          <i class="ph ph-user-plus text-base"></i>
+          <span>Thêm tài khoản mới</span>
+        </button>
+      </div>
+
+      <!-- Users Grid list -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="users-grid-container">
+        <!-- Dynamic User Cards -->
+      </div>
+    </main>
+
+    <!-- MODAL THÊM/SỬA NGƯỜI DÙNG (USER MODAL) -->
+    <div id="user-manage-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+      <div class="bg-white rounded-2xl border border-[#EAEAEA] shadow-2xl max-w-sm w-full overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+        <div class="px-6 py-4 border-b border-[#EAEAEA] bg-[#FBFBFA] flex items-center justify-between">
+          <h3 class="text-sm font-extrabold text-[#111111]" id="user-modal-title">Thêm người dùng</h3>
+          <button id="close-user-modal-btn" class="text-[#787774] hover:text-[#111111] p-1 rounded-md hover:bg-[#EAEAEA]">
+            <i class="ph ph-x text-lg"></i>
+          </button>
+        </div>
+        <form id="user-manage-form" class="p-6 space-y-4 text-xs font-medium">
+          <input type="hidden" id="user-modal-id">
+          <div>
+            <label class="block text-[#787774] mb-1 font-semibold">Tên tài khoản (Email):</label>
+            <input type="email" id="user-modal-email" class="w-full px-3 py-2 rounded-md border border-[#EAEAEA] bg-[#F7F6F3] text-[#111111] focus:bg-white focus:outline-none" required>
+          </div>
+          <div>
+            <label class="block text-[#787774] mb-1 font-semibold">Mật khẩu mới:</label>
+            <input type="password" id="user-modal-password" class="w-full px-3 py-2 rounded-md border border-[#EAEAEA] bg-[#F7F6F3] text-[#111111] focus:bg-white focus:outline-none" placeholder="Nhập để đặt mới...">
+          </div>
+          <div>
+            <label class="block text-[#787774] mb-1 font-semibold">Vai trò (Role):</label>
+            <select id="user-modal-role" class="w-full px-3 py-2 rounded-md border border-[#EAEAEA] bg-[#F7F6F3] text-[#111111] focus:bg-white focus:outline-none">
+              <option value="member">Nhân viên (Member)</option>
+              <option value="admin">Quản trị viên (Admin)</option>
+            </select>
+          </div>
+          <div class="pt-4 border-t border-[#EAEAEA] flex items-center justify-end gap-2">
+            <button type="button" id="cancel-user-modal-btn" class="px-4 py-2 rounded-md border border-[#EAEAEA] bg-white text-[#2F3437] font-semibold hover:bg-[#F7F6F3]">Hủy bỏ</button>
+            <button type="submit" class="px-4 py-2 rounded-md bg-[#111111] text-white font-bold hover:bg-[#333333]">Lưu tài khoản</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- MÀN HÌNH ĐĂNG NHẬP (LOGIN SCREEN OVERLAY - BẬT LÊN KHI CHƯA AUTH) -->
+    <div id="login-overlay" class="fixed inset-0 bg-[#F7F6F3] z-[999] flex items-center justify-center p-4 hidden">
+      <div class="bg-white rounded-2xl border border-[#EAEAEA] shadow-xl max-w-sm w-full p-8 space-y-6">
+        <div class="text-center space-y-2">
+          <div class="w-12 h-12 bg-[#111111] text-white rounded-xl flex items-center justify-center font-mono-code text-lg font-bold mx-auto">AF</div>
+          <h2 class="text-lg font-extrabold text-[#111111]">Đăng nhập hệ thống</h2>
+          <p class="text-xs text-[#787774]">Vui lòng đăng nhập tài khoản Auto Fill Order để tiếp tục.</p>
+        </div>
+        <form id="login-form" class="space-y-4 text-xs font-semibold">
+          <div>
+            <label class="block text-[#787774] mb-1">Địa chỉ Email:</label>
+            <input type="email" id="login-email" class="w-full px-3.5 py-2.5 rounded-xl border border-[#EAEAEA] bg-[#F7F6F3] text-[#111111] focus:bg-white focus:outline-none focus:border-[#111111] transition-all" required>
+          </div>
+          <div>
+            <label class="block text-[#787774] mb-1">Mật khẩu:</label>
+            <input type="password" id="login-password" class="w-full px-3.5 py-2.5 rounded-xl border border-[#EAEAEA] bg-[#F7F6F3] text-[#111111] focus:bg-white focus:outline-none focus:border-[#111111] transition-all" required>
+          </div>
+          <button type="submit" class="w-full py-3 rounded-xl bg-[#111111] text-white font-bold hover:bg-[#333333] transition-all shadow-md mt-2 flex items-center justify-center gap-1.5 text-xs">
+            <i class="ph ph-sign-in text-base"></i>
+            <span>Bắt đầu đăng nhập</span>
+          </button>
+        </form>
+      </div>
+    </div>
 
     <!-- MODAL CHỈNH SỬA ĐƠN HÀNG (EDIT ORDER MODAL) -->
     <div id="edit-order-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
@@ -1566,8 +1656,42 @@
     });
 
     btnNext.addEventListener('click', () => {
-      currentPage++;
-      renderOrders();
+      const filteredCount = allOrders.filter(item => {
+        let res = item.result || {};
+        if (typeof res === 'string') { try { res = JSON.parse(res); } catch(e) {} }
+        const name = (item.customer_name || res.name || res.recipientName || res.hoTen || '').toLowerCase();
+        const phone = (item.phone || res.phone || res.recipientPhone || res.sdt || '').toLowerCase();
+        const address = (item.address || res.address || res.normalizedAddress || res.diaChi || '').toLowerCase();
+        const orderCode = (res.orderCode || item.order_code || res.maDon || '').toLowerCase();
+        const waybillCode = (res.waybillCode || res.maVanDon || res.trackingCode || '').toLowerCase();
+        const devName = (item.device_name || item.deviceName || '').toLowerCase();
+        const platform = (res.platform || item.platform || '').toLowerCase();
+
+        const createdAt = item.created_at || '';
+        const dateStr = createdAt.slice(0, 10);
+        const fromVal = dateFrom ? dateFrom.value : '';
+        const toVal = dateTo ? dateTo.value : '';
+        if (fromVal && dateStr < fromVal) return false;
+        if (toVal && dateStr > toVal) return false;
+
+        const matchKeyword = !searchInput.value.toLowerCase().trim() || 
+          name.includes(searchInput.value.toLowerCase().trim()) || 
+          phone.includes(searchInput.value.toLowerCase().trim()) || 
+          orderCode.includes(searchInput.value.toLowerCase().trim()) ||
+          waybillCode.includes(searchInput.value.toLowerCase().trim()) ||
+          address.includes(searchInput.value.toLowerCase().trim());
+
+        const matchDevice = deviceFilter.value === 'ALL' || devName === deviceFilter.value;
+        const matchPlatform = platformFilter.value === 'ALL' || platform === platformFilter.value;
+
+        return matchKeyword && matchDevice && matchPlatform;
+      }).length;
+
+      const totalPages = Math.max(1, Math.ceil(filteredCount / perPage));
+      if (currentPage < totalPages) {
+        currentPage++;
+        renderOrders();
+      }
     });
 
     function getPlatformBadge(platform) {
@@ -1605,6 +1729,283 @@
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#039;");
     }
+
+    // ==========================================
+    // 5. ĐĂNG NHẬP & QUẢN LÝ USER HỆ THỐNG
+    // ==========================================
+    let currentUser = null;
+    let allUsers = [];
+
+    const navTabUsers = document.getElementById('nav-tab-users');
+    const sectionUsers = document.getElementById('section-users');
+    const loginOverlay = document.getElementById('login-overlay');
+    const loginForm = document.getElementById('login-form');
+    const sidebarLogoutBtn = document.getElementById('sidebar-logout-btn');
+
+    // Cập nhật sự kiện chuyển Tab cho Quản lý User
+    if (navTabUsers) {
+      navTabUsers.addEventListener('click', () => {
+        navTabUsers.className = "w-full flex items-center gap-3 px-3 py-2 rounded-md bg-[#111111] text-white font-semibold transition-all";
+        navTabOrders.className = "w-full flex items-center gap-3 px-3 py-2 rounded-md text-[#787774] hover:bg-[#F0EFEA] hover:text-[#111111] transition-all";
+        navTabCustomers.className = "w-full flex items-center gap-3 px-3 py-2 rounded-md text-[#787774] hover:bg-[#F0EFEA] hover:text-[#111111] transition-all";
+        
+        sectionUsers.classList.remove('hidden');
+        sectionOrders.classList.add('hidden');
+        sectionCustomers.classList.add('hidden');
+        
+        fetchUsers();
+      });
+    }
+
+    // Gắn thêm sự kiện vào tab cũ để reset màu tab Users
+    if (navTabOrders) {
+      navTabOrders.addEventListener('click', () => {
+        if (navTabUsers) navTabUsers.className = "w-full flex items-center gap-3 px-3 py-2 rounded-md text-[#787774] hover:bg-[#F0EFEA] hover:text-[#111111] transition-all";
+        sectionUsers.classList.add('hidden');
+      });
+    }
+
+    if (navTabCustomers) {
+      navTabCustomers.addEventListener('click', () => {
+        if (navTabUsers) navTabUsers.className = "w-full flex items-center gap-3 px-3 py-2 rounded-md text-[#787774] hover:bg-[#F0EFEA] hover:text-[#111111] transition-all";
+        sectionUsers.classList.add('hidden');
+      });
+    }
+
+    // Kiểm tra Trạng thái Đăng nhập khi load trang
+    function checkLoginStatus() {
+      const stored = localStorage.getItem('af_logged_user');
+      if (stored) {
+        currentUser = JSON.parse(stored);
+        loginOverlay.classList.add('hidden');
+      } else {
+        loginOverlay.classList.remove('hidden');
+      }
+    }
+
+    // Đăng nhập tài khoản
+    if (loginForm) {
+      loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('login-email').value.trim();
+        const pass = document.getElementById('login-password').value.trim();
+
+        const sb = initSupabase();
+        if (!sb) return alert("Lỗi kết nối Supabase!");
+
+        try {
+          // Xác thực thông tin đăng nhập trực tiếp qua bảng auth.users hoặc bảng profiles tùy chọn.
+          // Ở đây sử dụng auth.signInWithPassword chuẩn của Supabase
+          const { data, error } = await sb.auth.signInWithPassword({
+            email: email,
+            password: pass
+          });
+
+          if (error) {
+            alert("❌ Đăng nhập thất bại: " + error.message);
+          } else {
+            currentUser = { email: data.user.email, id: data.user.id };
+            localStorage.setItem('af_logged_user', JSON.stringify(currentUser));
+            loginOverlay.classList.add('hidden');
+            fetchOrders();
+          }
+        } catch(err) {
+          alert("Lỗi xác thực hệ thống: " + err.message);
+        }
+      });
+    }
+
+    // Đăng xuất tài khoản
+    if (sidebarLogoutBtn) {
+      sidebarLogoutBtn.addEventListener('click', async () => {
+        if (!confirm("Bạn có chắc chắn muốn đăng xuất tài khoản?")) return;
+        
+        const sb = initSupabase();
+        if (sb) await sb.auth.signOut();
+        
+        localStorage.removeItem('af_logged_user');
+        currentUser = null;
+        loginOverlay.classList.remove('hidden');
+      });
+    }
+
+    // Tải danh sách User (Chỉ Admin mới có quyền quản lý)
+    async function fetchUsers() {
+      const sb = initSupabase();
+      if (!sb) return;
+
+      const container = document.getElementById('users-grid-container');
+      container.innerHTML = `<div class="py-8 text-center text-xs text-[#787774] col-span-full">Đang tải danh sách tài khoản...</div>`;
+
+      try {
+        // Lấy danh sách hồ sơ người dùng trong hệ thống
+        const { data, error } = await sb.from('profiles').select('*');
+        if (error) {
+          container.innerHTML = `<div class="py-8 text-center text-xs text-red-500 col-span-full">Chưa có quyền quản lý hoặc lỗi: ${error.message}</div>`;
+          return;
+        }
+
+        allUsers = data || [];
+        renderUsers();
+      } catch(err) {
+        container.innerHTML = `<div class="py-8 text-center text-xs text-red-500 col-span-full">Lỗi kết nối: ${err.message}</div>`;
+      }
+    }
+
+    function renderUsers() {
+      const container = document.getElementById('users-grid-container');
+      if (allUsers.length === 0) {
+        container.innerHTML = `<div class="py-8 text-center text-xs text-[#787774] col-span-full">Không có tài khoản nào khác trong hệ thống.</div>`;
+        return;
+      }
+
+      container.innerHTML = allUsers.map(u => {
+        const isSelf = currentUser && currentUser.email === u.email;
+        const roleBadge = u.role === 'admin' 
+          ? `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-purple-100 text-purple-700">Quản trị viên</span>`
+          : `<span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-gray-100 text-gray-600">Nhân viên</span>`;
+
+        return `
+          <div class="bg-white rounded-2xl border border-[#EAEAEA] shadow-sm p-5 space-y-4 flex flex-col justify-between">
+            <div class="space-y-2">
+              <div class="flex items-center justify-between">
+                <div class="w-8 h-8 rounded-full bg-[#111111] text-white flex items-center justify-center font-bold text-xs">
+                  ${u.email.charAt(0).toUpperCase()}
+                </div>
+                ${roleBadge}
+              </div>
+              <div>
+                <h4 class="font-extrabold text-[#111111] text-sm truncate" title="${escapeHtml(u.email)}">${escapeHtml(u.email)}</h4>
+                <p class="text-[10px] text-[#787774] mt-0.5">ID: ${u.id}</p>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-end gap-2 pt-3 border-t border-[#F1F1F0]">
+              <button onclick="openUserModal('${u.id}')" class="px-3 py-1 rounded-md bg-[#F7F6F3] text-[#2F3437] hover:bg-[#EAEAEA] font-semibold text-xs transition-all">Sửa</button>
+              ${isSelf ? '' : `<button onclick="deleteUser('${u.id}', '${escapeHtml(u.email)}')" class="px-3 py-1 rounded-md bg-pastel-rose text-[#9F2F2D] hover:bg-rose-200 font-semibold text-xs transition-all">Xóa</button>`}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Modal Add/Edit User Logic
+    const userModal = document.getElementById('user-manage-modal');
+    const userForm = document.getElementById('user-manage-form');
+    const btnAddUser = document.getElementById('btn-add-user');
+    const closeUserModalBtn = document.getElementById('close-user-modal-btn');
+    const cancelUserModalBtn = document.getElementById('cancel-user-modal-btn');
+
+    if (btnAddUser) {
+      btnAddUser.onclick = () => {
+        document.getElementById('user-modal-title').textContent = "Thêm người dùng";
+        document.getElementById('user-modal-id').value = "";
+        document.getElementById('user-modal-email').value = "";
+        document.getElementById('user-modal-email').disabled = false;
+        document.getElementById('user-modal-password').value = "";
+        document.getElementById('user-modal-password').required = true;
+        document.getElementById('user-modal-role').value = "member";
+        userModal.classList.remove('hidden');
+      };
+    }
+
+    function openUserModal(id) {
+      const u = allUsers.find(user => user.id === id);
+      if (!u) return;
+
+      document.getElementById('user-modal-title').textContent = "Chỉnh sửa tài khoản";
+      document.getElementById('user-modal-id').value = u.id;
+      document.getElementById('user-modal-email').value = u.email;
+      document.getElementById('user-modal-email').disabled = true;
+      document.getElementById('user-modal-password').value = "";
+      document.getElementById('user-modal-password').required = false;
+      document.getElementById('user-modal-role').value = u.role || 'member';
+
+      userModal.classList.remove('hidden');
+    }
+
+    function closeUserModal() {
+      userModal.classList.add('hidden');
+    }
+
+    if (closeUserModalBtn) closeUserModalBtn.onclick = closeUserModal;
+    if (cancelUserModalBtn) cancelUserModalBtn.onclick = closeUserModal;
+
+    if (userForm) {
+      userForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const id = document.getElementById('user-modal-id').value;
+        const email = document.getElementById('user-modal-email').value.trim();
+        const password = document.getElementById('user-modal-password').value.trim();
+        const role = document.getElementById('user-modal-role').value;
+
+        const sb = initSupabase();
+        if (!sb) return;
+
+        try {
+          if (!id) {
+            // Trường hợp 1: Tạo User mới (Gọi API Auth SignUp chuẩn của Supabase)
+            const { data, error } = await sb.auth.signUp({
+              email: email,
+              password: password,
+              options: {
+                data: { role: role } // Metadata role
+              }
+            });
+
+            if (error) return alert("Lỗi khi tạo user: " + error.message);
+            
+            // Tự động đồng bộ thêm vào bảng profiles
+            await sb.from('profiles').insert({
+              id: data.user.id,
+              email: email,
+              role: role
+            });
+
+            alert(`🎉 Đã tạo thành công tài khoản: ${email}`);
+          } else {
+            // Trường hợp 2: Cập nhật thông tin vai trò hoặc mật khẩu
+            const { error: profileErr } = await sb.from('profiles').update({ role: role }).eq('id', id);
+            if (profileErr) return alert("Lỗi cập nhật profile: " + profileErr.message);
+
+            if (password) {
+              // Nếu admin đổi mật khẩu của tài khoản (Gọi RPC hoặc API Admin của Supabase nếu được phân quyền)
+              alert("⚠️ Đã lưu thay đổi. Mật khẩu cần được tự đặt lại qua email khôi phục hoặc qua chức năng quản trị viên.");
+            } else {
+              alert("🎉 Đã cập nhật thành công thông tin người dùng!");
+            }
+          }
+
+          closeUserModal();
+          fetchUsers();
+        } catch(err) {
+          alert("Lỗi hệ thống: " + err.message);
+        }
+      });
+    }
+
+    async function deleteUser(id, email) {
+      if (!confirm(`⚠️ Bạn có chắc chắn muốn XÓA TÀI KHOẢN "${email}" khỏi hệ thống?`)) return;
+
+      const sb = initSupabase();
+      if (!sb) return;
+
+      try {
+        const { error } = await sb.from('profiles').delete().eq('id', id);
+        if (error) {
+          alert("Lỗi khi xóa người dùng: " + error.message);
+        } else {
+          alert(`🎉 Đã xóa tài khoản "${email}" thành công!`);
+          fetchUsers();
+        }
+      } catch(e) {
+        alert("Lỗi hệ thống: " + e.message);
+      }
+    }
+
+    // Kích hoạt kiểm tra Login ngay sau khi khởi chạy
+    checkLoginStatus();
   </script>
 </body>
 </html>
