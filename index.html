@@ -64,7 +64,12 @@
 
       <!-- Navigation Menu -->
       <nav class="space-y-1 text-xs font-medium">
-        <button id="nav-tab-orders" class="w-full flex items-center gap-3 px-3 py-2 rounded-md bg-[#111111] text-white font-semibold transition-all">
+        <button id="nav-tab-statistics" class="w-full flex items-center gap-3 px-3 py-2 rounded-md bg-[#111111] text-white font-semibold transition-all">
+          <i class="ph ph-chart-bar text-base"></i>
+          <span>Thống kê báo cáo</span>
+        </button>
+
+        <button id="nav-tab-orders" class="w-full flex items-center gap-3 px-3 py-2 rounded-md text-[#787774] hover:bg-[#F0EFEA] hover:text-[#111111] transition-all">
           <i class="ph ph-paper-plane-tilt text-base"></i>
           <span>Đơn hàng đã lên đơn</span>
         </button>
@@ -78,11 +83,6 @@
           <i class="ph ph-shield-check text-base"></i>
           <span>Quản lý người dùng</span>
         </button>
-
-        <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-md text-[#787774] hover:bg-[#F0EFEA] hover:text-[#111111] transition-all">
-          <i class="ph ph-chart-bar text-base text-[#787774]"></i>
-          <span>Thống kê báo cáo</span>
-        </a>
 
         <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-md text-[#787774] hover:bg-[#F0EFEA] hover:text-[#111111] transition-all">
           <i class="ph ph-gear text-base text-[#787774]"></i>
@@ -143,7 +143,7 @@
     </header>
 
     <!-- SECTION 1: ĐƠN HÀNG ĐÃ LÊN ĐƠN -->
-    <main id="section-orders" class="p-6 md:p-8 space-y-6 flex-1 w-full">
+    <main id="section-orders" class="p-6 md:p-8 space-y-6 flex-1 w-full hidden">
       
       <!-- Title Section -->
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-3 pb-2 border-b border-[#EAEAEA]">
@@ -179,36 +179,7 @@
         </div>
       </div>
 
-      <!-- BIỂU ĐỒ BÁO CÁO THỐNG KÊ DOANH THU & ĐƠN HÀNG (TanStack / Chart.JS style) -->
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <!-- Biểu đồ doanh thu COD -->
-        <div class="bg-white rounded-xl p-5 border border-[#EAEAEA] shadow-sm space-y-3">
-          <div class="flex items-center justify-between border-b border-[#F1F1F0] pb-2">
-            <h3 class="text-xs font-extrabold text-[#111111] uppercase tracking-wider flex items-center gap-2">
-              <i class="ph ph-chart-line-up text-base text-[#346538]"></i>
-              Thống kê doanh thu COD theo ngày (VNĐ)
-            </h3>
-            <span class="text-[10px] text-[#787774] font-semibold bg-[#EDF3EC] px-2 py-0.5 rounded text-[#346538]">Doanh thu</span>
-          </div>
-          <div class="h-64 w-full relative">
-            <canvas id="revenueChart"></canvas>
-          </div>
-        </div>
 
-        <!-- Biểu đồ sản lượng đơn hàng -->
-        <div class="bg-white rounded-xl p-5 border border-[#EAEAEA] shadow-sm space-y-3">
-          <div class="flex items-center justify-between border-b border-[#F1F1F0] pb-2">
-            <h3 class="text-xs font-extrabold text-[#111111] uppercase tracking-wider flex items-center gap-2">
-              <i class="ph ph-chart-bar text-base text-[#1F6C9F]"></i>
-              Số lượng đơn hàng thành công theo ngày
-            </h3>
-            <span class="text-[10px] text-[#787774] font-semibold bg-[#E1F3FE] px-2 py-0.5 rounded text-[#1F6C9F]">Sản lượng</span>
-          </div>
-          <div class="h-64 w-full relative">
-            <canvas id="ordersCountChart"></canvas>
-          </div>
-        </div>
-      </div>
 
       <!-- Minimal Filter Bar -->
       <div class="bg-[#FFFFFF] rounded-xl p-4 border border-[#EAEAEA] space-y-4">
@@ -327,7 +298,72 @@
         </div>
       </div>
     </main>
+    <!-- SECTION STATISTICS: BIỂU ĐỒ BÁO CÁO THỐNG KÊ DOANH THU & ĐƠN HÀNG (TanStack / Chart.JS style) -->
+    <main id="section-statistics" class="p-6 md:p-8 space-y-6 flex-1 w-full">
+      <!-- Title Section -->
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-3 pb-2 border-b border-[#EAEAEA]">
+        <div>
+          <span class="text-[11px] font-semibold text-[#787774] uppercase tracking-wider">Dashboard & Reports</span>
+          <h1 class="text-2xl sm:text-3xl font-extrabold text-[#111111] tracking-tight mt-0.5">Thống kê báo cáo</h1>
+        </div>
+        <div class="text-xs text-[#787774] font-medium bg-[#FFFFFF] px-3 py-1.5 rounded-md border border-[#EAEAEA]">
+          Doanh thu & Sản lượng thực tế
+        </div>
+      </div>
 
+      <!-- KPI Summary under statistics tab -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div class="bg-pastel-blue rounded-xl p-6 border border-[#E1F3FE] flex items-center gap-5 transition-transform hover:-translate-y-0.5">
+          <div class="w-12 h-12 rounded-lg bg-white/80 text-[#1F6C9F] flex items-center justify-center shrink-0">
+            <i class="ph ph-paper-plane-tilt text-2xl"></i>
+          </div>
+          <div>
+            <div class="text-[11px] uppercase font-bold tracking-wider opacity-80">TỔNG ĐƠN ĐÃ LÊN ĐƠN</div>
+            <div id="stat-total-orders-static" class="text-3xl font-black tracking-tight mt-0.5">0</div>
+          </div>
+        </div>
+
+        <div class="bg-pastel-green rounded-xl p-6 border border-[#EDF3EC] flex items-center gap-5 transition-transform hover:-translate-y-0.5">
+          <div class="w-12 h-12 rounded-lg bg-white/80 text-[#346538] flex items-center justify-center shrink-0">
+            <i class="ph ph-currency-dollar-simple text-2xl"></i>
+          </div>
+          <div>
+            <div class="text-[11px] uppercase font-bold tracking-wider opacity-80">TỔNG COD ĐÃ LÊN ĐƠN</div>
+            <div id="stat-total-cod-static" class="text-3xl font-black tracking-tight mt-0.5">0 đ</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Biểu đồ doanh thu COD -->
+        <div class="bg-white rounded-xl p-5 border border-[#EAEAEA] shadow-sm space-y-3">
+          <div class="flex items-center justify-between border-b border-[#F1F1F0] pb-2">
+            <h3 class="text-xs font-extrabold text-[#111111] uppercase tracking-wider flex items-center gap-2">
+              <i class="ph ph-chart-line-up text-base text-[#346538]"></i>
+              Thống kê doanh thu COD theo ngày (VNĐ)
+            </h3>
+            <span class="text-[10px] text-[#787774] font-semibold bg-[#EDF3EC] px-2 py-0.5 rounded text-[#346538]">Doanh thu</span>
+          </div>
+          <div class="h-64 w-full relative">
+            <canvas id="revenueChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Biểu đồ sản lượng đơn hàng -->
+        <div class="bg-white rounded-xl p-5 border border-[#EAEAEA] shadow-sm space-y-3">
+          <div class="flex items-center justify-between border-b border-[#F1F1F0] pb-2">
+            <h3 class="text-xs font-extrabold text-[#111111] uppercase tracking-wider flex items-center gap-2">
+              <i class="ph ph-chart-bar text-base text-[#1F6C9F]"></i>
+              Số lượng đơn hàng thành công theo ngày
+            </h3>
+            <span class="text-[10px] text-[#787774] font-semibold bg-[#E1F3FE] px-2 py-0.5 rounded text-[#1F6C9F]">Sản lượng</span>
+          </div>
+          <div class="h-64 w-full relative">
+            <canvas id="ordersCountChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </main>
     <!-- SECTION 2: BẢNG QUẢN LÝ KHÁCH HÀNG -->
     <main id="section-customers" class="p-6 md:p-8 space-y-6 flex-1 w-full hidden">
       <!-- Title Section -->
@@ -752,21 +788,50 @@
       }
     }
 
+    const navTabStatistics = document.getElementById('nav-tab-statistics');
+    const sectionStatistics = document.getElementById('section-statistics');
+
     // Navigation Tabs Handler
     function setupTabSwitching() {
+      if (navTabStatistics) {
+        navTabStatistics.addEventListener('click', () => {
+          setActiveTab(navTabStatistics);
+          sectionStatistics.classList.remove('hidden');
+          sectionOrders.classList.add('hidden');
+          sectionCustomers.classList.add('hidden');
+          sectionUsers.classList.add('hidden');
+          renderCharts(allOrders); // Vẽ lại biểu đồ khi chuyển tab
+        });
+      }
+
       navTabOrders.addEventListener('click', () => {
-        navTabOrders.className = "w-full flex items-center gap-3 px-3 py-2 rounded-md bg-[#111111] text-white font-semibold transition-all";
-        navTabCustomers.className = "w-full flex items-center gap-3 px-3 py-2 rounded-md text-[#787774] hover:bg-[#F0EFEA] hover:text-[#111111] transition-all";
+        setActiveTab(navTabOrders);
         sectionOrders.classList.remove('hidden');
+        sectionStatistics.classList.add('hidden');
         sectionCustomers.classList.add('hidden');
+        sectionUsers.classList.add('hidden');
       });
 
       navTabCustomers.addEventListener('click', () => {
-        navTabCustomers.className = "w-full flex items-center gap-3 px-3 py-2 rounded-md bg-[#111111] text-white font-semibold transition-all";
-        navTabOrders.className = "w-full flex items-center gap-3 px-3 py-2 rounded-md text-[#787774] hover:bg-[#F0EFEA] hover:text-[#111111] transition-all";
+        setActiveTab(navTabCustomers);
         sectionCustomers.classList.remove('hidden');
+        sectionStatistics.classList.add('hidden');
         sectionOrders.classList.add('hidden');
+        sectionUsers.classList.add('hidden');
         renderCustomers();
+      });
+    }
+
+    function setActiveTab(activeTabEl) {
+      const tabs = [navTabStatistics, navTabOrders, navTabCustomers, navTabUsers];
+      tabs.forEach(tab => {
+        if (tab) {
+          if (tab === activeTabEl) {
+            tab.className = "w-full flex items-center gap-3 px-3 py-2 rounded-md bg-[#111111] text-white font-semibold transition-all";
+          } else {
+            tab.className = "w-full flex items-center gap-3 px-3 py-2 rounded-md text-[#787774] hover:bg-[#F0EFEA] hover:text-[#111111] transition-all";
+          }
+        }
       });
     }
 
@@ -1650,6 +1715,11 @@
     function updateStats(total, totalCod) {
       if (statTotalOrders) statTotalOrders.textContent = `${total}/${total}`;
       if (statTotalCod) statTotalCod.textContent = `${Number(totalCod).toLocaleString('vi-VN')} đ`;
+      
+      const ordersStatic = document.getElementById('stat-total-orders-static');
+      const codStatic = document.getElementById('stat-total-cod-static');
+      if (ordersStatic) ordersStatic.textContent = total;
+      if (codStatic) codStatic.textContent = `${Number(totalCod).toLocaleString('vi-VN')} đ`;
     }
 
     // Quick Date Handlers
@@ -1797,32 +1867,15 @@
     const sidebarLogoutBtn = document.getElementById('sidebar-logout-btn');
 
     // Cập nhật sự kiện chuyển Tab cho Quản lý User
+    // Cập nhật sự kiện chuyển Tab cho Quản lý User
     if (navTabUsers) {
       navTabUsers.addEventListener('click', () => {
-        navTabUsers.className = "w-full flex items-center gap-3 px-3 py-2 rounded-md bg-[#111111] text-white font-semibold transition-all";
-        navTabOrders.className = "w-full flex items-center gap-3 px-3 py-2 rounded-md text-[#787774] hover:bg-[#F0EFEA] hover:text-[#111111] transition-all";
-        navTabCustomers.className = "w-full flex items-center gap-3 px-3 py-2 rounded-md text-[#787774] hover:bg-[#F0EFEA] hover:text-[#111111] transition-all";
-        
+        setActiveTab(navTabUsers);
         sectionUsers.classList.remove('hidden');
         sectionOrders.classList.add('hidden');
         sectionCustomers.classList.add('hidden');
-        
+        sectionStatistics.classList.add('hidden');
         fetchUsers();
-      });
-    }
-
-    // Gắn thêm sự kiện vào tab cũ để reset màu tab Users
-    if (navTabOrders) {
-      navTabOrders.addEventListener('click', () => {
-        if (navTabUsers) navTabUsers.className = "w-full flex items-center gap-3 px-3 py-2 rounded-md text-[#787774] hover:bg-[#F0EFEA] hover:text-[#111111] transition-all";
-        sectionUsers.classList.add('hidden');
-      });
-    }
-
-    if (navTabCustomers) {
-      navTabCustomers.addEventListener('click', () => {
-        if (navTabUsers) navTabUsers.className = "w-full flex items-center gap-3 px-3 py-2 rounded-md text-[#787774] hover:bg-[#F0EFEA] hover:text-[#111111] transition-all";
-        sectionUsers.classList.add('hidden');
       });
     }
 
