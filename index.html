@@ -492,22 +492,67 @@
       </div>
     </main>
 
-    <!-- SECTION 3: BẢNG QUẢN LÝ NGƯỜI DÙNG -->
+    <!-- SECTION 3: BẢNG QUẢN LÝ NGƯỜI DÙNG CHUYÊN NGHIỆP (BENTO GRID STYLE) -->
     <main id="section-users" class="p-6 md:p-8 space-y-6 flex-1 w-full hidden">
       <!-- Title Section -->
-      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pb-2 border-b border-[#EAEAEA]">
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pb-2 border-b border-brand-borderLight">
         <div>
-          <h1 class="text-2xl sm:text-3xl font-extrabold text-[#111111] tracking-tight">Quản lý người dùng</h1>
+          <h1 class="text-2xl sm:text-3xl font-extrabold text-brand-darkText tracking-tight">Quản trị & Phân quyền</h1>
+          <p class="text-xs text-brand-darkText/60 mt-0.5">Quản lý tài khoản nhân viên, thiết bị hoạt động và lịch sử vết hệ thống.</p>
         </div>
-        <button id="btn-add-user" class="px-4 py-2 bg-[#111111] text-white rounded-xl text-xs font-bold hover:bg-[#333333] flex items-center gap-1.5 shadow-md">
+        <button id="btn-add-user" class="px-4 py-2 bg-brand-primaryBlue hover:bg-brand-primaryBlueHover text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-md transition-all">
           <i class="ph ph-user-plus text-base"></i>
-          <span>Thêm tài khoản mới</span>
+          <span>Thêm nhân viên mới</span>
         </button>
       </div>
 
-      <!-- Users Grid list -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="users-grid-container">
-        <!-- Dynamic User Cards -->
+      <!-- Bento Grid Layout -->
+      <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+        
+        <!-- Cột 1: Danh sách Tài khoản & Phân quyền (Chiếm 1 cột xl) -->
+        <div class="xl:col-span-1 bg-brand-neutralCard rounded-2xl border border-brand-borderLight p-5 space-y-4">
+          <div class="flex items-center justify-between pb-3 border-b border-brand-borderLight">
+            <h3 class="text-xs font-extrabold text-brand-darkText uppercase tracking-wider flex items-center gap-2">
+              <i class="ph ph-users-three text-base text-brand-primaryBlue"></i>
+              Tài khoản nhân viên
+            </h3>
+            <span id="system-user-count" class="px-2 py-0.5 rounded text-[10px] font-bold bg-brand-primaryBlueLight text-brand-primaryBlue">0</span>
+          </div>
+          <div class="space-y-4 max-h-[500px] overflow-y-auto pr-1" id="users-grid-container">
+            <!-- Dynamic User Cards -->
+          </div>
+        </div>
+
+        <!-- Cột 2: Phiên hoạt động & Đăng xuất từ xa (Chiếm 1 cột xl) -->
+        <div class="xl:col-span-1 bg-brand-neutralCard rounded-2xl border border-brand-borderLight p-5 space-y-4">
+          <div class="flex items-center justify-between pb-3 border-b border-brand-borderLight">
+            <h3 class="text-xs font-extrabold text-brand-darkText uppercase tracking-wider flex items-center gap-2">
+              <i class="ph ph-monitor text-base text-brand-primaryBlue"></i>
+              Thiết bị đang kết nối
+            </h3>
+            <span id="active-session-count" class="px-2 py-0.5 rounded text-[10px] font-bold bg-[#ECFDF5] text-[#059669]">0 Online</span>
+          </div>
+          <div class="space-y-3 max-h-[500px] overflow-y-auto pr-1" id="active-sessions-container">
+            <!-- Dynamic Session Cards -->
+            <div class="text-center py-8 text-[11px] text-brand-darkText/50">Đang tải danh sách thiết bị...</div>
+          </div>
+        </div>
+
+        <!-- Cột 3: Nhật ký hoạt động Audit Logs (Chiếm 1 cột xl) -->
+        <div class="xl:col-span-1 bg-brand-neutralCard rounded-2xl border border-brand-borderLight p-5 space-y-4">
+          <div class="flex items-center justify-between pb-3 border-b border-brand-borderLight">
+            <h3 class="text-xs font-extrabold text-brand-darkText uppercase tracking-wider flex items-center gap-2">
+              <i class="ph ph-clock-counter-clockwise text-base text-brand-primaryBlue"></i>
+              Nhật ký vết hệ thống (Audit Logs)
+            </h3>
+            <button id="btn-clear-logs-ui" class="text-[10px] text-red-600 font-bold hover:underline">Xóa log</button>
+          </div>
+          <div class="space-y-4 max-h-[500px] overflow-y-auto pr-1 text-[11px]" id="audit-logs-container">
+            <!-- Dynamic Logs Timeline -->
+            <div class="text-center py-8 text-[11px] text-brand-darkText/50">Chưa có nhật ký hoạt động nào.</div>
+          </div>
+        </div>
+
       </div>
     </main>
 

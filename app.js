@@ -968,6 +968,9 @@ if (btnBulkDelete) {
       if (error) {
         alert("Lỗi khi xóa hàng loạt: " + error.message);
       } else {
+        if (typeof writeAuditLog === 'function') {
+          writeAuditLog('Xóa hàng loạt', `Đã xóa vĩnh viễn ${idsToDelete.length} đơn hàng khỏi hệ thống.`);
+        }
         alert(`🎉 Đã xóa thành công ${idsToDelete.length} đơn hàng!`);
         fetchOrders();
       }
@@ -1053,6 +1056,10 @@ if (editForm) {
       if (error) {
         alert("Lỗi khi lưu đơn hàng: " + error.message);
       } else {
+        // Ghi nhận nhật ký audit log
+        if (typeof writeAuditLog === 'function') {
+          writeAuditLog('Sửa đơn hàng', `Đã cập nhật thông tin đơn hàng của khách hàng: ${name}, SĐT: ${phone}, COD: ${codAmount.toLocaleString('vi-VN')}đ`);
+        }
         alert("🎉 Đã cập nhật thông tin đơn hàng thành công!");
         closeEditModal();
         fetchOrders();
@@ -1240,21 +1247,28 @@ async function fetchUsers() {
         allUsers = JSON.parse(localUsers);
       }
       renderUsers();
+      loadSessionsAndLogs();
       return;
     }
 
     allUsers = data || [];
     renderUsers();
+    loadSessionsAndLogs();
   } catch(err) {
     let localUsers = localStorage.getItem('af_local_profiles');
     allUsers = localUsers ? JSON.parse(localUsers) : [{ id: 'admin_bypass_local', email: 'admin@luathuysinh.vn', role: 'admin' }];
     renderUsers();
+    loadSessionsAndLogs();
   }
 }
 
 function renderUsers() {
   const container = document.getElementById('users-grid-container');
+  const countEl = document.getElementById('system-user-count');
   if (!container) return;
+
+  if (countEl) countEl.textContent = allUsers.length;
+
   if (allUsers.length === 0) {
     container.innerHTML = `<div class="py-8 text-center text-xs text-[#787774] col-span-full">Không có tài khoản nào khác trong hệ thống.</div>`;
     return;
@@ -1267,28 +1281,148 @@ function renderUsers() {
       : `<span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-gray-100 text-gray-600">Nhân viên</span>`;
 
     return `
-      <div class="bg-white rounded-2xl border border-[#EAEAEA] shadow-sm p-5 space-y-4 flex flex-col justify-between">
+      <div class="bg-white rounded-xl border border-brand-borderLight shadow-sm p-4 space-y-3 flex flex-col justify-between">
         <div class="space-y-2">
           <div class="flex items-center justify-between">
-            <div class="w-8 h-8 rounded-full bg-[#111111] text-white flex items-center justify-center font-bold text-xs">
+            <div class="w-8 h-8 rounded-full bg-brand-primaryBlue text-white flex items-center justify-center font-bold text-xs">
               ${u.email.charAt(0).toUpperCase()}
             </div>
             ${roleBadge}
           </div>
           <div>
-            <h4 class="font-extrabold text-[#111111] text-sm truncate" title="${escapeHtml(u.email)}">${escapeHtml(u.email)}</h4>
-            <p class="text-[10px] text-[#787774] mt-0.5">ID: ${u.id}</p>
+            <h4 class="font-extrabold text-brand-darkText text-xs truncate" title="${escapeHtml(u.email)}">${escapeHtml(u.email)}</h4>
+            <p class="text-[9px] text-brand-darkText/50 mt-0.5">ID: ${u.id.substring(0, 8)}...</p>
           </div>
         </div>
 
-        <div class="flex items-center justify-end gap-2 pt-3 border-t border-[#F1F1F0]">
-          <button onclick="openUserModal('${u.id}')" class="px-3 py-1 rounded-md bg-[#F7F6F3] text-[#2F3437] hover:bg-[#EAEAEA] font-semibold text-xs transition-all">Sửa</button>
-          ${isSelf ? '' : `<button onclick="deleteSystemUser('${u.id}', '${escapeHtml(u.email)}')" class="px-3 py-1 rounded-md bg-pastel-rose text-[#9F2F2D] hover:bg-rose-200 font-semibold text-xs transition-all">Xóa</button>`}
+        <div class="flex items-center justify-end gap-2 pt-2 border-t border-brand-borderLight">
+          <button onclick="openUserModal('${u.id}')" class="px-2.5 py-1 rounded bg-brand-neutralBg text-brand-darkText hover:bg-brand-borderLight font-semibold text-[10px] transition-all">Sửa</button>
+          ${isSelf ? '' : `<button onclick="deleteSystemUser('${u.id}', '${escapeHtml(u.email)}')" class="px-2.5 py-1 rounded bg-pastel-rose text-[#9F2F2D] hover:bg-rose-200 font-semibold text-[10px] transition-all">Xóa</button>`}
         </div>
       </div>
     `;
   }).join('');
 }
+
+// Giả lập Dữ liệu Phiên Đăng nhập & Audit Logs (Local Fallback + Supabase ready)
+function loadSessionsAndLogs() {
+  const sessionsContainer = document.getElementById('active-sessions-container');
+  const logsContainer = document.getElementById('audit-logs-container');
+  const sessionCountEl = document.getElementById('active-session-count');
+
+  // 1. Tải danh sách Active Sessions
+  let localSessions = localStorage.getItem('af_user_sessions');
+  if (!localSessions) {
+    localSessions = [
+      { id: 'sess_1', email: 'admin@luathuysinh.vn', device: 'Windows 11 (Chrome Browser)', ip: '113.161.44.82', isCurrent: true, date: new Date().toISOString() },
+      { id: 'sess_2', email: 'member@luathuysinh.vn', device: 'iPhone 15 (Zalo Webview)', ip: '14.232.88.109', isCurrent: false, date: new Date(Date.now() - 3600000).toISOString() }
+    ];
+    localStorage.setItem('af_user_sessions', JSON.stringify(localSessions));
+  } else {
+    localSessions = JSON.parse(localSessions);
+  }
+
+  if (sessionCountEl) {
+    sessionCountEl.textContent = `${localSessions.length} Thiết bị`;
+  }
+
+  if (sessionsContainer) {
+    sessionsContainer.innerHTML = localSessions.map(s => {
+      return `
+        <div class="p-3 bg-brand-neutralBg rounded-xl border border-brand-borderLight space-y-2 text-xs">
+          <div class="flex items-start justify-between">
+            <div>
+              <span class="font-extrabold text-brand-darkText">${escapeHtml(s.email)}</span>
+              <span class="text-[9px] text-[#787774] ml-1">(${s.ip})</span>
+            </div>
+            ${s.isCurrent 
+              ? `<span class="px-1.5 py-0.5 text-[8px] bg-emerald-100 text-emerald-800 rounded font-bold">Thiết bị này</span>` 
+              : `<button onclick="revokeSession('${s.id}')" class="text-[9px] text-red-600 hover:underline font-bold">Đăng xuất</button>`
+            }
+          </div>
+          <div class="text-[10px] text-brand-darkText/70 flex items-center gap-1">
+            <i class="ph ph-desktop text-sm"></i>
+            <span>${escapeHtml(s.device)}</span>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // 2. Tải Nhật ký hoạt động Audit Logs
+  let localLogs = localStorage.getItem('af_audit_logs');
+  if (!localLogs) {
+    localLogs = [
+      { actor: 'admin@luathuysinh.vn', action: 'Đăng nhập', details: 'Đăng nhập hệ thống thành công', date: new Date().toISOString() },
+      { actor: 'admin@luathuysinh.vn', action: 'Sửa COD', details: 'Đã sửa tiền thu hộ COD đơn của khách Nguyễn Văn A', date: new Date(Date.now() - 600000).toISOString() }
+    ];
+    localStorage.setItem('af_audit_logs', JSON.stringify(localLogs));
+  } else {
+    localLogs = JSON.parse(localLogs);
+  }
+
+  if (logsContainer) {
+    if (localLogs.length === 0) {
+      logsContainer.innerHTML = `<div class="text-center py-8 text-[11px] text-brand-darkText/50">Không có nhật ký hoạt động nào.</div>`;
+    } else {
+      logsContainer.innerHTML = localLogs.map(l => {
+        const timeStr = new Date(l.date).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
+        return `
+          <div class="flex gap-3 border-l-2 border-brand-mintLight pl-3 pb-2 relative">
+            <div class="absolute -left-[5px] top-1 w-2.5 h-2.5 rounded-full bg-brand-primaryBlue"></div>
+            <div class="space-y-0.5">
+              <div class="flex items-center gap-2">
+                <span class="font-extrabold text-brand-darkText">${escapeHtml(l.actor.split('@')[0])}</span>
+                <span class="px-1.5 py-0.5 rounded text-[8px] font-bold bg-brand-primaryBlueLight text-brand-primaryBlue">${escapeHtml(l.action)}</span>
+                <span class="text-[9px] text-[#787774]">${timeStr}</span>
+              </div>
+              <p class="text-brand-darkText/70 text-[10px] leading-relaxed">${escapeHtml(l.details)}</p>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+  }
+}
+
+// Đăng xuất từ xa thiết bị
+window.revokeSession = function(id) {
+  if (!confirm("⚠️ Bạn có chắc chắn muốn đăng xuất từ xa cho thiết bị này không?")) return;
+
+  let localSessions = JSON.parse(localStorage.getItem('af_user_sessions') || '[]');
+  localSessions = localSessions.filter(s => s.id !== id);
+  localStorage.setItem('af_user_sessions', JSON.stringify(localSessions));
+
+  // Ghi nhận nhật ký audit log
+  writeAuditLog('Đăng xuất từ xa', `Admin đã thu hồi token đăng xuất phiên thiết bị ID: ${id}`);
+  loadSessionsAndLogs();
+};
+
+// Hàm ghi nhận nhật ký hệ thống
+window.writeAuditLog = function(action, details) {
+  let localLogs = JSON.parse(localStorage.getItem('af_audit_logs') || '[]');
+  const storedUser = localStorage.getItem('af_logged_user');
+  const email = storedUser ? JSON.parse(storedUser).email : 'Hệ thống';
+
+  localLogs.unshift({
+    actor: email,
+    action: action,
+    details: details,
+    date: new Date().toISOString()
+  });
+
+  // Giới hạn tối đa 50 log gần nhất
+  if (localLogs.length > 50) localLogs.pop();
+  localStorage.setItem('af_audit_logs', JSON.stringify(localLogs));
+};
+
+// Sự kiện xóa log trên UI
+document.getElementById('btn-clear-logs-ui')?.addEventListener('click', () => {
+  if (confirm("⚠️ Bạn có chắc chắn muốn xóa sạch nhật ký hoạt động trên giao diện này không?")) {
+    localStorage.setItem('af_audit_logs', JSON.stringify([]));
+    loadSessionsAndLogs();
+  }
+});
 
 // Modal Add/Edit User Logic
 const userModal = document.getElementById('user-manage-modal');
@@ -1368,6 +1502,7 @@ if (userForm) {
         list.push({ id: newId, email: email, role: role });
         localStorage.setItem('af_local_profiles', JSON.stringify(list));
 
+        writeAuditLog('Tạo tài khoản', `Đã tạo tài khoản nhân viên mới: ${email}`);
         alert(`🎉 Đã tạo thành công tài khoản: ${email}`);
       } else {
         await sb.from('profiles').update({ role: role }).eq('id', id);
@@ -1382,6 +1517,7 @@ if (userForm) {
           }
         }
 
+        writeAuditLog('Cập nhật quyền', `Đã sửa đổi thông tin quyền cho tài khoản: ${email}`);
         if (password) {
           alert("⚠️ Đã lưu thay đổi. Mật khẩu cần được tự đặt lại qua email khôi phục hoặc qua chức năng quản trị viên.");
         } else {
@@ -1413,6 +1549,7 @@ async function deleteSystemUser(id, email) {
       localStorage.setItem('af_local_profiles', JSON.stringify(list));
     }
 
+    writeAuditLog('Xóa tài khoản', `Đã xóa vĩnh viễn tài khoản nhân viên: ${email}`);
     alert(`🎉 Đã xóa tài khoản "${email}" thành công!`);
     fetchUsers();
   } catch(e) {
