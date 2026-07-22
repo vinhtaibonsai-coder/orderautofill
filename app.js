@@ -1272,7 +1272,7 @@ function renderUsers() {
 
         <div class="flex items-center justify-end gap-2 pt-3 border-t border-[#F1F1F0]">
           <button onclick="openUserModal('${u.id}')" class="px-3 py-1 rounded-md bg-[#F7F6F3] text-[#2F3437] hover:bg-[#EAEAEA] font-semibold text-xs transition-all">Sửa</button>
-          ${isSelf ? '' : `<button onclick="deleteUser('${u.id}', '${escapeHtml(u.email)}')" class="px-3 py-1 rounded-md bg-pastel-rose text-[#9F2F2D] hover:bg-rose-200 font-semibold text-xs transition-all">Xóa</button>`}
+          ${isSelf ? '' : `<button onclick="deleteSystemUser('${u.id}', '${escapeHtml(u.email)}')" class="px-3 py-1 rounded-md bg-pastel-rose text-[#9F2F2D] hover:bg-rose-200 font-semibold text-xs transition-all">Xóa</button>`}
         </div>
       </div>
     `;
@@ -1386,7 +1386,7 @@ if (userForm) {
   });
 }
 
-async function deleteUser(id, email) {
+async function deleteSystemUser(id, email) {
   if (!confirm(`⚠️ Bạn có chắc chắn muốn XÓA TÀI KHOẢN "${email}" khỏi hệ thống?`)) return;
 
   const sb = initSupabase();
