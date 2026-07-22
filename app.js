@@ -980,12 +980,11 @@ function renderOrders() {
           <span class="inline-block font-semibold text-xs text-[#111111] bg-[#F7F6F3] px-2 py-0.5 rounded border border-[#EAEAEA]">${escapeHtml(orderCode)}</span>
         </td>
         <td class="py-3.5 px-3">
-          <div class="flex items-center gap-1.5">
+          <div class="flex items-center gap-1">
             <span class="inline-block text-xs font-bold bg-pastel-blue px-2 py-0.5 rounded font-mono">${escapeHtml(waybillCode)}</span>
             ${waybillCode && waybillCode !== '—' ? `
-              <button onclick="copyWaybillCode('${escapeHtml(waybillCode)}', '${escapeHtml(platform)}')" title="Sao chép mã vận đơn cho khách (${escapeHtml(waybillCode)} - ${platform.includes('jt') ? 'J&T' : 'VNPost'})" class="px-1.5 py-0.5 bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200 rounded transition-all flex items-center gap-0.5 text-[10px] font-bold">
-                <i class="ph ph-copy text-xs"></i>
-                <span>Copy</span>
+              <button onclick="copyWaybillCode('${escapeHtml(waybillCode)}', '${escapeHtml(platform)}')" title="Sao chép: ${escapeHtml(waybillCode)} - ${platform.includes('jt') ? 'J&T' : 'VNPost'}" class="p-1 text-slate-400 hover:text-blue-600 transition-colors cursor-pointer">
+                <i class="ph ph-copy text-sm"></i>
               </button>
             ` : ''}
           </div>
@@ -1065,12 +1064,11 @@ function renderOrders() {
             </div>
             <div>
               <span class="text-[#1F6C9F] font-medium text-[11px]">Mã vận đơn:</span>
-              <div class="flex items-center gap-1.5 mt-0.5">
+              <div class="flex items-center gap-1 mt-0.5">
                 <span class="font-bold text-[#1F6C9F] text-xs">${escapeHtml(waybillCode)}</span>
                 ${waybillCode && waybillCode !== '—' ? `
-                  <button onclick="copyWaybillCode('${escapeHtml(waybillCode)}', '${escapeHtml(platform)}')" title="Sao chép mã vận đơn" class="px-1.5 py-0.5 bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200 rounded flex items-center gap-0.5 font-bold text-[10px]">
-                    <i class="ph ph-copy text-xs"></i>
-                    <span>Copy</span>
+                  <button onclick="copyWaybillCode('${escapeHtml(waybillCode)}', '${escapeHtml(platform)}')" title="Sao chép" class="p-0.5 text-slate-400 hover:text-blue-600 transition-colors cursor-pointer">
+                    <i class="ph ph-copy text-sm"></i>
                   </button>
                 ` : ''}
               </div>
