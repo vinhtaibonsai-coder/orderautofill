@@ -203,9 +203,9 @@ function setActiveTab(activeTabEl) {
   tabs.forEach(tab => {
     if (tab) {
       if (tab === activeTabEl) {
-        tab.className = "w-full flex items-center gap-3 px-3 py-2 rounded-md bg-[#111111] text-white font-semibold transition-all";
+        tab.className = "w-full flex items-center gap-3 px-3 py-2 rounded-md bg-[#3C7363] text-white font-bold transition-all shadow-sm";
       } else {
-        tab.className = "w-full flex items-center gap-3 px-3 py-2 rounded-md text-[#787774] hover:bg-[#F0EFEA] hover:text-[#111111] transition-all";
+        tab.className = "w-full flex items-center gap-3 px-3 py-2 rounded-md text-[#3C7363]/80 hover:bg-[#B8D9D0] hover:text-[#3C7363] transition-all";
       }
     }
   });
@@ -1461,12 +1461,12 @@ function renderCharts(orders) {
         datasets: [{
           label: 'Doanh thu COD (VNĐ)',
           data: revenues,
-          borderColor: '#346538',
-          backgroundColor: 'rgba(237, 243, 236, 0.4)',
+          borderColor: '#3C7363', // Sage Green
+          backgroundColor: 'rgba(143, 217, 196, 0.3)', // Mint Green transparent fill
           borderWidth: 2,
           tension: 0.3,
           fill: true,
-          pointBackgroundColor: '#346538',
+          pointBackgroundColor: '#3C7363',
           pointRadius: 3
         }]
       },
@@ -1479,7 +1479,7 @@ function renderCharts(orders) {
         scales: {
           y: {
             beginAtZero: true,
-            grid: { color: '#EAEAEA' },
+            grid: { color: '#E8F1FD' },
             ticks: {
               callback: (value) => value.toLocaleString('vi-VN') + ' đ',
               font: { size: 10 }
@@ -1504,7 +1504,7 @@ function renderCharts(orders) {
         datasets: [{
           label: 'Số lượng đơn hàng',
           data: counts,
-          backgroundColor: '#1F6C9F',
+          backgroundColor: '#8FD9C4', // Soft Mint Green
           borderRadius: 6,
           barPercentage: 0.5
         }]
@@ -1585,11 +1585,11 @@ function setStatBtnActive(activeBtnId) {
     const btn = document.getElementById(id);
     if (btn) {
       if (id === activeBtnId) {
-        // Nút được chọn sẽ đậm màu hơn hẳn (nền đen, chữ trắng)
-        btn.className = "px-3.5 py-1.5 rounded-lg border border-[#111111] bg-[#111111] text-white text-xs font-bold transition-all shadow-sm";
+        // Nút được chọn sẽ đậm màu hơn hẳn (nền xanh Sage đậm, chữ trắng)
+        btn.className = "px-3.5 py-1.5 rounded-lg border border-[#3C7363] bg-[#3C7363] text-white text-xs font-bold transition-all shadow-sm";
       } else {
         // Nút bình thường
-        btn.className = "px-3.5 py-1.5 rounded-lg border border-[#EAEAEA] bg-white text-xs font-semibold text-[#787774] hover:bg-[#F7F6F3] hover:text-[#111111] transition-all";
+        btn.className = "px-3.5 py-1.5 rounded-lg border border-[#B8D9D0] bg-white text-xs font-semibold text-[#3C7363] hover:bg-[#F1F7F5] hover:text-[#3C7363] transition-all";
       }
     }
   });
